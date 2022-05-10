@@ -13,9 +13,25 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
-      name: "AggregatorV3Interface",
+      name: "OwnableUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AggregatorV3Interface__factory>;
+    ): Promise<Contracts.OwnableUpgradeable__factory>;
+    getContractFactory(
+      name: "Initializable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Initializable__factory>;
+    getContractFactory(
+      name: "ReentrancyGuardUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ReentrancyGuardUpgradeable__factory>;
+    getContractFactory(
+      name: "IERC20Upgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20Upgradeable__factory>;
+    getContractFactory(
+      name: "ContextUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ContextUpgradeable__factory>;
     getContractFactory(
       name: "Ownable",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -25,39 +41,47 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20__factory>;
     getContractFactory(
+      name: "GREvent",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.GREvent__factory>;
+    getContractFactory(
+      name: "GroupEvent",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.GroupEvent__factory>;
+    getContractFactory(
+      name: "GroupPrediction",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.GroupPrediction__factory>;
+    getContractFactory(
       name: "Greeter",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Greeter__factory>;
-    getContractFactory(
-      name: "MIMatch",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.MIMatch__factory>;
-    getContractFactory(
-      name: "MiniMatch",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.MiniMatch__factory>;
-    getContractFactory(
-      name: "MiniPrediction",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.MiniPrediction__factory>;
-    getContractFactory(
-      name: "SIMatchExt",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.SIMatchExt__factory>;
-    getContractFactory(
-      name: "SponsoredMatchLink",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.SponsoredMatchLink__factory>;
-    getContractFactory(
-      name: "SponsoredPredictionLink",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.SponsoredPredictionLink__factory>;
 
     getContractAt(
-      name: "AggregatorV3Interface",
+      name: "OwnableUpgradeable",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.AggregatorV3Interface>;
+    ): Promise<Contracts.OwnableUpgradeable>;
+    getContractAt(
+      name: "Initializable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Initializable>;
+    getContractAt(
+      name: "ReentrancyGuardUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ReentrancyGuardUpgradeable>;
+    getContractAt(
+      name: "IERC20Upgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20Upgradeable>;
+    getContractAt(
+      name: "ContextUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ContextUpgradeable>;
     getContractAt(
       name: "Ownable",
       address: string,
@@ -69,40 +93,25 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC20>;
     getContractAt(
+      name: "GREvent",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.GREvent>;
+    getContractAt(
+      name: "GroupEvent",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.GroupEvent>;
+    getContractAt(
+      name: "GroupPrediction",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.GroupPrediction>;
+    getContractAt(
       name: "Greeter",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Greeter>;
-    getContractAt(
-      name: "MIMatch",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.MIMatch>;
-    getContractAt(
-      name: "MiniMatch",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.MiniMatch>;
-    getContractAt(
-      name: "MiniPrediction",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.MiniPrediction>;
-    getContractAt(
-      name: "SIMatchExt",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.SIMatchExt>;
-    getContractAt(
-      name: "SponsoredMatchLink",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.SponsoredMatchLink>;
-    getContractAt(
-      name: "SponsoredPredictionLink",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.SponsoredPredictionLink>;
 
     // default types
     getContractFactory(

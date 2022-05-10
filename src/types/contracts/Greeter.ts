@@ -12,7 +12,11 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -25,16 +29,23 @@ export interface GreeterInterface extends utils.Interface {
   functions: {
     "greet()": FunctionFragment;
     "greeting()": FunctionFragment;
+    "initialize(string)": FunctionFragment;
     "setGreeting(string)": FunctionFragment;
     "throwError()": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "greet" | "greeting" | "setGreeting" | "throwError"
+    nameOrSignatureOrTopic:
+      | "greet"
+      | "greeting"
+      | "initialize"
+      | "setGreeting"
+      | "throwError"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "greet", values?: undefined): string;
   encodeFunctionData(functionFragment: "greeting", values?: undefined): string;
+  encodeFunctionData(functionFragment: "initialize", values: [string]): string;
   encodeFunctionData(functionFragment: "setGreeting", values: [string]): string;
   encodeFunctionData(
     functionFragment: "throwError",
@@ -43,14 +54,26 @@ export interface GreeterInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "greet", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "greeting", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setGreeting",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "throwError", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "Initialized(uint8)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
 }
+
+export interface InitializedEventObject {
+  version: number;
+}
+export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
+
+export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
 
 export interface Greeter extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -83,6 +106,11 @@ export interface Greeter extends BaseContract {
 
     greeting(overrides?: CallOverrides): Promise<[string]>;
 
+    initialize(
+      _greeting: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setGreeting(
       _greeting: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -94,6 +122,11 @@ export interface Greeter extends BaseContract {
   greet(overrides?: CallOverrides): Promise<string>;
 
   greeting(overrides?: CallOverrides): Promise<string>;
+
+  initialize(
+    _greeting: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   setGreeting(
     _greeting: string,
@@ -107,17 +140,27 @@ export interface Greeter extends BaseContract {
 
     greeting(overrides?: CallOverrides): Promise<string>;
 
+    initialize(_greeting: string, overrides?: CallOverrides): Promise<void>;
+
     setGreeting(_greeting: string, overrides?: CallOverrides): Promise<void>;
 
     throwError(overrides?: CallOverrides): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    "Initialized(uint8)"(version?: null): InitializedEventFilter;
+    Initialized(version?: null): InitializedEventFilter;
+  };
 
   estimateGas: {
     greet(overrides?: CallOverrides): Promise<BigNumber>;
 
     greeting(overrides?: CallOverrides): Promise<BigNumber>;
+
+    initialize(
+      _greeting: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     setGreeting(
       _greeting: string,
@@ -131,6 +174,11 @@ export interface Greeter extends BaseContract {
     greet(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     greeting(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    initialize(
+      _greeting: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     setGreeting(
       _greeting: string,

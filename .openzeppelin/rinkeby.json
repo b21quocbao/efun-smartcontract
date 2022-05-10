@@ -1,0 +1,384 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x11642F0B180281520587899F88FC1046e8f037e1",
+    "txHash": "0x7373e280ac12f633585ccccc986ee67e62e1a36e2590879d718b4d06cad6416e"
+  },
+  "proxies": [
+    {
+      "address": "0x7D857BfE801A2BE605E22FfDfaE3A276300283B9",
+      "txHash": "0x0129e9a49c28d669c1a99f47ba00930961341042d80a4666102784b1ab1ad7a3",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x179CEf86dCe27456898828c5F08e3B593AA2cF2C",
+      "txHash": "0x95af9370befd240899f87d8654f2d53231b43281a054af5d2a280bd53d443405",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xab56928AAeB3f63f9Ed7e84dcd7Fdd7166E33d02",
+      "txHash": "0xfe1838ff1bb005de34449e4b8ad7d7b76c053b05dac33f20faa94ee755ee7d38",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "94796505e5eeb299d4a3e4cb3fabfdc167762f900508ae5b943d14eef400e8e1": {
+      "address": "0x7c2f3AD0Dd1fA870288C0d8bcE13302C1CbF7477",
+      "txHash": "0x7560e1c597805b6f999e230aa459e2ae08d92f57d56290a973c3736f7ede1e2e",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:67"
+          },
+          {
+            "label": "greeting",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_string_storage",
+            "contract": "Greeter",
+            "src": "contracts\\Greeter.sol:10"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    },
+    "f1ddd047c09f0ba11aa35def63ec3a7c70d14d3e359ed49687bca6577626865a": {
+      "address": "0x67F5b09E31F78354fF98DFF20c0D25aBf533B374",
+      "txHash": "0x987070389edac1247148501c8e864383336c6ab5ac7d1935060ca92af3c34c88",
+      "layout": {
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:22"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol:87"
+          },
+          {
+            "label": "_status",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_uint256",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:38"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "ReentrancyGuardUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\security\\ReentrancyGuardUpgradeable.sol:74"
+          },
+          {
+            "label": "ONE_HUNDRED_PERCENT",
+            "offset": 0,
+            "slot": "151",
+            "type": "t_uint256",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:17"
+          },
+          {
+            "label": "predictions",
+            "offset": 0,
+            "slot": "152",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_mapping(t_uint256,t_struct(GroupPrediction)1188_storage)))",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:19"
+          },
+          {
+            "label": "predictStats",
+            "offset": 0,
+            "slot": "153",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(GroupPredictStats)1177_storage))",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:20"
+          },
+          {
+            "label": "sponsorTotal",
+            "offset": 0,
+            "slot": "154",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_uint256))",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:21"
+          },
+          {
+            "label": "feeCollector",
+            "offset": 0,
+            "slot": "155",
+            "type": "t_address_payable",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:23"
+          },
+          {
+            "label": "rewardToken",
+            "offset": 0,
+            "slot": "156",
+            "type": "t_address_payable",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:24"
+          },
+          {
+            "label": "burnWallet",
+            "offset": 0,
+            "slot": "157",
+            "type": "t_address",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:25"
+          },
+          {
+            "label": "lotCollector",
+            "offset": 0,
+            "slot": "158",
+            "type": "t_address_payable",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:26"
+          },
+          {
+            "label": "feeBNB",
+            "offset": 0,
+            "slot": "159",
+            "type": "t_uint256",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:27"
+          },
+          {
+            "label": "feeEFUN",
+            "offset": 0,
+            "slot": "160",
+            "type": "t_uint256",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:28"
+          },
+          {
+            "label": "lotRate",
+            "offset": 0,
+            "slot": "161",
+            "type": "t_uint256",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:29"
+          },
+          {
+            "label": "numPredict",
+            "offset": 0,
+            "slot": "162",
+            "type": "t_uint256",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:30"
+          },
+          {
+            "label": "bnbRate",
+            "offset": 0,
+            "slot": "163",
+            "type": "t_uint256",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:31"
+          },
+          {
+            "label": "participateRate",
+            "offset": 0,
+            "slot": "164",
+            "type": "t_uint256",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:32"
+          },
+          {
+            "label": "includeSponsorTokenBack",
+            "offset": 0,
+            "slot": "165",
+            "type": "t_bool",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:34"
+          },
+          {
+            "label": "matchData",
+            "offset": 1,
+            "slot": "165",
+            "type": "t_contract(MIMatch)1202",
+            "contract": "MiniPrediction",
+            "src": "contracts\\custom\\group-predict\\MiniSponsoredPredict.sol:36"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_address_payable": {
+            "label": "address payable",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)3_storage": {
+            "label": "uint256[3]",
+            "numberOfBytes": "96"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_contract(MIMatch)1202": {
+            "label": "contract MIMatch",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_mapping(t_uint256,t_struct(GroupPrediction)1188_storage)))": {
+            "label": "mapping(address => mapping(address => mapping(uint256 => struct MDataTypes.GroupPrediction)))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(GroupPredictStats)1177_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MDataTypes.GroupPredictStats))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(GroupPrediction)1188_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct MDataTypes.GroupPrediction))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_uint256))": {
+            "label": "mapping(address => mapping(uint256 => uint256))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(GroupPredictStats)1177_storage)": {
+            "label": "mapping(uint256 => struct MDataTypes.GroupPredictStats)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(GroupPrediction)1188_storage)": {
+            "label": "mapping(uint256 => struct MDataTypes.GroupPrediction)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(GroupPredictStats)1177_storage": {
+            "label": "struct MDataTypes.GroupPredictStats",
+            "members": [
+              {
+                "label": "predictionAmount",
+                "type": "t_array(t_uint256)3_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "predictOptions",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "3"
+              }
+            ],
+            "numberOfBytes": "128"
+          },
+          "t_struct(GroupPrediction)1188_storage": {
+            "label": "struct MDataTypes.GroupPrediction",
+            "members": [
+              {
+                "label": "predictionAmount",
+                "type": "t_array(t_uint256)3_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "numPredict",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "predictOptions",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "claimed",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "5"
+              }
+            ],
+            "numberOfBytes": "192"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    }
+  }
+}
