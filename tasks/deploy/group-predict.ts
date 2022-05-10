@@ -2,7 +2,7 @@ import { getImplementationAddress } from "@openzeppelin/upgrades-core";
 import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 
-import type { GroupMatch__factory } from "../../src/types/factories/contracts/custom/group-predict/GroupMatch__factory";
+import type { GroupEvent__factory } from "../../src/types/factories/contracts/custom/group-predict/GroupEvent__factory";
 import type { GroupPrediction__factory } from "../../src/types/factories/contracts/custom/group-predict/GroupSponsoredPredict.sol";
 
 task("deploy:GroupPrediction").setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
@@ -23,12 +23,12 @@ task("deploy:GroupPrediction").setAction(async function (taskArguments: TaskArgu
   console.log("Implementation address: ", currentImplAddress);
 });
 
-task("deploy:GroupMatch").setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
-  const GroupMatchFactory: GroupMatch__factory = <GroupMatch__factory>await ethers.getContractFactory("GroupMatch");
-  const groupMatchFactory = await upgrades.deployProxy(GroupMatchFactory, []);
-  await groupMatchFactory.deployed();
+task("deploy:GroupEvent").setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
+  const GroupEventFactory: GroupEvent__factory = <GroupEvent__factory>await ethers.getContractFactory("GroupEvent");
+  const groupEventFactory = await upgrades.deployProxy(GroupEventFactory, []);
+  await groupEventFactory.deployed();
 
-  const currentImplAddress = await getImplementationAddress(ethers.provider, groupMatchFactory.address);
-  console.log("GroupMatch deployed to: ", groupMatchFactory.address);
+  const currentImplAddress = await getImplementationAddress(ethers.provider, groupEventFactory.address);
+  console.log("GroupEvent deployed to: ", groupEventFactory.address);
   console.log("Implementation address: ", currentImplAddress);
 });
