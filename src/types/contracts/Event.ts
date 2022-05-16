@@ -178,7 +178,7 @@ export interface EventInterface extends utils.Interface {
   ): Result;
 
   events: {
-    "EventCreated(uint256,bytes32,uint256,uint256,uint256,address,string,address,uint256,address)": EventFragment;
+    "EventCreated(uint256,bytes32,uint256,uint256,uint256,address,string,address,uint256,address,tuple)": EventFragment;
     "EventResultUpdated(address,uint256,string)": EventFragment;
     "EventStatusUpdated(address,uint256,uint8)": EventFragment;
     "Initialized(uint8)": EventFragment;
@@ -203,6 +203,7 @@ export interface EventCreatedEventObject {
   sToken: string;
   sTotal: BigNumber;
   creator: string;
+  options: EDataTypes.OptionStructOutput;
 }
 export type EventCreatedEvent = TypedEvent<
   [
@@ -215,7 +216,8 @@ export type EventCreatedEvent = TypedEvent<
     string,
     string,
     BigNumber,
-    string
+    string,
+    EDataTypes.OptionStructOutput
   ],
   EventCreatedEventObject
 >;
@@ -533,7 +535,7 @@ export interface Event extends BaseContract {
   };
 
   filters: {
-    "EventCreated(uint256,bytes32,uint256,uint256,uint256,address,string,address,uint256,address)"(
+    "EventCreated(uint256,bytes32,uint256,uint256,uint256,address,string,address,uint256,address,tuple)"(
       idx?: null,
       descriptions?: null,
       startTime?: null,
@@ -543,7 +545,8 @@ export interface Event extends BaseContract {
       additionalData?: null,
       sToken?: null,
       sTotal?: null,
-      creator?: null
+      creator?: null,
+      options?: null
     ): EventCreatedEventFilter;
     EventCreated(
       idx?: null,
@@ -555,7 +558,8 @@ export interface Event extends BaseContract {
       additionalData?: null,
       sToken?: null,
       sTotal?: null,
-      creator?: null
+      creator?: null,
+      options?: null
     ): EventCreatedEventFilter;
 
     "EventResultUpdated(address,uint256,string)"(

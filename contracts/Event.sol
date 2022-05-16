@@ -63,8 +63,9 @@ contract Event is OwnableUpgradeable {
         uint256 _sTotal,
         EDataTypes.Option calldata _options
     ) external returns (uint256 _idx) {
-        require(_startTime <= _deadlineTime, "deadline_time > start_time");
-        require(_deadlineTime <= _endTime, "end_time > deadline_time");
+        require(block.timestamp < _startTime, "_startTime > block.timestamp");
+        require(_startTime < _deadlineTime, "deadline_time > start_time");
+        require(_deadlineTime < _endTime, "end_time > deadline_time");
         require(_options.data.length == _options.odds.length, "not-match-length-option-odd");
 
         _idx = nEvents;
@@ -93,7 +94,8 @@ contract Event is OwnableUpgradeable {
             _addtionalData,
             _sToken,
             _sTotal,
-            msg.sender
+            msg.sender,
+            _options
         );
         nEvents++;
     }
@@ -127,6 +129,7 @@ contract Event is OwnableUpgradeable {
         string additionalData,
         address sToken,
         uint256 sTotal,
-        address creator
+        address creator,
+        EDataTypes.Option options
     );
 }

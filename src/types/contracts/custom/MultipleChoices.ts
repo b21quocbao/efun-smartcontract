@@ -47,8 +47,8 @@ export declare namespace EDataTypes {
 
 export interface MultipleChoicesInterface extends utils.Interface {
   functions: {
-    "calculateReward(address,uint256,uint256,uint256,(uint256,uint256,string,bool),uint256)": FunctionFragment;
-    "validatePrediction(address,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "calculateReward(address,uint256,uint256,uint256,(uint256,uint256,string,bool),uint256,uint256)": FunctionFragment;
+    "validatePrediction(address,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
 
   getFunction(
@@ -63,6 +63,7 @@ export interface MultipleChoicesInterface extends utils.Interface {
       BigNumberish,
       BigNumberish,
       EDataTypes.PredictionStruct,
+      BigNumberish,
       BigNumberish
     ]
   ): string;
@@ -70,6 +71,7 @@ export interface MultipleChoicesInterface extends utils.Interface {
     functionFragment: "validatePrediction",
     values: [
       string,
+      BigNumberish,
       BigNumberish,
       BigNumberish,
       BigNumberish,
@@ -136,6 +138,7 @@ export interface MultipleChoices extends BaseContract {
       _predictOptionStats: BigNumberish,
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & { _reward: BigNumber; _sponsorReward: BigNumber }
@@ -149,6 +152,7 @@ export interface MultipleChoices extends BaseContract {
       _predictValue: BigNumberish,
       _odd: BigNumberish,
       _liquidityPool: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
   };
@@ -160,6 +164,7 @@ export interface MultipleChoices extends BaseContract {
     _predictOptionStats: BigNumberish,
     _predictions: EDataTypes.PredictionStruct,
     _odd: BigNumberish,
+    _oneHundredPrecent: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
     [BigNumber, BigNumber] & { _reward: BigNumber; _sponsorReward: BigNumber }
@@ -173,6 +178,7 @@ export interface MultipleChoices extends BaseContract {
     _predictValue: BigNumberish,
     _odd: BigNumberish,
     _liquidityPool: BigNumberish,
+    _oneHundredPrecent: BigNumberish,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
@@ -184,6 +190,7 @@ export interface MultipleChoices extends BaseContract {
       _predictOptionStats: BigNumberish,
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & { _reward: BigNumber; _sponsorReward: BigNumber }
@@ -197,6 +204,7 @@ export interface MultipleChoices extends BaseContract {
       _predictValue: BigNumberish,
       _odd: BigNumberish,
       _liquidityPool: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
   };
@@ -214,6 +222,7 @@ export interface MultipleChoices extends BaseContract {
       _predictOptionStats: BigNumberish,
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -225,6 +234,7 @@ export interface MultipleChoices extends BaseContract {
       _predictValue: BigNumberish,
       _odd: BigNumberish,
       _liquidityPool: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
@@ -237,6 +247,7 @@ export interface MultipleChoices extends BaseContract {
       _predictOptionStats: BigNumberish,
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -248,6 +259,7 @@ export interface MultipleChoices extends BaseContract {
       _predictValue: BigNumberish,
       _odd: BigNumberish,
       _liquidityPool: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

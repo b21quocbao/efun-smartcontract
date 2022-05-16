@@ -62,6 +62,7 @@ export interface PredictionInterface extends utils.Interface {
   functions: {
     "bnbRate()": FunctionFragment;
     "claimReward(uint256,address)": FunctionFragment;
+    "deposit(address,uint256)": FunctionFragment;
     "emergencyWithdraw(address,uint256)": FunctionFragment;
     "eventData()": FunctionFragment;
     "eventDataAddress()": FunctionFragment;
@@ -97,6 +98,7 @@ export interface PredictionInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "bnbRate"
       | "claimReward"
+      | "deposit"
       | "emergencyWithdraw"
       | "eventData"
       | "eventDataAddress"
@@ -132,6 +134,10 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "claimReward",
     values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "deposit",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "emergencyWithdraw",
@@ -240,6 +246,7 @@ export interface PredictionInterface extends utils.Interface {
     functionFragment: "claimReward",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "emergencyWithdraw",
     data: BytesLike
@@ -417,6 +424,12 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    deposit(
+      _token: string,
+      _amount: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     emergencyWithdraw(
       _token: string,
       amount: BigNumberish,
@@ -560,6 +573,12 @@ export interface Prediction extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  deposit(
+    _token: string,
+    _amount: BigNumberish,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   emergencyWithdraw(
     _token: string,
     amount: BigNumberish,
@@ -697,6 +716,12 @@ export interface Prediction extends BaseContract {
     claimReward(
       _eventId: BigNumberish,
       _token: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    deposit(
+      _token: string,
+      _amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -871,6 +896,12 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    deposit(
+      _token: string,
+      _amount: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     emergencyWithdraw(
       _token: string,
       amount: BigNumberish,
@@ -1006,6 +1037,12 @@ export interface Prediction extends BaseContract {
       _eventId: BigNumberish,
       _token: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    deposit(
+      _token: string,
+      _amount: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     emergencyWithdraw(
