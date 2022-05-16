@@ -3,4 +3,7 @@
 /* eslint-disable */
 import type * as custom from "./custom";
 export type { custom };
-export type { Greeter } from "./Greeter";
+export type { Event } from "./Event";
+export type { IEvent } from "./IEvent";
+export type { IHelper } from "./IHelper";
+export type { Prediction } from "./Prediction";

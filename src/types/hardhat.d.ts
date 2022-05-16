@@ -33,29 +33,29 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ContextUpgradeable__factory>;
     getContractFactory(
-      name: "Ownable",
+      name: "GroupPredict",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Ownable__factory>;
+    ): Promise<Contracts.GroupPredict__factory>;
     getContractFactory(
-      name: "IERC20",
+      name: "MultipleChoices",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC20__factory>;
+    ): Promise<Contracts.MultipleChoices__factory>;
     getContractFactory(
-      name: "GREvent",
+      name: "Event",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GREvent__factory>;
+    ): Promise<Contracts.Event__factory>;
     getContractFactory(
-      name: "GroupEvent",
+      name: "IEvent",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GroupEvent__factory>;
+    ): Promise<Contracts.IEvent__factory>;
     getContractFactory(
-      name: "GroupPrediction",
+      name: "IHelper",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GroupPrediction__factory>;
+    ): Promise<Contracts.IHelper__factory>;
     getContractFactory(
-      name: "Greeter",
+      name: "Prediction",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Greeter__factory>;
+    ): Promise<Contracts.Prediction__factory>;
 
     getContractAt(
       name: "OwnableUpgradeable",
@@ -83,35 +83,35 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ContextUpgradeable>;
     getContractAt(
-      name: "Ownable",
+      name: "GroupPredict",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.Ownable>;
+    ): Promise<Contracts.GroupPredict>;
     getContractAt(
-      name: "IERC20",
+      name: "MultipleChoices",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.IERC20>;
+    ): Promise<Contracts.MultipleChoices>;
     getContractAt(
-      name: "GREvent",
+      name: "Event",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.GREvent>;
+    ): Promise<Contracts.Event>;
     getContractAt(
-      name: "GroupEvent",
+      name: "IEvent",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.GroupEvent>;
+    ): Promise<Contracts.IEvent>;
     getContractAt(
-      name: "GroupPrediction",
+      name: "IHelper",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.GroupPrediction>;
+    ): Promise<Contracts.IHelper>;
     getContractAt(
-      name: "Greeter",
+      name: "Prediction",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.Greeter>;
+    ): Promise<Contracts.Prediction>;
 
     // default types
     getContractFactory(

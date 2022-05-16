@@ -2,4 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as custom from "./custom";
-export { Greeter__factory } from "./Greeter__factory";
+export { Event__factory } from "./Event__factory";
+export { IEvent__factory } from "./IEvent__factory";
+export { IHelper__factory } from "./IHelper__factory";
+export { Prediction__factory } from "./Prediction__factory";

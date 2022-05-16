@@ -2,33 +2,26 @@ import { getImplementationAddress } from "@openzeppelin/upgrades-core";
 import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 
-import type { GroupEvent__factory } from "../../src/types/factories/contracts/custom/group-predict/GroupEvent__factory";
-import type { GroupPrediction__factory } from "../../src/types/factories/contracts/custom/group-predict/GroupSponsoredPredict.sol";
+import type { GroupPredict__factory } from "../../src/types/factories/contracts/custom/GroupPredict__factory";
 
-task("deploy:GroupPrediction").setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
-  const GroupPredictionFactory: GroupPrediction__factory = <GroupPrediction__factory>(
-    await ethers.getContractFactory("GroupPrediction")
+task("deploy:GroupPredict").setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
+  const GroupPredictFactory: GroupPredict__factory = <GroupPredict__factory>(
+    await ethers.getContractFactory("GroupPredict")
   );
-  const groupPredictionFactory = await upgrades.deployProxy(GroupPredictionFactory, [
-    "0x000000000000000000000000000000000000dEaD",
-    2,
-    100,
-    10000,
-    false,
-  ]);
-  await groupPredictionFactory.deployed();
-
-  const currentImplAddress = await getImplementationAddress(ethers.provider, groupPredictionFactory.address);
-  console.log("GroupPrediction deployed to: ", groupPredictionFactory.address);
+  const groupPredictFactory = await upgrades.deployProxy(GroupPredictFactory, []);
+  const currentImplAddress = await getImplementationAddress(ethers.provider, groupPredictFactory.address);
+  console.log("GroupPredict deployed to: ", groupPredictFactory.address);
   console.log("Implementation address: ", currentImplAddress);
 });
 
-task("deploy:GroupEvent").setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
-  const GroupEventFactory: GroupEvent__factory = <GroupEvent__factory>await ethers.getContractFactory("GroupEvent");
-  const groupEventFactory = await upgrades.deployProxy(GroupEventFactory, []);
-  await groupEventFactory.deployed();
-
-  const currentImplAddress = await getImplementationAddress(ethers.provider, groupEventFactory.address);
-  console.log("GroupEvent deployed to: ", groupEventFactory.address);
-  console.log("Implementation address: ", currentImplAddress);
-});
+task("upgrade:GroupPredict")
+  .addParam("address", "Contract address")
+  .setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
+    const GroupPredictFactory: GroupPredict__factory = <GroupPredict__factory>(
+      await ethers.getContractFactory("GroupPredict")
+    );
+    const groupPredictFactory = await upgrades.upgradeProxy(taskArguments.address, GroupPredictFactory);
+    const currentImplAddress = await getImplementationAddress(ethers.provider, groupPredictFactory.address); // 0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208
+    console.log("GroupPredict upgraded to: ", groupPredictFactory.address);
+    console.log("Implementation address: ", currentImplAddress);
+  });
