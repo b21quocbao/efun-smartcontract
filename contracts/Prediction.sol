@@ -106,14 +106,31 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256 _amount
     ) public payable {
         EDataTypes.Event memory _event = eventData.info(_eventId);
-        require(indexOf(_event.options, _option) != 21042104, "predict-not-in-options");
-        require(_event.startTime <= block.timestamp && block.timestamp <= _event.deadlineTime, "invalid-predict-time");
-        require(_event.status == EDataTypes.EventStatus.AVAILABLE, "event-not-available");
-        require(predictions[_token][msg.sender][_eventId].numPredict < 1, "event-exceed-predict");
-
+        IHelper _helper = IHelper(_event.helperAddress);
         uint256 _predictValue = msg.value;
         if (_token != address(0)) {
             _predictValue = _amount;
+        }
+        uint256 _index = indexOf(_event.options, predictions[_token][msg.sender][_eventId].predictOptions);
+
+        require(_index != 21042104, "predict-not-in-options");
+        require(_event.startTime <= block.timestamp && block.timestamp <= _event.deadlineTime, "invalid-predict-time");
+        require(_event.status == EDataTypes.EventStatus.AVAILABLE, "event-not-available");
+        require(predictions[_token][msg.sender][_eventId].numPredict < 1, "event-exceed-predict");
+        require(
+            _helper.validatePrediction(
+                eventDataAddress,
+                _eventId,
+                predictStats[_token][_eventId].predictionAmount,
+                predictOptionStats[_token][_eventId][_option],
+                _predictValue,
+                _event.odds[_index],
+                this.getTokenAmount(_token)
+            ),
+            "not-enough-liquidity"
+        );
+
+        if (_token != address(0)) {
             IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
         }
         require(_predictValue > 0, "predict-value = 0");

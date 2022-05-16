@@ -48,9 +48,12 @@ export declare namespace EDataTypes {
 export interface GroupPredictInterface extends utils.Interface {
   functions: {
     "calculateReward(address,uint256,uint256,uint256,(uint256,uint256,string,bool),uint256)": FunctionFragment;
+    "validatePrediction(address,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: "calculateReward"): FunctionFragment;
+  getFunction(
+    nameOrSignatureOrTopic: "calculateReward" | "validatePrediction"
+  ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "calculateReward",
@@ -63,9 +66,25 @@ export interface GroupPredictInterface extends utils.Interface {
       BigNumberish
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "validatePrediction",
+    values: [
+      string,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "calculateReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "validatePrediction",
     data: BytesLike
   ): Result;
 
@@ -121,6 +140,17 @@ export interface GroupPredict extends BaseContract {
     ): Promise<
       [BigNumber, BigNumber] & { _reward: BigNumber; _sponsorReward: BigNumber }
     >;
+
+    validatePrediction(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish,
+      _predictValue: BigNumberish,
+      _odd: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
   };
 
   calculateReward(
@@ -135,6 +165,17 @@ export interface GroupPredict extends BaseContract {
     [BigNumber, BigNumber] & { _reward: BigNumber; _sponsorReward: BigNumber }
   >;
 
+  validatePrediction(
+    _eventDataAddress: string,
+    _eventId: BigNumberish,
+    _predictStats: BigNumberish,
+    _predictOptionStats: BigNumberish,
+    _predictValue: BigNumberish,
+    _odd: BigNumberish,
+    _liquidityPool: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   callStatic: {
     calculateReward(
       _eventDataAddress: string,
@@ -147,6 +188,17 @@ export interface GroupPredict extends BaseContract {
     ): Promise<
       [BigNumber, BigNumber] & { _reward: BigNumber; _sponsorReward: BigNumber }
     >;
+
+    validatePrediction(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish,
+      _predictValue: BigNumberish,
+      _odd: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
   };
 
   filters: {
@@ -164,6 +216,17 @@ export interface GroupPredict extends BaseContract {
       _odd: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    validatePrediction(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish,
+      _predictValue: BigNumberish,
+      _odd: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -174,6 +237,17 @@ export interface GroupPredict extends BaseContract {
       _predictOptionStats: BigNumberish,
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    validatePrediction(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish,
+      _predictValue: BigNumberish,
+      _odd: BigNumberish,
+      _liquidityPool: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

@@ -78,6 +78,55 @@ const _abi = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_eventDataAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_eventId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_predictStats",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_predictOptionStats",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_predictValue",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_odd",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_liquidityPool",
+        type: "uint256",
+      },
+    ],
+    name: "validatePrediction",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
 ];
 
 export class IHelper__factory {

@@ -10,6 +10,18 @@ contract GroupPredict is Initializable {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
 
+    function validatePrediction(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256 _predictOptionStats,
+        uint256 _predictValue,
+        uint256 _odd,
+        uint256 _liquidityPool
+    ) external view returns (bool) {
+        return true;
+    }
+
     /**
      * @dev Calculates reward
      */
