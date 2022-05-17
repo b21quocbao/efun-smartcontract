@@ -36,7 +36,7 @@ task("upgrade:Event")
   .setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
     const EventFactory: Event__factory = <Event__factory>await ethers.getContractFactory("Event");
     const eventFactory = await upgrades.upgradeProxy(taskArguments.address, EventFactory);
-    const currentImplAddress = await getImplementationAddress(ethers.provider, eventFactory.address); // 0xc6CAd1caEF5a39292Bff943f265f3f6EF2a3260D
+    const currentImplAddress = await getImplementationAddress(ethers.provider, eventFactory.address); // 0xD51ED95e4f82bd4377B916b5D642f8F0e6B814DA
     console.log("Event upgraded to: ", eventFactory.address);
     console.log("Implementation address: ", currentImplAddress);
   });

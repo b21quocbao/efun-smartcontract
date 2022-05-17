@@ -12,7 +12,7 @@ task("create:Event").setAction(async function (_taskArgs, hre) {
   const { ethers } = hre;
   const [deployer] = await ethers.getSigners();
 
-  const event = await Event__factory.connect("0xc6CAd1caEF5a39292Bff943f265f3f6EF2a3260D", deployer);
+  const event = await Event__factory.connect("0xD51ED95e4f82bd4377B916b5D642f8F0e6B814DA", deployer);
 
   const { timestamp } = await ethers.provider.getBlock("latest");
 
