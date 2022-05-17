@@ -38,12 +38,11 @@ contract GroupPredict is Initializable {
         uint256 _odd,
         uint256 _oneHundredPrecent,
         uint256 _index
-    ) public view returns (uint256 _reward, uint256 _sponsorReward) {
+    ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
         string memory _win = _event.result;
         require(compareStrings(_win, _predictions.predictOptions), "no-reward");
 
         _reward = (_predictStats * _predictions.predictionAmount) / _predictOptionStats;
-        _sponsorReward = (_event.sTotal * _predictions.predictionAmount) / _predictOptionStats;
     }
 }

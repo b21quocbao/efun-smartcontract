@@ -5,5 +5,5 @@ upgrade:
 	yarn hardhat upgrade:GroupPredict --network bscTestnet --address 0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208
 	yarn hardhat upgrade:Handicap --network bscTestnet --address 0xd4cf937089DAc1FA149B8cc87Daa04fC920B0C90
 verify:
-	yarn hardhat verify:address
+	yarn hardhat verify:address --network bscTestnet
 

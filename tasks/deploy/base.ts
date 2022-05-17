@@ -8,35 +8,25 @@ import type { Prediction__factory } from "../../src/types/factories/contracts/Pr
 task("deploy:Prediction").setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
   const PredictionFactory: Prediction__factory = <Prediction__factory>await ethers.getContractFactory("Prediction");
   const predictionFactory = await upgrades.deployProxy(PredictionFactory, [100, 10000]);
-  const currentImplAddress = await getImplementationAddress(ethers.provider, predictionFactory.address);
   console.log("Prediction deployed to: ", predictionFactory.address);
-  console.log("Implementation address: ", currentImplAddress);
 });
 
 task("deploy:Event").setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
   const EventFactory: Event__factory = <Event__factory>await ethers.getContractFactory("Event");
   const eventFactory = await upgrades.deployProxy(EventFactory, []);
-  const currentImplAddress = await getImplementationAddress(ethers.provider, eventFactory.address);
   console.log("Event deployed to: ", eventFactory.address);
-  console.log("Implementation address: ", currentImplAddress);
 });
 
 task("upgrade:Prediction")
   .addParam("address", "Contract address")
   .setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
     const PredictionFactory: Prediction__factory = <Prediction__factory>await ethers.getContractFactory("Prediction");
-    const predictionFactory = await upgrades.upgradeProxy(taskArguments.address, PredictionFactory);
-    const currentImplAddress = await getImplementationAddress(ethers.provider, predictionFactory.address); // 0x43624c41450D76A8711c257969a67Fa7E6EdB6EB
-    console.log("Prediction upgraded to: ", predictionFactory.address);
-    console.log("Implementation address: ", currentImplAddress);
+    await upgrades.upgradeProxy(taskArguments.address, PredictionFactory);
   });
 
 task("upgrade:Event")
   .addParam("address", "Contract address")
   .setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
     const EventFactory: Event__factory = <Event__factory>await ethers.getContractFactory("Event");
-    const eventFactory = await upgrades.upgradeProxy(taskArguments.address, EventFactory);
-    const currentImplAddress = await getImplementationAddress(ethers.provider, eventFactory.address); // 0xD51ED95e4f82bd4377B916b5D642f8F0e6B814DA
-    console.log("Event upgraded to: ", eventFactory.address);
-    console.log("Implementation address: ", currentImplAddress);
+    await upgrades.upgradeProxy(taskArguments.address, EventFactory);
   });

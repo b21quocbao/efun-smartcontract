@@ -72,7 +72,6 @@ export interface PredictionInterface extends utils.Interface {
     "getEventInfo(uint256,address)": FunctionFragment;
     "getLiquidityPool(address)": FunctionFragment;
     "getPredictInfo(uint256,address,address)": FunctionFragment;
-    "getSponsorTotal(uint256,address)": FunctionFragment;
     "getTokenAmount(address)": FunctionFragment;
     "initialize(uint256,uint256)": FunctionFragment;
     "lotCollector()": FunctionFragment;
@@ -91,7 +90,6 @@ export interface PredictionInterface extends utils.Interface {
     "setFeeLot(uint256)": FunctionFragment;
     "setLotCollector(address)": FunctionFragment;
     "setRewardToken(address)": FunctionFragment;
-    "setSponsorTotal(uint256,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
 
@@ -109,7 +107,6 @@ export interface PredictionInterface extends utils.Interface {
       | "getEventInfo"
       | "getLiquidityPool"
       | "getPredictInfo"
-      | "getSponsorTotal"
       | "getTokenAmount"
       | "initialize"
       | "lotCollector"
@@ -128,7 +125,6 @@ export interface PredictionInterface extends utils.Interface {
       | "setFeeLot"
       | "setLotCollector"
       | "setRewardToken"
-      | "setSponsorTotal"
       | "transferOwnership"
   ): FunctionFragment;
 
@@ -167,10 +163,6 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getPredictInfo",
     values: [BigNumberish, string, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getSponsorTotal",
-    values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "getTokenAmount",
@@ -239,10 +231,6 @@ export interface PredictionInterface extends utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "setSponsorTotal",
-    values: [BigNumberish, string, BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
@@ -278,10 +266,6 @@ export interface PredictionInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getPredictInfo",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getSponsorTotal",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -330,10 +314,6 @@ export interface PredictionInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setRewardToken",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setSponsorTotal",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -474,12 +454,6 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[EDataTypes.PredictionStructOutput]>;
 
-    getSponsorTotal(
-      eventId: BigNumberish,
-      _sToken: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     getTokenAmount(
       token: string,
       overrides?: CallOverrides
@@ -567,13 +541,6 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setSponsorTotal(
-      _eventId: BigNumberish,
-      _sToken: string,
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -627,12 +594,6 @@ export interface Prediction extends BaseContract {
     token: string,
     overrides?: CallOverrides
   ): Promise<EDataTypes.PredictionStructOutput>;
-
-  getSponsorTotal(
-    eventId: BigNumberish,
-    _sToken: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
 
   getTokenAmount(token: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -718,13 +679,6 @@ export interface Prediction extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setSponsorTotal(
-    _eventId: BigNumberish,
-    _sToken: string,
-    _amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -778,12 +732,6 @@ export interface Prediction extends BaseContract {
       token: string,
       overrides?: CallOverrides
     ): Promise<EDataTypes.PredictionStructOutput>;
-
-    getSponsorTotal(
-      eventId: BigNumberish,
-      _sToken: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     getTokenAmount(
       token: string,
@@ -858,13 +806,6 @@ export interface Prediction extends BaseContract {
 
     setRewardToken(
       _rewardToken: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setSponsorTotal(
-      _eventId: BigNumberish,
-      _sToken: string,
-      _amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -961,12 +902,6 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getSponsorTotal(
-      eventId: BigNumberish,
-      _sToken: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getTokenAmount(
       token: string,
       overrides?: CallOverrides
@@ -1047,13 +982,6 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setSponsorTotal(
-      _eventId: BigNumberish,
-      _sToken: string,
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1106,12 +1034,6 @@ export interface Prediction extends BaseContract {
       eventId: BigNumberish,
       account: string,
       token: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getSponsorTotal(
-      eventId: BigNumberish,
-      _sToken: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1192,13 +1114,6 @@ export interface Prediction extends BaseContract {
 
     setRewardToken(
       _rewardToken: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setSponsorTotal(
-      _eventId: BigNumberish,
-      _sToken: string,
-      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

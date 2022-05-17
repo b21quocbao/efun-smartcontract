@@ -143,9 +143,7 @@ export interface Handicap extends BaseContract {
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber] & { _reward: BigNumber; _sponsorReward: BigNumber }
-    >;
+    ): Promise<[BigNumber] & { _reward: BigNumber }>;
 
     validatePrediction(
       _eventDataAddress: string,
@@ -171,9 +169,7 @@ export interface Handicap extends BaseContract {
     _oneHundredPrecent: BigNumberish,
     _index: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<
-    [BigNumber, BigNumber] & { _reward: BigNumber; _sponsorReward: BigNumber }
-  >;
+  ): Promise<BigNumber>;
 
   validatePrediction(
     _eventDataAddress: string,
@@ -199,9 +195,7 @@ export interface Handicap extends BaseContract {
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber] & { _reward: BigNumber; _sponsorReward: BigNumber }
-    >;
+    ): Promise<BigNumber>;
 
     validatePrediction(
       _eventDataAddress: string,

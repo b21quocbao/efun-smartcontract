@@ -61,7 +61,7 @@ contract Handicap is Initializable {
         uint256 _odd,
         uint256 _oneHundredPrecent,
         uint256 _index
-    ) public view returns (uint256 _reward, uint256 _sponsorReward) {
+    ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
         uint256 _indexOption = indexOf(_event.options, _predictions.predictOptions);
 
@@ -79,7 +79,5 @@ contract Handicap is Initializable {
         if ((_indexOption == 0 && _index == 3) || (_indexOption == 1 && _index == 1)) {
             _reward = _predictions.predictionAmount / 2;
         }
-
-        _sponsorReward = (_event.sTotal * _predictions.predictionAmount) / _predictStats;
     }
 }

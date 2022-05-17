@@ -2,7 +2,6 @@ import { getImplementationAddress } from "@openzeppelin/upgrades-core";
 import { exec } from "child_process";
 import { task } from "hardhat/config";
 import util from "util";
-import web3 from "web3";
 
 const execAsync = util.promisify(exec);
 

@@ -84,19 +84,6 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         eventDataAddress = _eventData;
     }
 
-    // more sponsor token for event
-    function setSponsorTotal(
-        uint256 _eventId,
-        address _sToken,
-        uint256 _amount
-    ) public onlyOwner {
-        sponsorTotal[_sToken][_eventId] = _amount;
-    }
-
-    function getSponsorTotal(uint256 eventId, address _sToken) public view returns (uint256) {
-        return sponsorTotal[_sToken][eventId];
-    }
-
     function getLiquidityPool(address _token) public view returns (uint256) {
         return liquidityPool[msg.sender][_token];
     }
@@ -206,10 +193,10 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
         uint256 _index = indexOf(_event.options, predictions[_token][msg.sender][_eventId].predictOptions);
         uint256 _reward;
-        uint256 _sponsorReward;
+
         IHelper _helper = IHelper(_event.helperAddress);
 
-        (_reward, _sponsorReward) = _helper.calculateReward(
+        (_reward) = _helper.calculateReward(
             eventDataAddress,
             _eventId,
             predictStats[_token][_eventId].predictionAmount,
@@ -223,10 +210,6 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         if (_reward > 0) {
             transferMoney(_token, msg.sender, _reward);
             predictions[_token][msg.sender][_eventId].claimed = true;
-
-            if (_sponsorReward > 0) {
-                transferMoney(_event.sToken, msg.sender, _sponsorReward);
-            }
         }
 
         emit RewardClaimed(_eventId, _token, _reward);
@@ -264,9 +247,6 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 IERC20Upgradeable(_token).safeTransfer(lotCollector, _lot);
             }
         }
-
-        // send sponsor token
-        // IERC20Upgradeable(_sToken).safeTransfer(_toAddress, _sponsorAmount);
     }
 
     function transferToken(

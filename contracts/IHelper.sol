@@ -28,5 +28,5 @@ interface IHelper {
         uint256 _odd,
         uint256 _oneHundredPrecent,
         uint256 _index
-    ) external view returns (uint256 _reward, uint256 _sponsorReward);
+    ) external view returns (uint256 _reward);
 }

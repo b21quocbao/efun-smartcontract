@@ -5,7 +5,7 @@ import type { Artifact } from "hardhat/types";
 import type { Event } from "../../src/types/contracts/Event";
 import type { Prediction } from "../../src/types/contracts/Prediction";
 import type { GroupPredict } from "../../src/types/contracts/custom/GroupPredict";
-import { Handicap } from "../../src/types/contracts/custom/Handicap.sol";
+import { Handicap } from "../../src/types/contracts/custom/Handicap";
 import type { MultipleChoices } from "../../src/types/contracts/custom/MultipleChoices";
 import { Signers } from "../types";
 import { shouldBehaveLikeEvent } from "./Efun.behavior";

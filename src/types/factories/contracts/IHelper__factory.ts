@@ -79,11 +79,6 @@ const _abi = [
         name: "_reward",
         type: "uint256",
       },
-      {
-        internalType: "uint256",
-        name: "_sponsorReward",
-        type: "uint256",
-      },
     ],
     stateMutability: "view",
     type: "function",
