@@ -15,15 +15,17 @@ task("verify:address").setAction(async function (_taskArgs, hre) {
     "0x77380fEcA9C1AFE1b6d1Bb077FbD637EE1bC921e",
   ];
 
-  for (const address of addresses) {
-    const currentImplAddress = await getImplementationAddress(ethers.provider, address);
-    console.log(currentImplAddress, "Line #18 verify.ts");
+  await Promise.all(
+    addresses.map(async address => {
+      const currentImplAddress = await getImplementationAddress(ethers.provider, address);
+      console.log(currentImplAddress, "Line #18 verify.ts");
 
-    console.log(
-      await execAsync("yarn hardhat verify --network bscTestnet " + currentImplAddress).catch(err => {
-        console.log(err, "Line #23 verify.ts");
-      }),
-      "Line #24 verify.ts",
-    );
-  }
+      console.log(
+        await execAsync("yarn hardhat verify --network bscTestnet " + currentImplAddress).catch(err => {
+          console.log(err, "Line #23 verify.ts");
+        }),
+        "Line #24 verify.ts",
+      );
+    }),
+  );
 });
