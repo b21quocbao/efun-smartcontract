@@ -22,14 +22,12 @@ import type {
 
 export declare namespace EDataTypes {
   export type EventStruct = {
-    description: BytesLike;
     startTime: BigNumberish;
     deadlineTime: BigNumberish;
     endTime: BigNumberish;
     result: string;
     status: BigNumberish;
     helperAddress: string;
-    additionalData: string;
     sToken: string;
     sTotal: BigNumberish;
     creator: string;
@@ -38,7 +36,6 @@ export declare namespace EDataTypes {
   };
 
   export type EventStructOutput = [
-    string,
     BigNumber,
     BigNumber,
     BigNumber,
@@ -46,20 +43,17 @@ export declare namespace EDataTypes {
     number,
     string,
     string,
-    string,
     BigNumber,
     string,
     string[],
     BigNumber[]
   ] & {
-    description: string;
     startTime: BigNumber;
     deadlineTime: BigNumber;
     endTime: BigNumber;
     result: string;
     status: number;
     helperAddress: string;
-    additionalData: string;
     sToken: string;
     sTotal: BigNumber;
     creator: string;

@@ -46,12 +46,11 @@ describe("Unit tests", function () {
       await this.event
         .connect(this.signers.admin)
         .createSingleEvent(
-          "0x5b5b224c69766572706f6f6c222c20224d616e63686573746572204369747922",
+          0,
           timestamp + 20,
           timestamp + 7 * 24 * 3600,
           timestamp + 10 * 24 * 3600,
           this.groupPredict.address,
-          "ok",
           "0x0000000000000000000000000000000000000000",
           0,
           {
@@ -63,12 +62,11 @@ describe("Unit tests", function () {
       await this.event
         .connect(this.signers.admin)
         .createSingleEvent(
-          "0x5b5b224c69766572706f6f6c222c20224d616e63686573746572204369747922",
+          1,
           timestamp + 20,
           timestamp + 7 * 24 * 3600,
           timestamp + 10 * 24 * 3600,
           this.multipleChoices.address,
-          "ok",
           "0x0000000000000000000000000000000000000000",
           0,
           {
@@ -80,12 +78,11 @@ describe("Unit tests", function () {
       await this.event
         .connect(this.signers.admin)
         .createSingleEvent(
-          "0x5b5b224c69766572706f6f6c222c20224d616e63686573746572204369747922",
+          2,
           timestamp + 20,
           timestamp + 7 * 24 * 3600,
           timestamp + 10 * 24 * 3600,
           this.handicap.address,
-          "ok",
           "0x0000000000000000000000000000000000000000",
           0,
           {

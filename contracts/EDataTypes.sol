@@ -9,14 +9,12 @@ library EDataTypes {
     }
 
     struct Event {
-        bytes32 description;
         uint256 startTime;
         uint256 deadlineTime;
         uint256 endTime;
         string result;
         EventStatus status;
         address helperAddress;
-        string additionalData;
         address sToken;
         uint256 sTotal;
         address creator;

@@ -20,11 +20,6 @@ const _abi = [
       {
         components: [
           {
-            internalType: "bytes32",
-            name: "description",
-            type: "bytes32",
-          },
-          {
             internalType: "uint256",
             name: "startTime",
             type: "uint256",
@@ -53,11 +48,6 @@ const _abi = [
             internalType: "address",
             name: "helperAddress",
             type: "address",
-          },
-          {
-            internalType: "string",
-            name: "additionalData",
-            type: "string",
           },
           {
             internalType: "address",

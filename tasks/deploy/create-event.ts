@@ -17,12 +17,11 @@ task("create:Event").setAction(async function (_taskArgs, hre) {
   const { timestamp } = await ethers.provider.getBlock("latest");
 
   const tx = await event.createSingleEvent(
-    "0x5b5b224c69766572706f6f6c222c20224d616e63686573746572204369747922",
+    0,
     timestamp + 10,
     timestamp + 7 * 24 * 3600,
     timestamp + 10 * 24 * 3600,
     "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
-    "ok",
     "0x0000000000000000000000000000000000000000",
     0,
     {

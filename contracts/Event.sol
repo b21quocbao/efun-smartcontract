@@ -9,8 +9,6 @@ import "./EDataTypes.sol";
 // import "hardhat/console.sol";
 
 contract Event is OwnableUpgradeable {
-    uint256 public nEvents;
-
     mapping(uint256 => EDataTypes.Event) public events;
 
     function initialize() public initializer {
@@ -53,31 +51,27 @@ contract Event is OwnableUpgradeable {
     }
 
     function createSingleEvent(
-        bytes32 _description,
+        uint256 _idx,
         uint256 _startTime,
         uint256 _deadlineTime,
         uint256 _endTime,
         address _helperAddress,
-        string calldata _addtionalData,
         address _sToken,
         uint256 _sTotal,
         EDataTypes.Option calldata _options
-    ) external returns (uint256 _idx) {
+    ) external {
         require(block.timestamp < _startTime, "_startTime > block.timestamp");
         require(_startTime < _deadlineTime, "deadline_time > start_time");
         require(_deadlineTime < _endTime, "end_time > deadline_time");
         require(_options.data.length == _options.odds.length, "not-match-length-option-odd");
 
-        _idx = nEvents;
         events[_idx] = EDataTypes.Event(
-            _description,
             _startTime,
             _deadlineTime,
             _endTime,
             "",
             EDataTypes.EventStatus.AVAILABLE,
             _helperAddress,
-            _addtionalData,
             _sToken,
             _sTotal,
             msg.sender,
@@ -86,18 +80,15 @@ contract Event is OwnableUpgradeable {
         );
         emit EventCreated(
             _idx,
-            _description,
             _startTime,
             _deadlineTime,
             _endTime,
             _helperAddress,
-            _addtionalData,
             _sToken,
             _sTotal,
             msg.sender,
             _options
         );
-        nEvents++;
     }
 
     /* ========== INTERNAL FUNCTIONS ========== */
@@ -121,12 +112,10 @@ contract Event is OwnableUpgradeable {
     event EventStatusUpdated(address caller, uint256 eventId, EDataTypes.EventStatus status);
     event EventCreated(
         uint256 idx,
-        bytes32 descriptions,
         uint256 startTime,
         uint256 deadlineTime,
         uint256 endTime,
         address helperAddress,
-        string additionalData,
         address sToken,
         uint256 sTotal,
         address creator,
