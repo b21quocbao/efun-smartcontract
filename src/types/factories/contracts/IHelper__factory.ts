@@ -66,6 +66,11 @@ const _abi = [
         name: "_oneHundredPrecent",
         type: "uint256",
       },
+      {
+        internalType: "uint256",
+        name: "_index",
+        type: "uint256",
+      },
     ],
     name: "calculateReward",
     outputs: [
@@ -123,6 +128,11 @@ const _abi = [
       {
         internalType: "uint256",
         name: "_oneHundredPrecent",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_index",
         type: "uint256",
       },
     ],

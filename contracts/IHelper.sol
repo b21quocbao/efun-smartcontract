@@ -15,7 +15,8 @@ interface IHelper {
         uint256 _predictValue,
         uint256 _odd,
         uint256 _liquidityPool,
-        uint256 _oneHundredPrecent
+        uint256 _oneHundredPrecent,
+        uint256 _index
     ) external view returns (bool);
 
     function calculateReward(
@@ -25,6 +26,7 @@ interface IHelper {
         uint256 _predictOptionStats,
         EDataTypes.Prediction calldata _predictions,
         uint256 _odd,
-        uint256 _oneHundredPrecent
+        uint256 _oneHundredPrecent,
+        uint256 _index
     ) external view returns (uint256 _reward, uint256 _sponsorReward);
 }

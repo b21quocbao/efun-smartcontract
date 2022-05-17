@@ -20,7 +20,8 @@ contract GroupPredict is Initializable {
         uint256 _predictValue,
         uint256 _odd,
         uint256 _liquidityPool,
-        uint256 _oneHundredPrecent
+        uint256 _oneHundredPrecent,
+        uint256 _index
     ) external view returns (bool) {
         return true;
     }
@@ -35,7 +36,8 @@ contract GroupPredict is Initializable {
         uint256 _predictOptionStats,
         EDataTypes.Prediction calldata _predictions,
         uint256 _odd,
-        uint256 _oneHundredPrecent
+        uint256 _oneHundredPrecent,
+        uint256 _index
     ) public view returns (uint256 _reward, uint256 _sponsorReward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
         string memory _win = _event.result;

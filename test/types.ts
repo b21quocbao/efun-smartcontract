@@ -4,6 +4,7 @@ import type { Fixture } from "ethereum-waffle";
 import type { Event } from "../src/types/contracts/Event";
 import type { Prediction } from "../src/types/contracts/Prediction";
 import type { GroupPredict } from "../src/types/contracts/custom/GroupPredict";
+import type { Handicap } from "../src/types/contracts/custom/Handicap";
 import type { MultipleChoices } from "../src/types/contracts/custom/MultipleChoices";
 
 declare module "mocha" {
@@ -12,6 +13,7 @@ declare module "mocha" {
     prediction: Prediction;
     groupPredict: GroupPredict;
     multipleChoices: MultipleChoices;
+    handicap: Handicap;
     loadFixture: <T>(fixture: Fixture<T>) => Promise<T>;
     signers: Signers;
   }

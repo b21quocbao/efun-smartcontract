@@ -5,6 +5,7 @@ import type { Artifact } from "hardhat/types";
 import type { Event } from "../../src/types/contracts/Event";
 import type { Prediction } from "../../src/types/contracts/Prediction";
 import type { GroupPredict } from "../../src/types/contracts/custom/GroupPredict";
+import { Handicap } from "../../src/types/contracts/custom/Handicap.sol";
 import type { MultipleChoices } from "../../src/types/contracts/custom/MultipleChoices";
 import { Signers } from "../types";
 import { shouldBehaveLikeEvent } from "./Efun.behavior";
@@ -26,6 +27,7 @@ describe("Unit tests", function () {
       const predictionArtifact: Artifact = await artifacts.readArtifact("Prediction");
       const groupPredictArtifact: Artifact = await artifacts.readArtifact("GroupPredict");
       const multipleChoicesArtifact: Artifact = await artifacts.readArtifact("MultipleChoices");
+      const handicapArtifact: Artifact = await artifacts.readArtifact("Handicap");
 
       this.event = <Event>await waffle.deployContract(this.signers.admin, eventArtifact, []);
       this.prediction = <Prediction>await waffle.deployContract(this.signers.admin, predictionArtifact, []);
@@ -33,6 +35,7 @@ describe("Unit tests", function () {
       this.multipleChoices = <MultipleChoices>(
         await waffle.deployContract(this.signers.admin, multipleChoicesArtifact, [])
       );
+      this.handicap = <Handicap>await waffle.deployContract(this.signers.admin, handicapArtifact, []);
 
       await this.event.initialize();
       await this.prediction.initialize(100, 10000);
@@ -44,7 +47,7 @@ describe("Unit tests", function () {
         .connect(this.signers.admin)
         .createSingleEvent(
           "0x5b5b224c69766572706f6f6c222c20224d616e63686573746572204369747922",
-          timestamp + 3,
+          timestamp + 20,
           timestamp + 7 * 24 * 3600,
           timestamp + 10 * 24 * 3600,
           this.groupPredict.address,
@@ -53,7 +56,7 @@ describe("Unit tests", function () {
           0,
           {
             data: ["Liverpool", "Manchester City", "Manchester United", "Chelsea"],
-            odds: [100, 100, 100, 100],
+            odds: [0, 0, 0, 0],
           },
         );
 
@@ -61,7 +64,7 @@ describe("Unit tests", function () {
         .connect(this.signers.admin)
         .createSingleEvent(
           "0x5b5b224c69766572706f6f6c222c20224d616e63686573746572204369747922",
-          timestamp + 3,
+          timestamp + 20,
           timestamp + 7 * 24 * 3600,
           timestamp + 10 * 24 * 3600,
           this.multipleChoices.address,
@@ -71,6 +74,23 @@ describe("Unit tests", function () {
           {
             data: ["Liverpool", "Manchester City", "Manchester United", "Chelsea"],
             odds: [23000, 12700, 47600, 35600],
+          },
+        );
+
+      await this.event
+        .connect(this.signers.admin)
+        .createSingleEvent(
+          "0x5b5b224c69766572706f6f6c222c20224d616e63686573746572204369747922",
+          timestamp + 20,
+          timestamp + 7 * 24 * 3600,
+          timestamp + 10 * 24 * 3600,
+          this.handicap.address,
+          "ok",
+          "0x0000000000000000000000000000000000000000",
+          0,
+          {
+            data: ["Win - Lose", "Half Win - Half Lose", "Draw - Draw", "Half Lose - Half Win", "Lose - Win"],
+            odds: [23000, 23000, 10000, 13000, 13000],
           },
         );
     });

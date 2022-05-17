@@ -22,7 +22,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "../../common";
+} from "../../../common";
 
 export declare namespace EDataTypes {
   export type PredictionStruct = {

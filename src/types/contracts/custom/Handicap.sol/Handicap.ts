@@ -22,7 +22,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "../../common";
+} from "../../../common";
 
 export declare namespace EDataTypes {
   export type PredictionStruct = {
@@ -45,7 +45,7 @@ export declare namespace EDataTypes {
   };
 }
 
-export interface MultipleChoicesInterface extends utils.Interface {
+export interface HandicapInterface extends utils.Interface {
   functions: {
     "calculateReward(address,uint256,uint256,uint256,(uint256,uint256,string,bool),uint256,uint256,uint256)": FunctionFragment;
     "validatePrediction(address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
@@ -106,12 +106,12 @@ export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
 export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
 
-export interface MultipleChoices extends BaseContract {
+export interface Handicap extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: MultipleChoicesInterface;
+  interface: HandicapInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

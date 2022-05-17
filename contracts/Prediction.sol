@@ -142,7 +142,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 _predictValue,
                 _event.odds[_index],
                 liquidityPool[_event.creator][_token],
-                oneHundredPrecent
+                oneHundredPrecent,
+                _index
             ),
             "not-enough-liquidity"
         );
@@ -215,7 +216,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             predictOptionStats[_token][_eventId][predictions[_token][msg.sender][_eventId].predictOptions],
             predictions[_token][msg.sender][_eventId],
             _event.odds[_index],
-            oneHundredPrecent
+            oneHundredPrecent,
+            _index
         );
 
         if (_reward > 0) {

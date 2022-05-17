@@ -47,8 +47,8 @@ export declare namespace EDataTypes {
 
 export interface GroupPredictInterface extends utils.Interface {
   functions: {
-    "calculateReward(address,uint256,uint256,uint256,(uint256,uint256,string,bool),uint256,uint256)": FunctionFragment;
-    "validatePrediction(address,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "calculateReward(address,uint256,uint256,uint256,(uint256,uint256,string,bool),uint256,uint256,uint256)": FunctionFragment;
+    "validatePrediction(address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
 
   getFunction(
@@ -64,6 +64,7 @@ export interface GroupPredictInterface extends utils.Interface {
       BigNumberish,
       EDataTypes.PredictionStruct,
       BigNumberish,
+      BigNumberish,
       BigNumberish
     ]
   ): string;
@@ -71,6 +72,7 @@ export interface GroupPredictInterface extends utils.Interface {
     functionFragment: "validatePrediction",
     values: [
       string,
+      BigNumberish,
       BigNumberish,
       BigNumberish,
       BigNumberish,
@@ -139,6 +141,7 @@ export interface GroupPredict extends BaseContract {
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & { _reward: BigNumber; _sponsorReward: BigNumber }
@@ -153,6 +156,7 @@ export interface GroupPredict extends BaseContract {
       _odd: BigNumberish,
       _liquidityPool: BigNumberish,
       _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
   };
@@ -165,6 +169,7 @@ export interface GroupPredict extends BaseContract {
     _predictions: EDataTypes.PredictionStruct,
     _odd: BigNumberish,
     _oneHundredPrecent: BigNumberish,
+    _index: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
     [BigNumber, BigNumber] & { _reward: BigNumber; _sponsorReward: BigNumber }
@@ -179,6 +184,7 @@ export interface GroupPredict extends BaseContract {
     _odd: BigNumberish,
     _liquidityPool: BigNumberish,
     _oneHundredPrecent: BigNumberish,
+    _index: BigNumberish,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
@@ -191,6 +197,7 @@ export interface GroupPredict extends BaseContract {
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & { _reward: BigNumber; _sponsorReward: BigNumber }
@@ -205,6 +212,7 @@ export interface GroupPredict extends BaseContract {
       _odd: BigNumberish,
       _liquidityPool: BigNumberish,
       _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
   };
@@ -223,6 +231,7 @@ export interface GroupPredict extends BaseContract {
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -235,6 +244,7 @@ export interface GroupPredict extends BaseContract {
       _odd: BigNumberish,
       _liquidityPool: BigNumberish,
       _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
@@ -248,6 +258,7 @@ export interface GroupPredict extends BaseContract {
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -260,6 +271,7 @@ export interface GroupPredict extends BaseContract {
       _odd: BigNumberish,
       _liquidityPool: BigNumberish,
       _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
