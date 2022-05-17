@@ -33,6 +33,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
     IEvent public eventData;
     address public eventDataAddress;
+    mapping(address => mapping(address => uint256)) private liquidityPool;
 
     function initialize(uint256 _participateRate, uint256 _oneHundredPrecent) public initializer {
         OwnableUpgradeable.__Ownable_init();
@@ -96,10 +97,19 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         return sponsorTotal[_sToken][eventId];
     }
 
-    function deposit(address _token, uint256 _amount) public payable {
+    function getLiquidityPool(address _token) public view returns (uint256) {
+        return liquidityPool[msg.sender][_token];
+    }
+
+    function depositLP(address _token, uint256 _amount) public payable {
+        uint256 _value = msg.value;
+
         if (_token != address(0)) {
+            _value = _amount;
             IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
         }
+
+        liquidityPool[msg.sender][_token] += _value;
     }
 
     /**
@@ -131,7 +141,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 predictOptionStats[_token][_eventId][_option],
                 _predictValue,
                 _event.odds[_index],
-                this.getTokenAmount(_token),
+                liquidityPool[_event.creator][_token],
                 oneHundredPrecent
             ),
             "not-enough-liquidity"

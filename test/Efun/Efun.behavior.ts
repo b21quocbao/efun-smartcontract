@@ -43,7 +43,7 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.prediction
       .connect(this.signers.admin)
-      .deposit("0x0000000000000000000000000000000000000000", 0, { value: toWei("100") });
+      .depositLP("0x0000000000000000000000000000000000000000", 0, { value: toWei("100") });
 
     await this.prediction
       .connect(this.signers.user2)

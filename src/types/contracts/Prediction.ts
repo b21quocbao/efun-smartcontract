@@ -62,7 +62,7 @@ export interface PredictionInterface extends utils.Interface {
   functions: {
     "bnbRate()": FunctionFragment;
     "claimReward(uint256,address)": FunctionFragment;
-    "deposit(address,uint256)": FunctionFragment;
+    "depositLP(address,uint256)": FunctionFragment;
     "emergencyWithdraw(address,uint256)": FunctionFragment;
     "eventData()": FunctionFragment;
     "eventDataAddress()": FunctionFragment;
@@ -70,6 +70,7 @@ export interface PredictionInterface extends utils.Interface {
     "feeCollector()": FunctionFragment;
     "feeEFUN()": FunctionFragment;
     "getEventInfo(uint256,address)": FunctionFragment;
+    "getLiquidityPool(address)": FunctionFragment;
     "getPredictInfo(uint256,address,address)": FunctionFragment;
     "getSponsorTotal(uint256,address)": FunctionFragment;
     "getTokenAmount(address)": FunctionFragment;
@@ -98,7 +99,7 @@ export interface PredictionInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "bnbRate"
       | "claimReward"
-      | "deposit"
+      | "depositLP"
       | "emergencyWithdraw"
       | "eventData"
       | "eventDataAddress"
@@ -106,6 +107,7 @@ export interface PredictionInterface extends utils.Interface {
       | "feeCollector"
       | "feeEFUN"
       | "getEventInfo"
+      | "getLiquidityPool"
       | "getPredictInfo"
       | "getSponsorTotal"
       | "getTokenAmount"
@@ -136,7 +138,7 @@ export interface PredictionInterface extends utils.Interface {
     values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "deposit",
+    functionFragment: "depositLP",
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
@@ -157,6 +159,10 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getEventInfo",
     values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getLiquidityPool",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "getPredictInfo",
@@ -246,7 +252,7 @@ export interface PredictionInterface extends utils.Interface {
     functionFragment: "claimReward",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "depositLP", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "emergencyWithdraw",
     data: BytesLike
@@ -264,6 +270,10 @@ export interface PredictionInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "feeEFUN", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getEventInfo",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLiquidityPool",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -424,7 +434,7 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    deposit(
+    depositLP(
       _token: string,
       _amount: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -451,6 +461,11 @@ export interface Prediction extends BaseContract {
       token: string,
       overrides?: CallOverrides
     ): Promise<[EDataTypes.PredictStatsStructOutput]>;
+
+    getLiquidityPool(
+      _token: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     getPredictInfo(
       eventId: BigNumberish,
@@ -573,7 +588,7 @@ export interface Prediction extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  deposit(
+  depositLP(
     _token: string,
     _amount: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -600,6 +615,11 @@ export interface Prediction extends BaseContract {
     token: string,
     overrides?: CallOverrides
   ): Promise<EDataTypes.PredictStatsStructOutput>;
+
+  getLiquidityPool(
+    _token: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getPredictInfo(
     eventId: BigNumberish,
@@ -719,7 +739,7 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    deposit(
+    depositLP(
       _token: string,
       _amount: BigNumberish,
       overrides?: CallOverrides
@@ -746,6 +766,11 @@ export interface Prediction extends BaseContract {
       token: string,
       overrides?: CallOverrides
     ): Promise<EDataTypes.PredictStatsStructOutput>;
+
+    getLiquidityPool(
+      _token: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getPredictInfo(
       eventId: BigNumberish,
@@ -896,7 +921,7 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    deposit(
+    depositLP(
       _token: string,
       _amount: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -921,6 +946,11 @@ export interface Prediction extends BaseContract {
     getEventInfo(
       eventId: BigNumberish,
       token: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getLiquidityPool(
+      _token: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1039,7 +1069,7 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    deposit(
+    depositLP(
       _token: string,
       _amount: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -1064,6 +1094,11 @@ export interface Prediction extends BaseContract {
     getEventInfo(
       eventId: BigNumberish,
       token: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getLiquidityPool(
+      _token: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
