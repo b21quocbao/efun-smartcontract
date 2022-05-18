@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { ethers } from "hardhat";
 import web3 from "web3";
 
 import { currentBlockTime, duration, increase, latest } from "../utils/time";
@@ -110,5 +111,26 @@ export function shouldBehaveLikeEvent(): void {
     console.log(await this.signers.user1.getBalance(), "user 1");
     console.log(await this.signers.user2.getBalance(), "user 2");
     console.log(await this.signers.user3.getBalance(), "user 3");
+  });
+
+  it("error duplicate event", async function () {
+    const { timestamp } = await ethers.provider.getBlock("latest");
+    await expect(
+      this.event
+        .connect(this.signers.user1)
+        .createSingleEvent(
+          0,
+          timestamp + 20,
+          timestamp + 7 * 24 * 3600,
+          timestamp + 10 * 24 * 3600,
+          this.groupPredict.address,
+          "0x0000000000000000000000000000000000000000",
+          0,
+          {
+            data: ["Liverpool", "Manchester City", "Manchester United", "Chelsea"],
+            odds: [0, 0, 0, 0],
+          },
+        ),
+    ).to.be.revertedWith("already existed");
   });
 }

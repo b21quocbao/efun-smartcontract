@@ -6,7 +6,7 @@ pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "./EDataTypes.sol";
 
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 contract Event is OwnableUpgradeable {
     mapping(uint256 => EDataTypes.Event) public events;
@@ -64,6 +64,7 @@ contract Event is OwnableUpgradeable {
         require(_startTime < _deadlineTime, "deadline_time > start_time");
         require(_deadlineTime < _endTime, "end_time > deadline_time");
         require(_options.data.length == _options.odds.length, "not-match-length-option-odd");
+        require(events[_idx].creator == address(0), "already existed");
 
         events[_idx] = EDataTypes.Event(
             _startTime,
@@ -109,7 +110,6 @@ contract Event is OwnableUpgradeable {
     /* =============== EVENTS ==================== */
 
     event EventResultUpdated(address caller, uint256 eventId, string result);
-    event EventStatusUpdated(address caller, uint256 eventId, EDataTypes.EventStatus status);
     event EventCreated(
         uint256 idx,
         uint256 startTime,

@@ -323,12 +323,14 @@ export interface PredictionInterface extends utils.Interface {
 
   events: {
     "Initialized(uint8)": EventFragment;
+    "LPDeposited(address,address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "PredictionCreated(uint256,string,address,uint256)": EventFragment;
-    "RewardClaimed(uint256,address,uint256)": EventFragment;
+    "PredictionCreated(uint256,address,string,address,uint256)": EventFragment;
+    "RewardClaimed(uint256,address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "LPDeposited"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PredictionCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RewardClaimed"): EventFragment;
@@ -340,6 +342,18 @@ export interface InitializedEventObject {
 export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
 export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
+
+export interface LPDepositedEventObject {
+  user: string;
+  token: string;
+  amount: BigNumber;
+}
+export type LPDepositedEvent = TypedEvent<
+  [string, string, BigNumber],
+  LPDepositedEventObject
+>;
+
+export type LPDepositedEventFilter = TypedEventFilter<LPDepositedEvent>;
 
 export interface OwnershipTransferredEventObject {
   previousOwner: string;
@@ -355,12 +369,13 @@ export type OwnershipTransferredEventFilter =
 
 export interface PredictionCreatedEventObject {
   eventId: BigNumber;
-  options: string;
+  user: string;
+  option: string;
   token: string;
   amount: BigNumber;
 }
 export type PredictionCreatedEvent = TypedEvent<
-  [BigNumber, string, string, BigNumber],
+  [BigNumber, string, string, string, BigNumber],
   PredictionCreatedEventObject
 >;
 
@@ -369,11 +384,12 @@ export type PredictionCreatedEventFilter =
 
 export interface RewardClaimedEventObject {
   eventId: BigNumber;
+  user: string;
   token: string;
   reward: BigNumber;
 }
 export type RewardClaimedEvent = TypedEvent<
-  [BigNumber, string, BigNumber],
+  [BigNumber, string, string, BigNumber],
   RewardClaimedEventObject
 >;
 
@@ -819,6 +835,17 @@ export interface Prediction extends BaseContract {
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
 
+    "LPDeposited(address,address,uint256)"(
+      user?: null,
+      token?: null,
+      amount?: null
+    ): LPDepositedEventFilter;
+    LPDeposited(
+      user?: null,
+      token?: null,
+      amount?: null
+    ): LPDepositedEventFilter;
+
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null
@@ -828,26 +855,30 @@ export interface Prediction extends BaseContract {
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
 
-    "PredictionCreated(uint256,string,address,uint256)"(
+    "PredictionCreated(uint256,address,string,address,uint256)"(
       eventId?: null,
-      options?: null,
+      user?: null,
+      option?: null,
       token?: null,
       amount?: null
     ): PredictionCreatedEventFilter;
     PredictionCreated(
       eventId?: null,
-      options?: null,
+      user?: null,
+      option?: null,
       token?: null,
       amount?: null
     ): PredictionCreatedEventFilter;
 
-    "RewardClaimed(uint256,address,uint256)"(
+    "RewardClaimed(uint256,address,address,uint256)"(
       eventId?: null,
+      user?: null,
       token?: null,
       reward?: null
     ): RewardClaimedEventFilter;
     RewardClaimed(
       eventId?: null,
+      user?: null,
       token?: null,
       reward?: null
     ): RewardClaimedEventFilter;

@@ -29,3 +29,18 @@ task("verify:address").setAction(async function (_taskArgs, hre) {
     }),
   );
 });
+
+task("verify:single:address")
+  .addParam("address", "Contract address")
+  .setAction(async function (_taskArgs, hre) {
+    const { ethers } = hre;
+    const currentImplAddress = await getImplementationAddress(ethers.provider, _taskArgs.address);
+    console.log(currentImplAddress, "Line #18 verify.ts");
+
+    console.log(
+      await execAsync("yarn hardhat verify --network bscTestnet " + currentImplAddress).catch(err => {
+        console.log(err, "Line #23 verify.ts");
+      }),
+      "Line #24 verify.ts",
+    );
+  });

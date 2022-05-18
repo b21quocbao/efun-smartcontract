@@ -169,14 +169,12 @@ export interface EventInterface extends utils.Interface {
   events: {
     "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256,address,tuple)": EventFragment;
     "EventResultUpdated(address,uint256,string)": EventFragment;
-    "EventStatusUpdated(address,uint256,uint8)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "EventCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "EventResultUpdated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "EventStatusUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
@@ -221,19 +219,6 @@ export type EventResultUpdatedEvent = TypedEvent<
 
 export type EventResultUpdatedEventFilter =
   TypedEventFilter<EventResultUpdatedEvent>;
-
-export interface EventStatusUpdatedEventObject {
-  caller: string;
-  eventId: BigNumber;
-  status: number;
-}
-export type EventStatusUpdatedEvent = TypedEvent<
-  [string, BigNumber, number],
-  EventStatusUpdatedEventObject
->;
-
-export type EventStatusUpdatedEventFilter =
-  TypedEventFilter<EventStatusUpdatedEvent>;
 
 export interface InitializedEventObject {
   version: number;
@@ -532,17 +517,6 @@ export interface Event extends BaseContract {
       eventId?: null,
       result?: null
     ): EventResultUpdatedEventFilter;
-
-    "EventStatusUpdated(address,uint256,uint8)"(
-      caller?: null,
-      eventId?: null,
-      status?: null
-    ): EventStatusUpdatedEventFilter;
-    EventStatusUpdated(
-      caller?: null,
-      eventId?: null,
-      status?: null
-    ): EventStatusUpdatedEventFilter;
 
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;

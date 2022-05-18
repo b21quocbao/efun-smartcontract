@@ -97,6 +97,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         }
 
         liquidityPool[msg.sender][_token] += _value;
+
+        emit LPDeposited(msg.sender, _token, _value);
     }
 
     /**
@@ -150,7 +152,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         // send reward
         // transferToken(_token, msg.sender, _amount);
 
-        emit PredictionCreated(_eventId, _option, _token, _predictValue);
+        emit PredictionCreated(_eventId, msg.sender, _option, _token, _predictValue);
     }
 
     /**
@@ -212,7 +214,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             predictions[_token][msg.sender][_eventId].claimed = true;
         }
 
-        emit RewardClaimed(_eventId, _token, _reward);
+        emit RewardClaimed(_eventId, msg.sender, _token, _reward);
     }
 
     function transferMoney(
@@ -294,6 +296,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
 
-    event PredictionCreated(uint256 eventId, string options, address token, uint256 amount);
-    event RewardClaimed(uint256 eventId, address token, uint256 reward);
+    event LPDeposited(address user, address token, uint256 amount);
+    event PredictionCreated(uint256 eventId, address user, string option, address token, uint256 amount);
+    event RewardClaimed(uint256 eventId, address user, address token, uint256 reward);
 }

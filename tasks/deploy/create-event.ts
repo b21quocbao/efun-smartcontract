@@ -18,7 +18,7 @@ task("create:Event").setAction(async function (_taskArgs, hre) {
 
   const tx = await event.createSingleEvent(
     0,
-    timestamp + 10,
+    timestamp + 60,
     timestamp + 7 * 24 * 3600,
     timestamp + 10 * 24 * 3600,
     "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
@@ -26,7 +26,7 @@ task("create:Event").setAction(async function (_taskArgs, hre) {
     0,
     {
       data: ["Liverpool", "Manchester City"],
-      odds: [1, 1],
+      odds: [0, 0],
     },
   );
   console.log("\x1b[36m%s\x1b[0m", "tx", tx);
