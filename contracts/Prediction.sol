@@ -34,6 +34,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     IEvent public eventData;
     address public eventDataAddress;
     mapping(address => mapping(address => uint256)) private liquidityPool;
+    mapping(uint256 => mapping(address => uint256)) private liquidityPoolEvent;
 
     function initialize(uint256 _participateRate, uint256 _oneHundredPrecent) public initializer {
         OwnableUpgradeable.__Ownable_init();
@@ -84,11 +85,15 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         eventDataAddress = _eventData;
     }
 
-    function getLiquidityPool(address _token) public view returns (uint256) {
-        return liquidityPool[msg.sender][_token];
+    function getLiquidityPool(uint256 _eventId, address _token) public view returns (uint256) {
+        return liquidityPoolEvent[_eventId][_token];
     }
 
-    function depositLP(address _token, uint256 _amount) public payable {
+    function depositLP(
+        uint256 _eventId,
+        address _token,
+        uint256 _amount
+    ) public payable {
         uint256 _value = msg.value;
 
         if (_token != address(0)) {
@@ -96,9 +101,9 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
         }
 
-        liquidityPool[msg.sender][_token] += _value;
+        liquidityPoolEvent[_eventId][_token] += _value;
 
-        emit LPDeposited(msg.sender, _token, _value);
+        emit LPDeposited(_eventId, _token, liquidityPoolEvent[_eventId][_token]);
     }
 
     /**
@@ -114,6 +119,10 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         IHelper _helper = IHelper(_event.helperAddress);
         uint256 _index = indexOf(_event.options, _option);
         uint256 _predictValue = msg.value;
+        uint256 lpAmount = liquidityPoolEvent[_eventId][_token];
+        uint256 predictionOptionStatsValue = predictOptionStats[_token][_eventId][_option];
+        uint256 predictionAmountValue = predictStats[_token][_eventId].predictionAmount;
+
         if (_token != address(0)) {
             _predictValue = _amount;
         }
@@ -126,11 +135,11 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             _helper.validatePrediction(
                 eventDataAddress,
                 _eventId,
-                predictStats[_token][_eventId].predictionAmount,
-                predictOptionStats[_token][_eventId][_option],
+                predictionAmountValue,
+                predictionOptionStatsValue,
                 _predictValue,
                 _event.odds[_index],
-                liquidityPool[_event.creator][_token],
+                lpAmount,
                 oneHundredPrecent,
                 _index
             ),
@@ -296,7 +305,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
 
-    event LPDeposited(address user, address token, uint256 amount);
+    event LPDeposited(uint256 eventId, address token, uint256 amount);
     event PredictionCreated(uint256 eventId, address user, string option, address token, uint256 amount);
     event RewardClaimed(uint256 eventId, address user, address token, uint256 reward);
 }
