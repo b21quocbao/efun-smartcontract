@@ -1,12 +1,10 @@
-import { BigNumber, Signer } from "ethers";
 import { task } from "hardhat/config";
-import type { TaskArguments } from "hardhat/types";
 import web3 from "web3";
 
 import { Event__factory } from "../../src/types/factories/contracts/Event__factory";
 import { Prediction__factory } from "../../src/types/factories/contracts/Prediction__factory";
 
-const { toWei, fromWei } = web3.utils;
+const { toWei } = web3.utils;
 
 task("create:Event")
   .addParam("eventId", "EventId")

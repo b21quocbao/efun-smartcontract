@@ -1,4 +1,3 @@
-import { getImplementationAddress } from "@openzeppelin/upgrades-core";
 import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 

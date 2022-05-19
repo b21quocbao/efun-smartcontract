@@ -2,9 +2,9 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import web3 from "web3";
 
-import { currentBlockTime, duration, increase, latest } from "../utils/time";
+import { duration, increase } from "../utils/time";
 
-const { toWei, fromWei } = web3.utils;
+const { toWei } = web3.utils;
 
 export function shouldBehaveLikeEvent(): void {
   it("can predict group predict event", async function () {
