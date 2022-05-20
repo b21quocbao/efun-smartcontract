@@ -16,19 +16,17 @@ contract MultipleChoices is Initializable {
         address _eventDataAddress,
         uint256 _eventId,
         uint256 _predictStats,
-        uint256 _predictOptionStats,
+        uint256[] calldata _predictOptionStats,
         uint256 _predictValue,
         uint256 _odd,
         uint256 _liquidityPool,
         uint256 _oneHundredPrecent,
         uint256 _index
     ) external view returns (bool) {
-        return
-            (_predictStats + _predictValue + _liquidityPool) *
-                _oneHundredPrecent -
-                (_predictOptionStats + _predictValue) *
-                _odd >=
-            0;
+        uint256 totalAmount = (_predictStats + _predictValue + _liquidityPool) * _oneHundredPrecent;
+        uint256 winAmount = (_predictOptionStats[_index] + _predictValue) * _odd;
+
+        return totalAmount >= winAmount;
     }
 
     /**
@@ -38,15 +36,14 @@ contract MultipleChoices is Initializable {
         address _eventDataAddress,
         uint256 _eventId,
         uint256 _predictStats,
-        uint256 _predictOptionStats,
+        uint256[] calldata _predictOptionStats,
         EDataTypes.Prediction calldata _predictions,
         uint256 _odd,
         uint256 _oneHundredPrecent,
         uint256 _index
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-        string memory _win = _event.result;
-        require(compareStrings(_win, _predictions.predictOptions), "no-reward");
+        require(_event.resultIndex == _predictions.predictOptions, "no-reward");
 
         _reward = (_predictions.predictionAmount * _odd) / _oneHundredPrecent;
     }

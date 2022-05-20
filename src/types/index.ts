@@ -22,6 +22,8 @@ export type { Handicap } from "./contracts/custom/Handicap";
 export { Handicap__factory } from "./factories/contracts/custom/Handicap__factory";
 export type { MultipleChoices } from "./contracts/custom/MultipleChoices";
 export { MultipleChoices__factory } from "./factories/contracts/custom/MultipleChoices__factory";
+export type { OverUnder } from "./contracts/custom/OverUnder";
+export { OverUnder__factory } from "./factories/contracts/custom/OverUnder__factory";
 export type { Event } from "./contracts/Event";
 export { Event__factory } from "./factories/contracts/Event__factory";
 export type { IEvent } from "./contracts/IEvent";

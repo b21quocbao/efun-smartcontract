@@ -7,7 +7,7 @@ import "../IEvent.sol";
 
 // import "hardhat/console.sol";
 
-contract GroupPredict is Initializable {
+contract OverUnder is Initializable {
     function compareStrings(string memory a, string memory b) internal pure returns (bool) {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
@@ -23,7 +23,17 @@ contract GroupPredict is Initializable {
         uint256 _oneHundredPrecent,
         uint256 _index
     ) external view returns (bool) {
-        return true;
+        uint256 predictStats;
+        if (_index % 2 == 0) {
+            predictStats = _predictOptionStats[_index] + _predictOptionStats[_index + 1];
+        } else {
+            predictStats = _predictOptionStats[_index] + _predictOptionStats[_index - 1];
+        }
+        uint256 liquidityPool = (_liquidityPool * 2) / _predictOptionStats.length;
+        uint256 totalAmount = (predictStats + _predictValue + liquidityPool) * _oneHundredPrecent;
+        uint256 winAmount = (_predictOptionStats[_index] + _predictValue) * _odd;
+
+        return totalAmount >= winAmount;
     }
 
     /**
@@ -40,8 +50,12 @@ contract GroupPredict is Initializable {
         uint256 _index
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-        require(_event.resultIndex == _predictions.predictOptions, "no-reward");
 
-        _reward = (_predictStats * _predictions.predictionAmount) / _predictOptionStats[_index];
+        bool validate1 = _predictions.predictOptions % 2 == 0 && _predictions.predictOptions >= _event.resultIndex;
+        bool validate2 = _predictions.predictOptions % 2 == 1 && _predictions.predictOptions <= _event.resultIndex;
+
+        require(validate1 || validate2, "no-reward");
+
+        _reward = (_predictions.predictionAmount * _odd) / _oneHundredPrecent;
     }
 }

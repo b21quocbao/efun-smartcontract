@@ -28,32 +28,15 @@ import type {
 } from "../common";
 
 export declare namespace EDataTypes {
-  export type PredictStatsStruct = {
-    predictionAmount: BigNumberish;
-    predictOptions: string;
-  };
-
-  export type PredictStatsStructOutput = [BigNumber, string] & {
-    predictionAmount: BigNumber;
-    predictOptions: string;
-  };
-
   export type PredictionStruct = {
     predictionAmount: BigNumberish;
-    numPredict: BigNumberish;
-    predictOptions: string;
+    predictOptions: BigNumberish;
     claimed: boolean;
   };
 
-  export type PredictionStructOutput = [
-    BigNumber,
-    BigNumber,
-    string,
-    boolean
-  ] & {
+  export type PredictionStructOutput = [BigNumber, BigNumber, boolean] & {
     predictionAmount: BigNumber;
-    numPredict: BigNumber;
-    predictOptions: string;
+    predictOptions: BigNumber;
     claimed: boolean;
   };
 }
@@ -71,15 +54,16 @@ export interface PredictionInterface extends utils.Interface {
     "feeEFUN()": FunctionFragment;
     "getEventInfo(uint256,address)": FunctionFragment;
     "getLiquidityPool(uint256,address)": FunctionFragment;
-    "getPredictInfo(uint256,address,address)": FunctionFragment;
+    "getPredictInfo(uint256,address,address,uint256)": FunctionFragment;
     "getTokenAmount(address)": FunctionFragment;
     "initialize(uint256,uint256)": FunctionFragment;
     "lotCollector()": FunctionFragment;
     "lotRate()": FunctionFragment;
+    "numPredicts(address,address,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "participateRate()": FunctionFragment;
-    "predict(uint256,string,address,uint256)": FunctionFragment;
-    "predictions(address,address,uint256)": FunctionFragment;
+    "predict(uint256,string[],address[],uint256[])": FunctionFragment;
+    "predictions(address,address,uint256,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "rewardToken()": FunctionFragment;
     "setBnbRate(uint256)": FunctionFragment;
@@ -111,6 +95,7 @@ export interface PredictionInterface extends utils.Interface {
       | "initialize"
       | "lotCollector"
       | "lotRate"
+      | "numPredicts"
       | "owner"
       | "participateRate"
       | "predict"
@@ -162,7 +147,7 @@ export interface PredictionInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getPredictInfo",
-    values: [BigNumberish, string, string]
+    values: [BigNumberish, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getTokenAmount",
@@ -177,6 +162,10 @@ export interface PredictionInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "lotRate", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "numPredicts",
+    values: [string, string, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "participateRate",
@@ -184,11 +173,11 @@ export interface PredictionInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "predict",
-    values: [BigNumberish, string, string, BigNumberish]
+    values: [BigNumberish, string[], string[], BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "predictions",
-    values: [string, string, BigNumberish]
+    values: [string, string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -278,6 +267,10 @@ export interface PredictionInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "lotRate", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "numPredicts",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "participateRate",
@@ -457,7 +450,7 @@ export interface Prediction extends BaseContract {
       eventId: BigNumberish,
       token: string,
       overrides?: CallOverrides
-    ): Promise<[EDataTypes.PredictStatsStructOutput]>;
+    ): Promise<[BigNumber]>;
 
     getLiquidityPool(
       _eventId: BigNumberish,
@@ -469,6 +462,7 @@ export interface Prediction extends BaseContract {
       eventId: BigNumberish,
       account: string,
       token: string,
+      index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[EDataTypes.PredictionStructOutput]>;
 
@@ -487,15 +481,22 @@ export interface Prediction extends BaseContract {
 
     lotRate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    numPredicts(
+      arg0: string,
+      arg1: string,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     participateRate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     predict(
       _eventId: BigNumberish,
-      _option: string,
-      _token: string,
-      _amount: BigNumberish,
+      _options: string[],
+      _tokens: string[],
+      _amounts: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -503,12 +504,12 @@ export interface Prediction extends BaseContract {
       arg0: string,
       arg1: string,
       arg2: BigNumberish,
+      arg3: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, string, boolean] & {
+      [BigNumber, BigNumber, boolean] & {
         predictionAmount: BigNumber;
-        numPredict: BigNumber;
-        predictOptions: string;
+        predictOptions: BigNumber;
         claimed: boolean;
       }
     >;
@@ -600,7 +601,7 @@ export interface Prediction extends BaseContract {
     eventId: BigNumberish,
     token: string,
     overrides?: CallOverrides
-  ): Promise<EDataTypes.PredictStatsStructOutput>;
+  ): Promise<BigNumber>;
 
   getLiquidityPool(
     _eventId: BigNumberish,
@@ -612,6 +613,7 @@ export interface Prediction extends BaseContract {
     eventId: BigNumberish,
     account: string,
     token: string,
+    index: BigNumberish,
     overrides?: CallOverrides
   ): Promise<EDataTypes.PredictionStructOutput>;
 
@@ -627,15 +629,22 @@ export interface Prediction extends BaseContract {
 
   lotRate(overrides?: CallOverrides): Promise<BigNumber>;
 
+  numPredicts(
+    arg0: string,
+    arg1: string,
+    arg2: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   owner(overrides?: CallOverrides): Promise<string>;
 
   participateRate(overrides?: CallOverrides): Promise<BigNumber>;
 
   predict(
     _eventId: BigNumberish,
-    _option: string,
-    _token: string,
-    _amount: BigNumberish,
+    _options: string[],
+    _tokens: string[],
+    _amounts: BigNumberish[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -643,12 +652,12 @@ export interface Prediction extends BaseContract {
     arg0: string,
     arg1: string,
     arg2: BigNumberish,
+    arg3: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, string, boolean] & {
+    [BigNumber, BigNumber, boolean] & {
       predictionAmount: BigNumber;
-      numPredict: BigNumber;
-      predictOptions: string;
+      predictOptions: BigNumber;
       claimed: boolean;
     }
   >;
@@ -740,7 +749,7 @@ export interface Prediction extends BaseContract {
       eventId: BigNumberish,
       token: string,
       overrides?: CallOverrides
-    ): Promise<EDataTypes.PredictStatsStructOutput>;
+    ): Promise<BigNumber>;
 
     getLiquidityPool(
       _eventId: BigNumberish,
@@ -752,6 +761,7 @@ export interface Prediction extends BaseContract {
       eventId: BigNumberish,
       account: string,
       token: string,
+      index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<EDataTypes.PredictionStructOutput>;
 
@@ -770,15 +780,22 @@ export interface Prediction extends BaseContract {
 
     lotRate(overrides?: CallOverrides): Promise<BigNumber>;
 
+    numPredicts(
+      arg0: string,
+      arg1: string,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<string>;
 
     participateRate(overrides?: CallOverrides): Promise<BigNumber>;
 
     predict(
       _eventId: BigNumberish,
-      _option: string,
-      _token: string,
-      _amount: BigNumberish,
+      _options: string[],
+      _tokens: string[],
+      _amounts: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -786,12 +803,12 @@ export interface Prediction extends BaseContract {
       arg0: string,
       arg1: string,
       arg2: BigNumberish,
+      arg3: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, string, boolean] & {
+      [BigNumber, BigNumber, boolean] & {
         predictionAmount: BigNumber;
-        numPredict: BigNumber;
-        predictOptions: string;
+        predictOptions: BigNumber;
         claimed: boolean;
       }
     >;
@@ -938,6 +955,7 @@ export interface Prediction extends BaseContract {
       eventId: BigNumberish,
       account: string,
       token: string,
+      index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -956,15 +974,22 @@ export interface Prediction extends BaseContract {
 
     lotRate(overrides?: CallOverrides): Promise<BigNumber>;
 
+    numPredicts(
+      arg0: string,
+      arg1: string,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     participateRate(overrides?: CallOverrides): Promise<BigNumber>;
 
     predict(
       _eventId: BigNumberish,
-      _option: string,
-      _token: string,
-      _amount: BigNumberish,
+      _options: string[],
+      _tokens: string[],
+      _amounts: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -972,6 +997,7 @@ export interface Prediction extends BaseContract {
       arg0: string,
       arg1: string,
       arg2: BigNumberish,
+      arg3: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1075,6 +1101,7 @@ export interface Prediction extends BaseContract {
       eventId: BigNumberish,
       account: string,
       token: string,
+      index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1093,15 +1120,22 @@ export interface Prediction extends BaseContract {
 
     lotRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    numPredicts(
+      arg0: string,
+      arg1: string,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     participateRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     predict(
       _eventId: BigNumberish,
-      _option: string,
-      _token: string,
-      _amount: BigNumberish,
+      _options: string[],
+      _tokens: string[],
+      _amounts: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1109,6 +1143,7 @@ export interface Prediction extends BaseContract {
       arg0: string,
       arg1: string,
       arg2: BigNumberish,
+      arg3: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

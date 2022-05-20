@@ -19,29 +19,17 @@ contract Event is OwnableUpgradeable {
 
     function updateEventResult(uint256 _eventId, string memory _result) external {
         EDataTypes.Event storage _event = events[_eventId];
+        uint256 _index = indexOf(_event.options, _result);
 
-        require(indexOf(_event.options, _result) != 21042104, "result-not-in-options");
         require(_event.creator == msg.sender, "unauthorized");
         require(_event.endTime <= block.timestamp, "end_time <= timestamp");
         require(_event.endTime + 172800 >= block.timestamp, "end_time + 2 days >= timestamp");
 
         _event.result = _result;
+        _event.resultIndex = _index;
         _event.status = EDataTypes.EventStatus.FINISH;
 
         emit EventResultUpdated(msg.sender, _eventId, _result);
-    }
-
-    function updateSToken(
-        uint256 _eventId,
-        address _sToken,
-        uint256 _sTotal
-    ) external {
-        EDataTypes.Event storage _event = events[_eventId];
-
-        require(_event.creator == msg.sender, "unauthorized");
-
-        _event.sToken = _sToken;
-        _event.sTotal = _sTotal;
     }
 
     /* ========== PUBLIC FUNCTIONS ========== */
@@ -56,8 +44,6 @@ contract Event is OwnableUpgradeable {
         uint256 _deadlineTime,
         uint256 _endTime,
         address _helperAddress,
-        address _sToken,
-        uint256 _sTotal,
         EDataTypes.Option calldata _options
     ) external {
         require(block.timestamp < _startTime, "_startTime > block.timestamp");
@@ -70,26 +56,15 @@ contract Event is OwnableUpgradeable {
             _startTime,
             _deadlineTime,
             _endTime,
+            0,
             "",
             EDataTypes.EventStatus.AVAILABLE,
             _helperAddress,
-            _sToken,
-            _sTotal,
             msg.sender,
             _options.data,
             _options.odds
         );
-        emit EventCreated(
-            _idx,
-            _startTime,
-            _deadlineTime,
-            _endTime,
-            _helperAddress,
-            _sToken,
-            _sTotal,
-            msg.sender,
-            _options
-        );
+        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, msg.sender, _options);
     }
 
     /* ========== INTERNAL FUNCTIONS ========== */
@@ -100,7 +75,7 @@ contract Event is OwnableUpgradeable {
                 return i;
             }
         }
-        return 21042104;
+        require(false, "cannot-find-index");
     }
 
     function compareStrings(string memory a, string memory b) internal pure returns (bool) {
@@ -116,8 +91,6 @@ contract Event is OwnableUpgradeable {
         uint256 deadlineTime,
         uint256 endTime,
         address helperAddress,
-        address sToken,
-        uint256 sTotal,
         address creator,
         EDataTypes.Option options
     );

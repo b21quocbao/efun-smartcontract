@@ -4,3 +4,4 @@
 export { GroupPredict__factory } from "./GroupPredict__factory";
 export { Handicap__factory } from "./Handicap__factory";
 export { MultipleChoices__factory } from "./MultipleChoices__factory";
+export { OverUnder__factory } from "./OverUnder__factory";

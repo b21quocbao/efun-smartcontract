@@ -27,28 +27,21 @@ import type {
 export declare namespace EDataTypes {
   export type PredictionStruct = {
     predictionAmount: BigNumberish;
-    numPredict: BigNumberish;
-    predictOptions: string;
+    predictOptions: BigNumberish;
     claimed: boolean;
   };
 
-  export type PredictionStructOutput = [
-    BigNumber,
-    BigNumber,
-    string,
-    boolean
-  ] & {
+  export type PredictionStructOutput = [BigNumber, BigNumber, boolean] & {
     predictionAmount: BigNumber;
-    numPredict: BigNumber;
-    predictOptions: string;
+    predictOptions: BigNumber;
     claimed: boolean;
   };
 }
 
 export interface GroupPredictInterface extends utils.Interface {
   functions: {
-    "calculateReward(address,uint256,uint256,uint256,(uint256,uint256,string,bool),uint256,uint256,uint256)": FunctionFragment;
-    "validatePrediction(address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256)": FunctionFragment;
+    "validatePrediction(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
 
   getFunction(
@@ -61,7 +54,7 @@ export interface GroupPredictInterface extends utils.Interface {
       string,
       BigNumberish,
       BigNumberish,
-      BigNumberish,
+      BigNumberish[],
       EDataTypes.PredictionStruct,
       BigNumberish,
       BigNumberish,
@@ -74,7 +67,7 @@ export interface GroupPredictInterface extends utils.Interface {
       string,
       BigNumberish,
       BigNumberish,
-      BigNumberish,
+      BigNumberish[],
       BigNumberish,
       BigNumberish,
       BigNumberish,
@@ -137,7 +130,7 @@ export interface GroupPredict extends BaseContract {
       _eventDataAddress: string,
       _eventId: BigNumberish,
       _predictStats: BigNumberish,
-      _predictOptionStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
@@ -149,7 +142,7 @@ export interface GroupPredict extends BaseContract {
       _eventDataAddress: string,
       _eventId: BigNumberish,
       _predictStats: BigNumberish,
-      _predictOptionStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
       _predictValue: BigNumberish,
       _odd: BigNumberish,
       _liquidityPool: BigNumberish,
@@ -163,7 +156,7 @@ export interface GroupPredict extends BaseContract {
     _eventDataAddress: string,
     _eventId: BigNumberish,
     _predictStats: BigNumberish,
-    _predictOptionStats: BigNumberish,
+    _predictOptionStats: BigNumberish[],
     _predictions: EDataTypes.PredictionStruct,
     _odd: BigNumberish,
     _oneHundredPrecent: BigNumberish,
@@ -175,7 +168,7 @@ export interface GroupPredict extends BaseContract {
     _eventDataAddress: string,
     _eventId: BigNumberish,
     _predictStats: BigNumberish,
-    _predictOptionStats: BigNumberish,
+    _predictOptionStats: BigNumberish[],
     _predictValue: BigNumberish,
     _odd: BigNumberish,
     _liquidityPool: BigNumberish,
@@ -189,7 +182,7 @@ export interface GroupPredict extends BaseContract {
       _eventDataAddress: string,
       _eventId: BigNumberish,
       _predictStats: BigNumberish,
-      _predictOptionStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
@@ -201,7 +194,7 @@ export interface GroupPredict extends BaseContract {
       _eventDataAddress: string,
       _eventId: BigNumberish,
       _predictStats: BigNumberish,
-      _predictOptionStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
       _predictValue: BigNumberish,
       _odd: BigNumberish,
       _liquidityPool: BigNumberish,
@@ -221,7 +214,7 @@ export interface GroupPredict extends BaseContract {
       _eventDataAddress: string,
       _eventId: BigNumberish,
       _predictStats: BigNumberish,
-      _predictOptionStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
@@ -233,7 +226,7 @@ export interface GroupPredict extends BaseContract {
       _eventDataAddress: string,
       _eventId: BigNumberish,
       _predictStats: BigNumberish,
-      _predictOptionStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
       _predictValue: BigNumberish,
       _odd: BigNumberish,
       _liquidityPool: BigNumberish,
@@ -248,7 +241,7 @@ export interface GroupPredict extends BaseContract {
       _eventDataAddress: string,
       _eventId: BigNumberish,
       _predictStats: BigNumberish,
-      _predictOptionStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
@@ -260,7 +253,7 @@ export interface GroupPredict extends BaseContract {
       _eventDataAddress: string,
       _eventId: BigNumberish,
       _predictStats: BigNumberish,
-      _predictOptionStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
       _predictValue: BigNumberish,
       _odd: BigNumberish,
       _liquidityPool: BigNumberish,

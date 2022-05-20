@@ -35,6 +35,11 @@ const _abi = [
             type: "uint256",
           },
           {
+            internalType: "uint256",
+            name: "resultIndex",
+            type: "uint256",
+          },
+          {
             internalType: "string",
             name: "result",
             type: "string",
@@ -48,16 +53,6 @@ const _abi = [
             internalType: "address",
             name: "helperAddress",
             type: "address",
-          },
-          {
-            internalType: "address",
-            name: "sToken",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "sTotal",
-            type: "uint256",
           },
           {
             internalType: "address",

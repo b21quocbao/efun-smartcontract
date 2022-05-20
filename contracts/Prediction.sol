@@ -16,9 +16,11 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeab
 contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     using SafeERC20Upgradeable for IERC20Upgradeable;
 
-    mapping(address => mapping(address => mapping(uint256 => EDataTypes.Prediction))) public predictions;
-    mapping(address => mapping(uint256 => EDataTypes.PredictStats)) private predictStats;
-    mapping(address => mapping(uint256 => mapping(string => uint256))) private predictOptionStats;
+    mapping(address => mapping(address => mapping(uint256 => mapping(uint256 => EDataTypes.Prediction))))
+        public predictions;
+    mapping(address => mapping(address => mapping(uint256 => uint256))) public numPredicts;
+    mapping(address => mapping(uint256 => uint256)) private predictStats;
+    mapping(address => mapping(uint256 => uint256[])) private predictOptionStats;
     mapping(address => mapping(uint256 => uint256)) private sponsorTotal;
 
     uint256 private oneHundredPrecent;
@@ -111,57 +113,64 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
      */
     function predict(
         uint256 _eventId,
-        string calldata _option,
-        address _token,
-        uint256 _amount
+        string[] memory _options,
+        address[] calldata _tokens,
+        uint256[] calldata _amounts
     ) public payable {
         EDataTypes.Event memory _event = eventData.info(_eventId);
         IHelper _helper = IHelper(_event.helperAddress);
-        uint256 _index = indexOf(_event.options, _option);
-        uint256 _predictValue = msg.value;
-        uint256 lpAmount = liquidityPoolEvent[_eventId][_token];
-        uint256 predictionOptionStatsValue = predictOptionStats[_token][_eventId][_option];
-        uint256 predictionAmountValue = predictStats[_token][_eventId].predictionAmount;
+        uint256 _totalAmount = msg.value;
+        uint256 _localEventId = _eventId;
 
-        if (_token != address(0)) {
-            _predictValue = _amount;
+        require(_tokens.length == _amounts.length && _tokens.length == _options.length, "not-match-length");
+
+        for (uint256 i = 0; i < _tokens.length; ++i) {
+            string memory _option = _options[i];
+            address _token = _tokens[i];
+            uint256 _amount = _amounts[i];
+            uint256 _index = indexOf(_event.options, _option);
+            if (_token == address(0)) {
+                require(_totalAmount >= _amount, "total-amount-not-same");
+                _totalAmount -= _amount;
+            }
+            if (predictOptionStats[_token][_localEventId].length == 0) {
+                predictOptionStats[_token][_localEventId] = new uint256[](_event.odds.length);
+            }
+
+            require(_amount > 0, "predict-value = 0");
+            require(
+                _event.startTime <= block.timestamp && block.timestamp <= _event.deadlineTime,
+                "invalid-predict-time"
+            );
+            require(_event.status == EDataTypes.EventStatus.AVAILABLE, "event-not-available");
+            require(
+                _helper.validatePrediction(
+                    eventDataAddress,
+                    _localEventId,
+                    predictStats[_token][_localEventId],
+                    predictOptionStats[_token][_localEventId],
+                    _amount,
+                    _event.odds[_index],
+                    liquidityPoolEvent[_localEventId][_token],
+                    oneHundredPrecent,
+                    _index
+                ),
+                "not-enough-liquidity"
+            );
+
+            if (_token != address(0)) {
+                IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
+            }
+
+            uint256 _userNumPredict = numPredicts[_token][msg.sender][_localEventId];
+            predictStats[_token][_localEventId] += _amount;
+            predictOptionStats[_token][_localEventId][_index] += _amount;
+            predictions[_token][msg.sender][_localEventId][_userNumPredict].predictOptions = _index;
+            predictions[_token][msg.sender][_localEventId][_userNumPredict].predictionAmount = _amount; // locked fund
+            ++numPredicts[_token][msg.sender][_localEventId];
+
+            emit PredictionCreated(_localEventId, msg.sender, _option, _token, _amount);
         }
-
-        require(_index != 21042104, "predict-not-in-options");
-        require(_event.startTime <= block.timestamp && block.timestamp <= _event.deadlineTime, "invalid-predict-time");
-        require(_event.status == EDataTypes.EventStatus.AVAILABLE, "event-not-available");
-        require(predictions[_token][msg.sender][_eventId].numPredict < 1, "event-exceed-predict");
-        require(
-            _helper.validatePrediction(
-                eventDataAddress,
-                _eventId,
-                predictionAmountValue,
-                predictionOptionStatsValue,
-                _predictValue,
-                _event.odds[_index],
-                lpAmount,
-                oneHundredPrecent,
-                _index
-            ),
-            "not-enough-liquidity"
-        );
-
-        if (_token != address(0)) {
-            IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
-        }
-        require(_predictValue > 0, "predict-value = 0");
-
-        predictStats[_token][_eventId].predictOptions = "";
-        predictStats[_token][_eventId].predictionAmount += _predictValue;
-        predictOptionStats[_token][_eventId][_option] += _predictValue;
-        predictions[_token][msg.sender][_eventId].predictOptions = _option;
-        predictions[_token][msg.sender][_eventId].predictionAmount = _predictValue; // locked fund
-        predictions[_token][msg.sender][_eventId].numPredict = 1;
-
-        // send reward
-        // transferToken(_token, msg.sender, _amount);
-
-        emit PredictionCreated(_eventId, msg.sender, _option, _token, _predictValue);
     }
 
     /**
@@ -170,15 +179,16 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     function getPredictInfo(
         uint256 eventId,
         address account,
-        address token
+        address token,
+        uint256 index
     ) public view returns (EDataTypes.Prediction memory) {
-        return predictions[token][account][eventId];
+        return predictions[token][account][eventId][index];
     }
 
     /**
      * @dev Gets event information
      */
-    function getEventInfo(uint256 eventId, address token) public view returns (EDataTypes.PredictStats memory) {
+    function getEventInfo(uint256 eventId, address token) public view returns (uint256) {
         return predictStats[token][eventId];
     }
 
@@ -196,34 +206,35 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
      * @dev Claims reward
      */
     function claimReward(uint256 _eventId, address _token) external {
-        EDataTypes.Event memory _event = eventData.info(_eventId);
+        for (uint256 i = 0; i < numPredicts[_token][msg.sender][_eventId]; ++i) {
+            EDataTypes.Event memory _event = eventData.info(_eventId);
 
-        require(predictions[_token][msg.sender][_eventId].numPredict == 1, "not-predict");
-        require(_event.status == EDataTypes.EventStatus.FINISH, "event-not-finish");
-        require(predictions[_token][msg.sender][_eventId].claimed == false, "claimed");
+            require(_event.status == EDataTypes.EventStatus.FINISH, "event-not-finish");
+            require(predictions[_token][msg.sender][_eventId][i].claimed == false, "claimed");
 
-        uint256 _index = indexOf(_event.options, predictions[_token][msg.sender][_eventId].predictOptions);
-        uint256 _reward;
+            uint256 _index = predictions[_token][msg.sender][_eventId][i].predictOptions;
+            uint256 _reward;
 
-        IHelper _helper = IHelper(_event.helperAddress);
+            IHelper _helper = IHelper(_event.helperAddress);
 
-        (_reward) = _helper.calculateReward(
-            eventDataAddress,
-            _eventId,
-            predictStats[_token][_eventId].predictionAmount,
-            predictOptionStats[_token][_eventId][predictions[_token][msg.sender][_eventId].predictOptions],
-            predictions[_token][msg.sender][_eventId],
-            _event.odds[_index],
-            oneHundredPrecent,
-            _index
-        );
+            (_reward) = _helper.calculateReward(
+                eventDataAddress,
+                _eventId,
+                predictStats[_token][_eventId],
+                predictOptionStats[_token][_eventId],
+                predictions[_token][msg.sender][_eventId][i],
+                _event.odds[_index],
+                oneHundredPrecent,
+                _index
+            );
 
-        if (_reward > 0) {
-            transferMoney(_token, msg.sender, _reward);
-            predictions[_token][msg.sender][_eventId].claimed = true;
+            if (_reward > 0) {
+                transferMoney(_token, msg.sender, _reward);
+                predictions[_token][msg.sender][_eventId][i].claimed = true;
+            }
+
+            emit RewardClaimed(_eventId, msg.sender, _token, _reward);
         }
-
-        emit RewardClaimed(_eventId, msg.sender, _token, _reward);
     }
 
     function transferMoney(
@@ -298,7 +309,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 return i;
             }
         }
-        return 21042104;
+        require(false, "cannot-find-index");
     }
 
     function compareStrings(string memory a, string memory b) internal pure returns (bool) {

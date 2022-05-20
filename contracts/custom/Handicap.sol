@@ -18,13 +18,14 @@ contract Handicap is Initializable {
                 return i;
             }
         }
+        require(false, "cannot-find-index");
     }
 
     function validatePrediction(
         address _eventDataAddress,
         uint256 _eventId,
         uint256 _predictStats,
-        uint256 _predictOptionStats,
+        uint256[] calldata _predictOptionStats,
         uint256 _predictValue,
         uint256 _odd,
         uint256 _liquidityPool,
@@ -32,8 +33,8 @@ contract Handicap is Initializable {
         uint256 _index
     ) external view returns (bool) {
         uint256 totalAmount = (_predictStats + _predictValue + _liquidityPool) * _oneHundredPrecent;
-        uint256 totalAmountA = _predictOptionStats + _predictValue;
-        uint256 totalAmountB = _predictStats - _predictOptionStats;
+        uint256 totalAmountA = _predictOptionStats[_index] + _predictValue;
+        uint256 totalAmountB = _predictStats - _predictOptionStats[_index];
 
         uint256 winAmountA = totalAmountA * _odd;
         uint256 halfWinAmountA = (totalAmountA * (_odd + _oneHundredPrecent)) / 2;
@@ -56,27 +57,30 @@ contract Handicap is Initializable {
         address _eventDataAddress,
         uint256 _eventId,
         uint256 _predictStats,
-        uint256 _predictOptionStats,
+        uint256[] calldata _predictOptionStats,
         EDataTypes.Prediction calldata _predictions,
         uint256 _odd,
         uint256 _oneHundredPrecent,
         uint256 _index
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-        uint256 _indexOption = indexOf(_event.options, _predictions.predictOptions);
+        uint256 _indexOption = _predictions.predictOptions;
 
-        require((_indexOption == 0 && _index != 4) || (_indexOption == 4 && _index != 0), "no-reward");
+        require(
+            (_indexOption == 0 && _event.resultIndex != 4) || (_indexOption == 4 && _event.resultIndex != 0),
+            "no-reward"
+        );
 
-        if ((_indexOption == 0 && _index == 0) || (_indexOption == 1 && _index == 4)) {
+        if ((_indexOption == 0 && _event.resultIndex == 0) || (_indexOption == 1 && _event.resultIndex == 4)) {
             _reward = (_predictions.predictionAmount * _odd) / _oneHundredPrecent;
         }
-        if ((_indexOption == 0 && _index == 1) || (_indexOption == 1 && _index == 3)) {
+        if ((_indexOption == 0 && _event.resultIndex == 1) || (_indexOption == 1 && _event.resultIndex == 3)) {
             _reward = (_predictions.predictionAmount * (_oneHundredPrecent + _odd)) / 2 / _oneHundredPrecent;
         }
-        if ((_indexOption == 0 && _index == 2) || (_indexOption == 1 && _index == 2)) {
+        if ((_indexOption == 0 && _event.resultIndex == 2) || (_indexOption == 1 && _event.resultIndex == 2)) {
             _reward = _predictions.predictionAmount;
         }
-        if ((_indexOption == 0 && _index == 3) || (_indexOption == 1 && _index == 1)) {
+        if ((_indexOption == 0 && _event.resultIndex == 3) || (_indexOption == 1 && _event.resultIndex == 1)) {
             _reward = _predictions.predictionAmount / 2;
         }
     }

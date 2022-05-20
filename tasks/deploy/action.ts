@@ -12,7 +12,7 @@ task("create:Event")
     const { ethers } = hre;
     const [deployer] = await ethers.getSigners();
 
-    const event = await Event__factory.connect("0xD51ED95e4f82bd4377B916b5D642f8F0e6B814DA", deployer);
+    const event = await Event__factory.connect("0x9BBfAC96A5220a030fDDbD2702B8F5A225Dbe645", deployer);
 
     const { timestamp } = await ethers.provider.getBlock("latest");
 
@@ -22,8 +22,6 @@ task("create:Event")
       timestamp + 7 * 24 * 3600,
       timestamp + 10 * 24 * 3600,
       "0x77380fEcA9C1AFE1b6d1Bb077FbD637EE1bC921e",
-      "0x0000000000000000000000000000000000000000",
-      0,
       {
         data: ["Liverpool", "Manchester City"],
         odds: [45000, 67000],
@@ -39,7 +37,7 @@ task("update:event:result")
     const { ethers } = hre;
     const [deployer] = await ethers.getSigners();
 
-    const event = await Event__factory.connect("0xD51ED95e4f82bd4377B916b5D642f8F0e6B814DA", deployer);
+    const event = await Event__factory.connect("0x9BBfAC96A5220a030fDDbD2702B8F5A225Dbe645", deployer);
 
     console.log(Number(_taskArgs.eventId), _taskArgs.result, "Line #46 action.ts");
 
@@ -55,12 +53,28 @@ task("create:Prediction")
     const { ethers } = hre;
     const [deployer] = await ethers.getSigners();
 
-    const prediction = await Prediction__factory.connect("0x43624c41450D76A8711c257969a67Fa7E6EdB6EB", deployer);
+    const prediction = await Prediction__factory.connect("0x522608829526221417EDC35194A9060De79428C4", deployer);
 
     const tx = await prediction
       .connect(deployer)
-      .predict(Number(_taskArgs.eventId), "Liverpool", "0x0000000000000000000000000000000000000000", 0, {
-        value: toWei("0.01"),
-      });
+      .predict(
+        Number(_taskArgs.eventId),
+        ["Liverpool"],
+        ["0x0000000000000000000000000000000000000000"],
+        [toWei("0.01")],
+        {
+          value: toWei("0.01"),
+        },
+      );
     console.log("\x1b[36m%s\x1b[0m", "tx", tx);
   });
+
+task("update:event:data").setAction(async function (_taskArgs, hre) {
+  const { ethers } = hre;
+  const [deployer] = await ethers.getSigners();
+
+  const prediction = await Prediction__factory.connect("0x522608829526221417EDC35194A9060De79428C4", deployer);
+
+  const tx = await prediction.connect(deployer).setEventData("0x9BBfAC96A5220a030fDDbD2702B8F5A225Dbe645");
+  console.log("\x1b[36m%s\x1b[0m", "tx", tx);
+});

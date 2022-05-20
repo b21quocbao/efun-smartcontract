@@ -6,11 +6,13 @@ import type { Prediction } from "../src/types/contracts/Prediction";
 import type { GroupPredict } from "../src/types/contracts/custom/GroupPredict";
 import type { Handicap } from "../src/types/contracts/custom/Handicap";
 import type { MultipleChoices } from "../src/types/contracts/custom/MultipleChoices";
+import type { OverUnder } from "../src/types/contracts/custom/OverUnder";
 
 declare module "mocha" {
   export interface Context {
     event: Event;
     prediction: Prediction;
+    overUnder: OverUnder;
     groupPredict: GroupPredict;
     multipleChoices: MultipleChoices;
     handicap: Handicap;

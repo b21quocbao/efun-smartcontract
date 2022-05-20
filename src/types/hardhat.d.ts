@@ -45,6 +45,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MultipleChoices__factory>;
     getContractFactory(
+      name: "OverUnder",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OverUnder__factory>;
+    getContractFactory(
       name: "Event",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Event__factory>;
@@ -101,6 +105,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.MultipleChoices>;
+    getContractAt(
+      name: "OverUnder",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OverUnder>;
     getContractAt(
       name: "Event",
       address: string,

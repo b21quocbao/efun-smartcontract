@@ -25,9 +25,9 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "uint256",
+        internalType: "uint256[]",
         name: "_predictOptionStats",
-        type: "uint256",
+        type: "uint256[]",
       },
       {
         components: [
@@ -38,13 +38,8 @@ const _abi = [
           },
           {
             internalType: "uint256",
-            name: "numPredict",
-            type: "uint256",
-          },
-          {
-            internalType: "string",
             name: "predictOptions",
-            type: "string",
+            type: "uint256",
           },
           {
             internalType: "bool",
@@ -101,9 +96,9 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "uint256",
+        internalType: "uint256[]",
         name: "_predictOptionStats",
-        type: "uint256",
+        type: "uint256[]",
       },
       {
         internalType: "uint256",

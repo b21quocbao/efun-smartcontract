@@ -25,11 +25,10 @@ export declare namespace EDataTypes {
     startTime: BigNumberish;
     deadlineTime: BigNumberish;
     endTime: BigNumberish;
+    resultIndex: BigNumberish;
     result: string;
     status: BigNumberish;
     helperAddress: string;
-    sToken: string;
-    sTotal: BigNumberish;
     creator: string;
     options: string[];
     odds: BigNumberish[];
@@ -39,11 +38,10 @@ export declare namespace EDataTypes {
     BigNumber,
     BigNumber,
     BigNumber,
+    BigNumber,
     string,
     number,
     string,
-    string,
-    BigNumber,
     string,
     string[],
     BigNumber[]
@@ -51,11 +49,10 @@ export declare namespace EDataTypes {
     startTime: BigNumber;
     deadlineTime: BigNumber;
     endTime: BigNumber;
+    resultIndex: BigNumber;
     result: string;
     status: number;
     helperAddress: string;
-    sToken: string;
-    sTotal: BigNumber;
     creator: string;
     options: string[];
     odds: BigNumber[];
