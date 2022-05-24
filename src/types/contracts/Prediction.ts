@@ -44,7 +44,7 @@ export declare namespace EDataTypes {
 export interface PredictionInterface extends utils.Interface {
   functions: {
     "bnbRate()": FunctionFragment;
-    "claimReward(uint256,address)": FunctionFragment;
+    "claimReward(uint256,address,uint256)": FunctionFragment;
     "depositLP(uint256,address,uint256)": FunctionFragment;
     "emergencyWithdraw(address,uint256)": FunctionFragment;
     "eventData()": FunctionFragment;
@@ -116,7 +116,7 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "bnbRate", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "claimReward",
-    values: [BigNumberish, string]
+    values: [BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "depositLP",
@@ -318,8 +318,8 @@ export interface PredictionInterface extends utils.Interface {
     "Initialized(uint8)": EventFragment;
     "LPDeposited(uint256,address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "PredictionCreated(uint256,address,string,address,uint256)": EventFragment;
-    "RewardClaimed(uint256,address,address,uint256)": EventFragment;
+    "PredictionCreated(uint256,uint256,address,uint256,address,uint256)": EventFragment;
+    "RewardClaimed(uint256,uint256,address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
@@ -362,13 +362,14 @@ export type OwnershipTransferredEventFilter =
 
 export interface PredictionCreatedEventObject {
   eventId: BigNumber;
+  predictNum: BigNumber;
   user: string;
-  option: string;
+  optionIndex: BigNumber;
   token: string;
   amount: BigNumber;
 }
 export type PredictionCreatedEvent = TypedEvent<
-  [BigNumber, string, string, string, BigNumber],
+  [BigNumber, BigNumber, string, BigNumber, string, BigNumber],
   PredictionCreatedEventObject
 >;
 
@@ -377,12 +378,13 @@ export type PredictionCreatedEventFilter =
 
 export interface RewardClaimedEventObject {
   eventId: BigNumber;
+  predictNum: BigNumber;
   user: string;
   token: string;
   reward: BigNumber;
 }
 export type RewardClaimedEvent = TypedEvent<
-  [BigNumber, string, string, BigNumber],
+  [BigNumber, BigNumber, string, string, BigNumber],
   RewardClaimedEventObject
 >;
 
@@ -420,6 +422,7 @@ export interface Prediction extends BaseContract {
     claimReward(
       _eventId: BigNumberish,
       _token: string,
+      _predictNum: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -571,6 +574,7 @@ export interface Prediction extends BaseContract {
   claimReward(
     _eventId: BigNumberish,
     _token: string,
+    _predictNum: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -719,6 +723,7 @@ export interface Prediction extends BaseContract {
     claimReward(
       _eventId: BigNumberish,
       _token: string,
+      _predictNum: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -878,29 +883,33 @@ export interface Prediction extends BaseContract {
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
 
-    "PredictionCreated(uint256,address,string,address,uint256)"(
+    "PredictionCreated(uint256,uint256,address,uint256,address,uint256)"(
       eventId?: null,
+      predictNum?: null,
       user?: null,
-      option?: null,
+      optionIndex?: null,
       token?: null,
       amount?: null
     ): PredictionCreatedEventFilter;
     PredictionCreated(
       eventId?: null,
+      predictNum?: null,
       user?: null,
-      option?: null,
+      optionIndex?: null,
       token?: null,
       amount?: null
     ): PredictionCreatedEventFilter;
 
-    "RewardClaimed(uint256,address,address,uint256)"(
+    "RewardClaimed(uint256,uint256,address,address,uint256)"(
       eventId?: null,
+      predictNum?: null,
       user?: null,
       token?: null,
       reward?: null
     ): RewardClaimedEventFilter;
     RewardClaimed(
       eventId?: null,
+      predictNum?: null,
       user?: null,
       token?: null,
       reward?: null
@@ -913,6 +922,7 @@ export interface Prediction extends BaseContract {
     claimReward(
       _eventId: BigNumberish,
       _token: string,
+      _predictNum: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1059,6 +1069,7 @@ export interface Prediction extends BaseContract {
     claimReward(
       _eventId: BigNumberish,
       _token: string,
+      _predictNum: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

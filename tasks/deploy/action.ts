@@ -52,11 +52,15 @@ task("create:Prediction")
 
     const { ethers } = hre;
     const [deployer] = await ethers.getSigners();
+    const caller = new ethers.Wallet(
+      "8dc49be4fc73bc613cf35cc17104531f129411fbfb73236d037a3733bed1a803",
+      ethers.provider,
+    );
 
-    const prediction = await Prediction__factory.connect("0x522608829526221417EDC35194A9060De79428C4", deployer);
+    const prediction = await Prediction__factory.connect("0x522608829526221417EDC35194A9060De79428C4", caller);
 
     const tx = await prediction
-      .connect(deployer)
+      .connect(caller)
       .predict(
         Number(_taskArgs.eventId),
         ["Liverpool"],

@@ -36,7 +36,7 @@ export declare namespace EDataTypes {
 
 export interface IHelperInterface extends utils.Interface {
   functions: {
-    "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256)": FunctionFragment;
+    "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256,uint256)": FunctionFragment;
     "validatePrediction(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
 
@@ -52,6 +52,7 @@ export interface IHelperInterface extends utils.Interface {
       BigNumberish,
       BigNumberish[],
       EDataTypes.PredictionStruct,
+      BigNumberish,
       BigNumberish,
       BigNumberish,
       BigNumberish
@@ -120,6 +121,7 @@ export interface IHelper extends BaseContract {
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,
+      _liquidityPool: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { _reward: BigNumber }>;
 
@@ -146,6 +148,7 @@ export interface IHelper extends BaseContract {
     _odd: BigNumberish,
     _oneHundredPrecent: BigNumberish,
     _index: BigNumberish,
+    _liquidityPool: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -172,6 +175,7 @@ export interface IHelper extends BaseContract {
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,
+      _liquidityPool: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -201,6 +205,7 @@ export interface IHelper extends BaseContract {
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,
+      _liquidityPool: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -228,6 +233,7 @@ export interface IHelper extends BaseContract {
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,
+      _liquidityPool: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

@@ -32,12 +32,12 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.event.connect(this.signers.admin).updateEventResult(0, "Liverpool");
 
-    await this.prediction.connect(this.signers.user2).claimReward(0, "0x0000000000000000000000000000000000000000");
+    await this.prediction.connect(this.signers.user2).claimReward(0, "0x0000000000000000000000000000000000000000", 0);
 
-    await this.prediction.connect(this.signers.user3).claimReward(0, "0x0000000000000000000000000000000000000000");
+    await this.prediction.connect(this.signers.user3).claimReward(0, "0x0000000000000000000000000000000000000000", 0);
 
     await expect(
-      this.prediction.connect(this.signers.user1).claimReward(0, "0x0000000000000000000000000000000000000000"),
+      this.prediction.connect(this.signers.user1).claimReward(0, "0x0000000000000000000000000000000000000000", 0),
     ).to.be.revertedWith("no-reward");
 
     console.log(await this.signers.user1.getBalance(), "user 1");
@@ -75,12 +75,12 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.event.connect(this.signers.admin).updateEventResult(1, "Liverpool");
 
-    await this.prediction.connect(this.signers.user2).claimReward(1, "0x0000000000000000000000000000000000000000");
+    await this.prediction.connect(this.signers.user2).claimReward(1, "0x0000000000000000000000000000000000000000", 0);
 
-    await this.prediction.connect(this.signers.user3).claimReward(1, "0x0000000000000000000000000000000000000000");
+    await this.prediction.connect(this.signers.user3).claimReward(1, "0x0000000000000000000000000000000000000000", 0);
 
     await expect(
-      this.prediction.connect(this.signers.user1).claimReward(1, "0x0000000000000000000000000000000000000000"),
+      this.prediction.connect(this.signers.user1).claimReward(1, "0x0000000000000000000000000000000000000000", 0),
     ).to.be.revertedWith("no-reward");
 
     console.log(await this.signers.user1.getBalance(), "user 1");
@@ -122,12 +122,12 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.event.connect(this.signers.admin).updateEventResult(2, "Win - Lose");
 
-    await this.prediction.connect(this.signers.user2).claimReward(2, "0x0000000000000000000000000000000000000000");
+    await this.prediction.connect(this.signers.user2).claimReward(2, "0x0000000000000000000000000000000000000000", 0);
 
-    await this.prediction.connect(this.signers.user3).claimReward(2, "0x0000000000000000000000000000000000000000");
+    await this.prediction.connect(this.signers.user3).claimReward(2, "0x0000000000000000000000000000000000000000", 0);
 
     await expect(
-      this.prediction.connect(this.signers.user1).claimReward(2, "0x0000000000000000000000000000000000000000"),
+      this.prediction.connect(this.signers.user1).claimReward(2, "0x0000000000000000000000000000000000000000", 0),
     ).to.be.revertedWith("no-reward");
 
     console.log(await this.signers.user1.getBalance(), "user 1");
@@ -165,12 +165,12 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.event.connect(this.signers.admin).updateEventResult(3, ">2.5");
 
-    await this.prediction.connect(this.signers.user2).claimReward(3, "0x0000000000000000000000000000000000000000");
+    await this.prediction.connect(this.signers.user2).claimReward(3, "0x0000000000000000000000000000000000000000", 0);
 
-    await this.prediction.connect(this.signers.user3).claimReward(3, "0x0000000000000000000000000000000000000000");
+    await this.prediction.connect(this.signers.user3).claimReward(3, "0x0000000000000000000000000000000000000000", 0);
 
     await expect(
-      this.prediction.connect(this.signers.user1).claimReward(3, "0x0000000000000000000000000000000000000000"),
+      this.prediction.connect(this.signers.user1).claimReward(3, "0x0000000000000000000000000000000000000000", 0),
     ).to.be.revertedWith("no-reward");
 
     console.log(await this.signers.user1.getBalance(), "user 1");
@@ -207,6 +207,26 @@ export function shouldBehaveLikeEvent(): void {
           value: toWei("30"),
         }),
     ).to.be.revertedWith("cannot-find-index");
+
+    await expect(this.event.connect(this.signers.admin).updateEventResult(0, "Manchester City123")).to.be.revertedWith(
+      "cannot-find-index",
+    );
+  });
+
+  it("one user can predict multiple times", async function () {
+    await increase(duration.seconds(50));
+
+    await this.prediction
+      .connect(this.signers.user1)
+      .predict(0, ["Manchester City"], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+        value: toWei("30"),
+      });
+
+    await this.prediction
+      .connect(this.signers.user1)
+      .predict(0, ["Manchester City"], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+        value: toWei("30"),
+      });
 
     await expect(this.event.connect(this.signers.admin).updateEventResult(0, "Manchester City123")).to.be.revertedWith(
       "cannot-find-index",

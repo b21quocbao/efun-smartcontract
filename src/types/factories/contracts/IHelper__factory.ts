@@ -66,6 +66,11 @@ const _abi = [
         name: "_index",
         type: "uint256",
       },
+      {
+        internalType: "uint256",
+        name: "_liquidityPool",
+        type: "uint256",
+      },
     ],
     name: "calculateReward",
     outputs: [

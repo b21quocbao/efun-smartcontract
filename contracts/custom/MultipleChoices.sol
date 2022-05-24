@@ -40,7 +40,8 @@ contract MultipleChoices is Initializable {
         EDataTypes.Prediction calldata _predictions,
         uint256 _odd,
         uint256 _oneHundredPrecent,
-        uint256 _index
+        uint256 _index,
+        uint256 _liquidityPool
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
         require(_event.resultIndex == _predictions.predictOptions, "no-reward");

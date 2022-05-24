@@ -169,7 +169,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             predictions[_token][msg.sender][_localEventId][_userNumPredict].predictionAmount = _amount; // locked fund
             ++numPredicts[_token][msg.sender][_localEventId];
 
-            emit PredictionCreated(_localEventId, msg.sender, _option, _token, _amount);
+            emit PredictionCreated(_localEventId, _userNumPredict, msg.sender, _index, _token, _amount);
         }
     }
 
@@ -205,36 +205,40 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     /**
      * @dev Claims reward
      */
-    function claimReward(uint256 _eventId, address _token) external {
-        for (uint256 i = 0; i < numPredicts[_token][msg.sender][_eventId]; ++i) {
-            EDataTypes.Event memory _event = eventData.info(_eventId);
+    function claimReward(
+        uint256 _eventId,
+        address _token,
+        uint256 _predictNum
+    ) external {
+        EDataTypes.Event memory _event = eventData.info(_eventId);
 
-            require(_event.status == EDataTypes.EventStatus.FINISH, "event-not-finish");
-            require(predictions[_token][msg.sender][_eventId][i].claimed == false, "claimed");
+        require(_event.status == EDataTypes.EventStatus.FINISH, "event-not-finish");
+        require(predictions[_token][msg.sender][_eventId][_predictNum].claimed == false, "claimed");
 
-            uint256 _index = predictions[_token][msg.sender][_eventId][i].predictOptions;
-            uint256 _reward;
+        uint256 _index = predictions[_token][msg.sender][_eventId][_predictNum].predictOptions;
+        uint256 _reward;
+        uint256 _liquidityPool = liquidityPoolEvent[_eventId][_token];
 
-            IHelper _helper = IHelper(_event.helperAddress);
+        IHelper _helper = IHelper(_event.helperAddress);
 
-            (_reward) = _helper.calculateReward(
-                eventDataAddress,
-                _eventId,
-                predictStats[_token][_eventId],
-                predictOptionStats[_token][_eventId],
-                predictions[_token][msg.sender][_eventId][i],
-                _event.odds[_index],
-                oneHundredPrecent,
-                _index
-            );
+        (_reward) = _helper.calculateReward(
+            eventDataAddress,
+            _eventId,
+            predictStats[_token][_eventId],
+            predictOptionStats[_token][_eventId],
+            predictions[_token][msg.sender][_eventId][_predictNum],
+            _event.odds[_index],
+            oneHundredPrecent,
+            _index,
+            _liquidityPool
+        );
 
-            if (_reward > 0) {
-                transferMoney(_token, msg.sender, _reward);
-                predictions[_token][msg.sender][_eventId][i].claimed = true;
-            }
-
-            emit RewardClaimed(_eventId, msg.sender, _token, _reward);
+        if (_reward > 0) {
+            transferMoney(_token, msg.sender, _reward);
+            predictions[_token][msg.sender][_eventId][_predictNum].claimed = true;
         }
+
+        emit RewardClaimed(_eventId, _predictNum, msg.sender, _token, _reward);
     }
 
     function transferMoney(
@@ -317,6 +321,13 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     }
 
     event LPDeposited(uint256 eventId, address token, uint256 amount);
-    event PredictionCreated(uint256 eventId, address user, string option, address token, uint256 amount);
-    event RewardClaimed(uint256 eventId, address user, address token, uint256 reward);
+    event PredictionCreated(
+        uint256 eventId,
+        uint256 predictNum,
+        address user,
+        uint256 optionIndex,
+        address token,
+        uint256 amount
+    );
+    event RewardClaimed(uint256 eventId, uint256 predictNum, address user, address token, uint256 reward);
 }

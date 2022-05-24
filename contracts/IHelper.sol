@@ -27,6 +27,7 @@ interface IHelper {
         EDataTypes.Prediction calldata _predictions,
         uint256 _odd,
         uint256 _oneHundredPrecent,
-        uint256 _index
+        uint256 _index,
+        uint256 _liquidityPool
     ) external view returns (uint256 _reward);
 }
