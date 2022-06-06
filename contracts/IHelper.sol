@@ -7,6 +7,17 @@ import "./EDataTypes.sol";
 pragma experimental ABIEncoderV2;
 
 interface IHelper {
+    function maxPayout(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        uint256 _odd,
+        uint256 _liquidityPool,
+        uint256 _oneHundredPrecent,
+        uint256 _index
+    ) external view returns (uint256);
+
     function validatePrediction(
         address _eventDataAddress,
         uint256 _eventId,

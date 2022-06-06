@@ -12,6 +12,19 @@ contract GroupPredict is Initializable {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
 
+    function maxPayout(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        uint256 _odd,
+        uint256 _liquidityPool,
+        uint256 _oneHundredPrecent,
+        uint256 _index
+    ) external view returns (uint256) {
+        return 0;
+    }
+
     function validatePrediction(
         address _eventDataAddress,
         uint256 _eventId,

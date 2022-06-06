@@ -11,7 +11,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeab
 
 // import "@openzeppelin/contracts/utils/Strings.sol";
 
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     using SafeERC20Upgradeable for IERC20Upgradeable;
@@ -91,21 +91,51 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         return liquidityPoolEvent[_eventId][_token];
     }
 
-    function depositLP(
+    function getMaxPayout(
         uint256 _eventId,
         address _token,
-        uint256 _amount
-    ) public payable {
-        uint256 _value = msg.value;
-
-        if (_token != address(0)) {
-            _value = _amount;
-            IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
+        uint256 _index
+    ) public view returns (uint256) {
+        EDataTypes.Event memory _event = eventData.info(_eventId);
+        IHelper _helper = IHelper(_event.helperAddress);
+        uint256[] memory predictOptionStat = predictOptionStats[_token][_eventId];
+        if (predictOptionStats[_token][_eventId].length == 0) {
+            predictOptionStat = new uint256[](_event.odds.length);
         }
+        return
+            _helper.maxPayout(
+                eventDataAddress,
+                _eventId,
+                predictStats[_token][_eventId],
+                predictOptionStat,
+                _event.odds[_index],
+                liquidityPoolEvent[_eventId][_token],
+                oneHundredPrecent,
+                _index
+            );
+    }
 
-        liquidityPoolEvent[_eventId][_token] += _value;
+    function depositLP(
+        uint256 _eventId,
+        address[] calldata _tokens,
+        uint256[] calldata _amounts
+    ) public payable {
+        uint256 _totalAmount = msg.value;
 
-        emit LPDeposited(_eventId, _token, liquidityPoolEvent[_eventId][_token]);
+        for (uint256 i = 0; i < _tokens.length; ++i) {
+            address _token = _tokens[i];
+            uint256 _amount = _amounts[i];
+
+            liquidityPoolEvent[_eventId][_token] += _amount;
+            if (_token != address(0)) {
+                IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
+            } else {
+                require(_totalAmount >= _amount, "total-amount-not-same");
+                _totalAmount -= _amount;
+            }
+
+            emit LPDeposited(_eventId, _token, liquidityPoolEvent[_eventId][_token]);
+        }
     }
 
     /**

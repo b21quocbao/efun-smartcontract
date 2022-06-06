@@ -33,6 +33,22 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ContextUpgradeable__factory>;
     getContractFactory(
+      name: "Ownable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Ownable__factory>;
+    getContractFactory(
+      name: "ERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20__factory>;
+    getContractFactory(
+      name: "IERC20Metadata",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20Metadata__factory>;
+    getContractFactory(
+      name: "IERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20__factory>;
+    getContractFactory(
       name: "GroupPredict",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.GroupPredict__factory>;
@@ -48,6 +64,10 @@ declare module "hardhat/types/runtime" {
       name: "OverUnder",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OverUnder__factory>;
+    getContractFactory(
+      name: "ERC20Token",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20Token__factory>;
     getContractFactory(
       name: "Event",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -91,6 +111,26 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ContextUpgradeable>;
     getContractAt(
+      name: "Ownable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Ownable>;
+    getContractAt(
+      name: "ERC20",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC20>;
+    getContractAt(
+      name: "IERC20Metadata",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20Metadata>;
+    getContractAt(
+      name: "IERC20",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20>;
+    getContractAt(
       name: "GroupPredict",
       address: string,
       signer?: ethers.Signer
@@ -110,6 +150,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.OverUnder>;
+    getContractAt(
+      name: "ERC20Token",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC20Token>;
     getContractAt(
       name: "Event",
       address: string,

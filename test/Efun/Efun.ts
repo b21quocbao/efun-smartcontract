@@ -1,7 +1,9 @@
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 import { artifacts, ethers, waffle } from "hardhat";
 import type { Artifact } from "hardhat/types";
+import web3 from "web3";
 
+import type { ERC20Token } from "../../src/types/contracts/Erc20Token.sol/ERC20Token";
 import type { Event } from "../../src/types/contracts/Event";
 import type { Prediction } from "../../src/types/contracts/Prediction";
 import type { GroupPredict } from "../../src/types/contracts/custom/GroupPredict";
@@ -10,6 +12,8 @@ import type { MultipleChoices } from "../../src/types/contracts/custom/MultipleC
 import type { OverUnder } from "../../src/types/contracts/custom/OverUnder";
 import { Signers } from "../types";
 import { shouldBehaveLikeEvent } from "./Efun.behavior";
+
+const { toWei } = web3.utils;
 
 describe("Unit tests", function () {
   before(async function () {
@@ -30,6 +34,7 @@ describe("Unit tests", function () {
       const multipleChoicesArtifact: Artifact = await artifacts.readArtifact("MultipleChoices");
       const handicapArtifact: Artifact = await artifacts.readArtifact("Handicap");
       const overUnderArtifact: Artifact = await artifacts.readArtifact("OverUnder");
+      const erc20TokenArtifact: Artifact = await artifacts.readArtifact("ERC20Token");
 
       this.event = <Event>await waffle.deployContract(this.signers.admin, eventArtifact, []);
       this.prediction = <Prediction>await waffle.deployContract(this.signers.admin, predictionArtifact, []);
@@ -39,6 +44,9 @@ describe("Unit tests", function () {
       );
       this.handicap = <Handicap>await waffle.deployContract(this.signers.admin, handicapArtifact, []);
       this.overUnder = <OverUnder>await waffle.deployContract(this.signers.admin, overUnderArtifact, []);
+      this.erc20Token = <ERC20Token>(
+        await waffle.deployContract(this.signers.admin, erc20TokenArtifact, ["EFUN", "EFUN", toWei("100000")])
+      );
 
       await this.event.initialize();
       await this.prediction.initialize(100, 10000);

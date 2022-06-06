@@ -12,6 +12,31 @@ contract OverUnder is Initializable {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
 
+    function maxPayout(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        uint256 _odd,
+        uint256 _liquidityPool,
+        uint256 _oneHundredPrecent,
+        uint256 _index
+    ) external view returns (uint256) {
+        uint256 predictStats;
+        if (_index % 2 == 0) {
+            predictStats = _predictOptionStats[_index] + _predictOptionStats[_index + 1];
+        } else {
+            predictStats = _predictOptionStats[_index] + _predictOptionStats[_index - 1];
+        }
+        uint256 liquidityPool = (_liquidityPool * 2) / _predictOptionStats.length;
+        uint256 totalAmount = (predictStats + liquidityPool) * _oneHundredPrecent;
+        uint256 winAmount = _predictOptionStats[_index] * _odd;
+
+        uint256 winPercent = _odd - _oneHundredPrecent;
+
+        return ((totalAmount - winAmount) / winPercent) * _oneHundredPrecent;
+    }
+
     function validatePrediction(
         address _eventDataAddress,
         uint256 _eventId,

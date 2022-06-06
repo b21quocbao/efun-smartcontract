@@ -37,11 +37,15 @@ export declare namespace EDataTypes {
 export interface IHelperInterface extends utils.Interface {
   functions: {
     "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256,uint256)": FunctionFragment;
+    "maxPayout(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256)": FunctionFragment;
     "validatePrediction(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "calculateReward" | "validatePrediction"
+    nameOrSignatureOrTopic:
+      | "calculateReward"
+      | "maxPayout"
+      | "validatePrediction"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -52,6 +56,19 @@ export interface IHelperInterface extends utils.Interface {
       BigNumberish,
       BigNumberish[],
       EDataTypes.PredictionStruct,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "maxPayout",
+    values: [
+      string,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish[],
       BigNumberish,
       BigNumberish,
       BigNumberish,
@@ -77,6 +94,7 @@ export interface IHelperInterface extends utils.Interface {
     functionFragment: "calculateReward",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "maxPayout", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "validatePrediction",
     data: BytesLike
@@ -125,6 +143,18 @@ export interface IHelper extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { _reward: BigNumber }>;
 
+    maxPayout(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _odd: BigNumberish,
+      _liquidityPool: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     validatePrediction(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -152,6 +182,18 @@ export interface IHelper extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  maxPayout(
+    _eventDataAddress: string,
+    _eventId: BigNumberish,
+    _predictStats: BigNumberish,
+    _predictOptionStats: BigNumberish[],
+    _odd: BigNumberish,
+    _liquidityPool: BigNumberish,
+    _oneHundredPrecent: BigNumberish,
+    _index: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   validatePrediction(
     _eventDataAddress: string,
     _eventId: BigNumberish,
@@ -176,6 +218,18 @@ export interface IHelper extends BaseContract {
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,
       _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    maxPayout(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _odd: BigNumberish,
+      _liquidityPool: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -209,6 +263,18 @@ export interface IHelper extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    maxPayout(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _odd: BigNumberish,
+      _liquidityPool: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     validatePrediction(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -234,6 +300,18 @@ export interface IHelper extends BaseContract {
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,
       _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    maxPayout(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _odd: BigNumberish,
+      _liquidityPool: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

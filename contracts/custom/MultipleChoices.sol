@@ -12,6 +12,24 @@ contract MultipleChoices is Initializable {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
 
+    function maxPayout(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        uint256 _odd,
+        uint256 _liquidityPool,
+        uint256 _oneHundredPrecent,
+        uint256 _index
+    ) external view returns (uint256) {
+        uint256 totalAmount = (_predictStats + _liquidityPool);
+        uint256 winAmount = (_predictOptionStats[_index]);
+
+        uint256 winPercent = _odd - _oneHundredPrecent;
+
+        return ((totalAmount - winAmount) / winPercent) * _oneHundredPrecent;
+    }
+
     function validatePrediction(
         address _eventDataAddress,
         uint256 _eventId,

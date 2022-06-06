@@ -46,7 +46,6 @@ contract Event is OwnableUpgradeable {
         address _helperAddress,
         EDataTypes.Option calldata _options
     ) external {
-        require(block.timestamp < _startTime, "_startTime > block.timestamp");
         require(_startTime < _deadlineTime, "deadline_time > start_time");
         require(_deadlineTime < _endTime, "end_time > deadline_time");
         require(_options.data.length == _options.odds.length, "not-match-length-option-odd");

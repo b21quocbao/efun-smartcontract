@@ -45,7 +45,7 @@ export interface PredictionInterface extends utils.Interface {
   functions: {
     "bnbRate()": FunctionFragment;
     "claimReward(uint256,address,uint256)": FunctionFragment;
-    "depositLP(uint256,address,uint256)": FunctionFragment;
+    "depositLP(uint256,address[],uint256[])": FunctionFragment;
     "emergencyWithdraw(address,uint256)": FunctionFragment;
     "eventData()": FunctionFragment;
     "eventDataAddress()": FunctionFragment;
@@ -54,6 +54,7 @@ export interface PredictionInterface extends utils.Interface {
     "feeEFUN()": FunctionFragment;
     "getEventInfo(uint256,address)": FunctionFragment;
     "getLiquidityPool(uint256,address)": FunctionFragment;
+    "getMaxPayout(uint256,address,uint256)": FunctionFragment;
     "getPredictInfo(uint256,address,address,uint256)": FunctionFragment;
     "getTokenAmount(address)": FunctionFragment;
     "initialize(uint256,uint256)": FunctionFragment;
@@ -90,6 +91,7 @@ export interface PredictionInterface extends utils.Interface {
       | "feeEFUN"
       | "getEventInfo"
       | "getLiquidityPool"
+      | "getMaxPayout"
       | "getPredictInfo"
       | "getTokenAmount"
       | "initialize"
@@ -120,7 +122,7 @@ export interface PredictionInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "depositLP",
-    values: [BigNumberish, string, BigNumberish]
+    values: [BigNumberish, string[], BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "emergencyWithdraw",
@@ -144,6 +146,10 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getLiquidityPool",
     values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMaxPayout",
+    values: [BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getPredictInfo",
@@ -251,6 +257,10 @@ export interface PredictionInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getLiquidityPool",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMaxPayout",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -428,8 +438,8 @@ export interface Prediction extends BaseContract {
 
     depositLP(
       _eventId: BigNumberish,
-      _token: string,
-      _amount: BigNumberish,
+      _tokens: string[],
+      _amounts: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -458,6 +468,13 @@ export interface Prediction extends BaseContract {
     getLiquidityPool(
       _eventId: BigNumberish,
       _token: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getMaxPayout(
+      _eventId: BigNumberish,
+      _token: string,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -580,8 +597,8 @@ export interface Prediction extends BaseContract {
 
   depositLP(
     _eventId: BigNumberish,
-    _token: string,
-    _amount: BigNumberish,
+    _tokens: string[],
+    _amounts: BigNumberish[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -610,6 +627,13 @@ export interface Prediction extends BaseContract {
   getLiquidityPool(
     _eventId: BigNumberish,
     _token: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getMaxPayout(
+    _eventId: BigNumberish,
+    _token: string,
+    _index: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -729,8 +753,8 @@ export interface Prediction extends BaseContract {
 
     depositLP(
       _eventId: BigNumberish,
-      _token: string,
-      _amount: BigNumberish,
+      _tokens: string[],
+      _amounts: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -759,6 +783,13 @@ export interface Prediction extends BaseContract {
     getLiquidityPool(
       _eventId: BigNumberish,
       _token: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getMaxPayout(
+      _eventId: BigNumberish,
+      _token: string,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -928,8 +959,8 @@ export interface Prediction extends BaseContract {
 
     depositLP(
       _eventId: BigNumberish,
-      _token: string,
-      _amount: BigNumberish,
+      _tokens: string[],
+      _amounts: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -958,6 +989,13 @@ export interface Prediction extends BaseContract {
     getLiquidityPool(
       _eventId: BigNumberish,
       _token: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getMaxPayout(
+      _eventId: BigNumberish,
+      _token: string,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1075,8 +1113,8 @@ export interface Prediction extends BaseContract {
 
     depositLP(
       _eventId: BigNumberish,
-      _token: string,
-      _amount: BigNumberish,
+      _tokens: string[],
+      _amounts: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1105,6 +1143,13 @@ export interface Prediction extends BaseContract {
     getLiquidityPool(
       _eventId: BigNumberish,
       _token: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getMaxPayout(
+      _eventId: BigNumberish,
+      _token: string,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
