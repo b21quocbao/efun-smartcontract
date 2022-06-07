@@ -173,4 +173,42 @@ contract Handicap is Initializable {
             _reward = _predictions.predictionAmount / 2;
         }
     }
+
+    /**
+     * @dev Calculates reward
+     */
+    function calculateRemainLP(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        uint256[] calldata _odds,
+        uint256 _oneHundredPrecent,
+        uint256 _liquidityPool
+    ) public view returns (uint256 _remainLP) {
+        EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
+        _remainLP = _liquidityPool;
+
+        for (uint256 idx = 0; idx < _predictOptionStats.length; ++idx) {
+            _remainLP += _predictOptionStats[idx];
+
+            if ((idx == 0 && _event.resultIndex != 4) || (idx == 4 && _event.resultIndex != 0)) {
+                if ((idx == 0 && _event.resultIndex == 0) || (idx == 1 && _event.resultIndex == 4)) {
+                    _remainLP -= (_predictOptionStats[idx] * _odds[idx]) / _oneHundredPrecent;
+                }
+                if ((idx == 0 && _event.resultIndex == 1) || (idx == 1 && _event.resultIndex == 3)) {
+                    _remainLP -=
+                        (_predictOptionStats[idx] * (_oneHundredPrecent + _odds[idx])) /
+                        2 /
+                        _oneHundredPrecent;
+                }
+                if ((idx == 0 && _event.resultIndex == 2) || (idx == 1 && _event.resultIndex == 2)) {
+                    _remainLP -= _predictOptionStats[idx];
+                }
+                if ((idx == 0 && _event.resultIndex == 3) || (idx == 1 && _event.resultIndex == 1)) {
+                    _remainLP -= _predictOptionStats[idx] / 2;
+                }
+            }
+        }
+    }
 }

@@ -30,6 +30,55 @@ const _abi = [
         type: "uint256[]",
       },
       {
+        internalType: "uint256[]",
+        name: "_odds",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256",
+        name: "_oneHundredPrecent",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_liquidityPool",
+        type: "uint256",
+      },
+    ],
+    name: "calculateRemainLP",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "_remainLP",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_eventDataAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_eventId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_predictStats",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256[]",
+        name: "_predictOptionStats",
+        type: "uint256[]",
+      },
+      {
         components: [
           {
             internalType: "uint256",

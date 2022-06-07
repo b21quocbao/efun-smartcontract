@@ -84,4 +84,30 @@ contract OverUnder is Initializable {
 
         _reward = (_predictions.predictionAmount * _odd) / _oneHundredPrecent;
     }
+
+    /**
+     * @dev Calculates reward
+     */
+    function calculateRemainLP(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        uint256[] calldata _odds,
+        uint256 _oneHundredPrecent,
+        uint256 _liquidityPool
+    ) public view returns (uint256 _remainLP) {
+        EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
+        _remainLP = _liquidityPool;
+
+        for (uint256 idx = 0; idx < _predictOptionStats.length; ++idx) {
+            bool validate1 = idx % 2 == 0 && idx >= _event.resultIndex;
+            bool validate2 = idx % 2 == 1 && idx <= _event.resultIndex;
+            _remainLP += _predictOptionStats[idx];
+
+            if (validate1 || validate2) {
+                _remainLP -= (_predictOptionStats[idx] * _odds[idx]) / _oneHundredPrecent;
+            }
+        }
+    }
 }

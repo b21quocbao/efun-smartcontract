@@ -12,7 +12,7 @@ task("deploy:Prediction").setAction(async function (taskArguments: TaskArguments
 
 task("deploy:Event").setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
   const EventFactory: Event__factory = <Event__factory>await ethers.getContractFactory("Event");
-  const eventFactory = await upgrades.deployProxy(EventFactory, [0]);
+  const eventFactory = await upgrades.deployProxy(EventFactory, []);
   console.log("Event deployed to: ", eventFactory.address);
 });
 

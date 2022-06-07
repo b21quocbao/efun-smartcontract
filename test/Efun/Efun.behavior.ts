@@ -24,11 +24,21 @@ export function shouldBehaveLikeEvent(): void {
         value: toWei("30"),
       });
 
-    console.log(await this.signers.user1.getBalance(), "user 1");
-    console.log(await this.signers.user2.getBalance(), "user 2");
-    console.log(await this.signers.user3.getBalance(), "user 3");
+    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+    console.log(
+      Math.round(
+        Number(
+          fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
+        ),
+      ),
+      "contract",
+    );
 
     await increase(duration.days(10));
+    console.log("----------------------------------------------------------------------------------");
 
     await this.event.connect(this.signers.admin).updateEventResult(0, "Liverpool");
 
@@ -40,9 +50,10 @@ export function shouldBehaveLikeEvent(): void {
       this.prediction.connect(this.signers.user1).claimReward(0, "0x0000000000000000000000000000000000000000", 0),
     ).to.be.revertedWith("no-reward");
 
-    console.log(await this.signers.user1.getBalance(), "user 1");
-    console.log(await this.signers.user2.getBalance(), "user 2");
-    console.log(await this.signers.user3.getBalance(), "user 3");
+    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
   });
 
   it("can predict multiple choices event", async function () {
@@ -66,14 +77,43 @@ export function shouldBehaveLikeEvent(): void {
         value: toWei("30"),
       });
 
-    console.log(await this.signers.user1.getBalance(), "user 1");
-    console.log(await this.signers.user2.getBalance(), "user 2");
-    console.log(await this.signers.user3.getBalance(), "user 3");
-    console.log(await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000"), "contract");
+    await expect(
+      this.prediction.connect(this.signers.admin).claimRemainingLP(1, ["0x0000000000000000000000000000000000000000"]),
+    ).to.be.revertedWith("event-not-finish");
+
+    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+    console.log(
+      Math.round(
+        Number(
+          fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
+        ),
+      ),
+      "contract",
+    );
 
     await increase(duration.days(10));
+    console.log("----------------------------------------------------------------------------------");
 
     await this.event.connect(this.signers.admin).updateEventResult(1, "Liverpool");
+    await expect(
+      this.prediction.connect(this.signers.user1).claimRemainingLP(1, ["0x0000000000000000000000000000000000000000"]),
+    ).to.be.revertedWith("unauthorized");
+    console.log(
+      fromWei(
+        (
+          await this.prediction
+            .connect(this.signers.admin)
+            .getRemainingLP(1, "0x0000000000000000000000000000000000000000")
+        ).toString(),
+      ),
+      "zxcvoiu",
+    );
+    await this.prediction
+      .connect(this.signers.admin)
+      .claimRemainingLP(1, ["0x0000000000000000000000000000000000000000"]);
 
     await this.prediction.connect(this.signers.user2).claimReward(1, "0x0000000000000000000000000000000000000000", 0);
 
@@ -83,9 +123,10 @@ export function shouldBehaveLikeEvent(): void {
       this.prediction.connect(this.signers.user1).claimReward(1, "0x0000000000000000000000000000000000000000", 0),
     ).to.be.revertedWith("no-reward");
 
-    console.log(await this.signers.user1.getBalance(), "user 1");
-    console.log(await this.signers.user2.getBalance(), "user 2");
-    console.log(await this.signers.user3.getBalance(), "user 3");
+    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
   });
 
   it("cant predict when not allow", async function () {
@@ -128,12 +169,21 @@ export function shouldBehaveLikeEvent(): void {
         value: toWei("30"),
       });
 
-    console.log(await this.signers.user1.getBalance(), "user 1");
-    console.log(await this.signers.user2.getBalance(), "user 2");
-    console.log(await this.signers.user3.getBalance(), "user 3");
-    console.log(await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000"), "contract");
+    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+    console.log(
+      Math.round(
+        Number(
+          fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
+        ),
+      ),
+      "contract",
+    );
 
     await increase(duration.days(10));
+    console.log("----------------------------------------------------------------------------------");
 
     await this.event.connect(this.signers.admin).updateEventResult(2, "Win - Lose");
 
@@ -145,9 +195,10 @@ export function shouldBehaveLikeEvent(): void {
       this.prediction.connect(this.signers.user1).claimReward(2, "0x0000000000000000000000000000000000000000", 0),
     ).to.be.revertedWith("no-reward");
 
-    console.log(await this.signers.user1.getBalance(), "user 1");
-    console.log(await this.signers.user2.getBalance(), "user 2");
-    console.log(await this.signers.user3.getBalance(), "user 3");
+    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
   });
 
   it("can predict over under event", async function () {
@@ -171,12 +222,21 @@ export function shouldBehaveLikeEvent(): void {
         value: toWei("30"),
       });
 
-    console.log(await this.signers.user1.getBalance(), "user 1");
-    console.log(await this.signers.user2.getBalance(), "user 2");
-    console.log(await this.signers.user3.getBalance(), "user 3");
-    console.log(await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000"), "contract");
+    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+    console.log(
+      Math.round(
+        Number(
+          fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
+        ),
+      ),
+      "contract",
+    );
 
     await increase(duration.days(10));
+    console.log("----------------------------------------------------------------------------------");
 
     await this.event.connect(this.signers.admin).updateEventResult(3, ">2.5");
 
@@ -188,9 +248,10 @@ export function shouldBehaveLikeEvent(): void {
       this.prediction.connect(this.signers.user1).claimReward(3, "0x0000000000000000000000000000000000000000", 0),
     ).to.be.revertedWith("no-reward");
 
-    console.log(await this.signers.user1.getBalance(), "user 1");
-    console.log(await this.signers.user2.getBalance(), "user 2");
-    console.log(await this.signers.user3.getBalance(), "user 3");
+    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
   });
 
   it("error cannot-find-index", async function () {

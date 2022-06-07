@@ -6,42 +6,40 @@ import { Prediction__factory } from "../../src/types/factories/contracts/Predict
 
 const { toWei } = web3.utils;
 
-task("create:Event")
-  .addParam("eventId", "EventId")
-  .setAction(async function (_taskArgs, hre) {
-    const { ethers } = hre;
-    const [deployer] = await ethers.getSigners();
+task("create:Event").setAction(async function (_taskArgs, hre) {
+  const { ethers } = hre;
+  const [deployer] = await ethers.getSigners();
 
-    const event = await Event__factory.connect("0x9BBfAC96A5220a030fDDbD2702B8F5A225Dbe645", deployer);
+  const event = await Event__factory.connect("0x9BBfAC96A5220a030fDDbD2702B8F5A225Dbe645", deployer);
 
-    const { timestamp } = await ethers.provider.getBlock("latest");
+  const { timestamp } = await ethers.provider.getBlock("latest");
 
-    const tx = await event.createSingleEvent(
-      timestamp + 60,
-      timestamp + 7 * 24 * 3600,
-      timestamp + 10 * 24 * 3600,
-      "0x77380fEcA9C1AFE1b6d1Bb077FbD637EE1bC921e",
-      {
-        data: ["Liverpool", "Manchester City"],
-        odds: [45000, 67000],
-      },
-      [
-        "name",
-        "thumbnailUrl",
-        "bannerUrl",
-        "0",
-        "0",
-        "0",
-        "type",
-        "marketType",
-        "description",
-        "metadata",
-        "shortDescription",
-        "streamUrl",
-      ],
-    );
-    console.log("\x1b[36m%s\x1b[0m", "tx", tx);
-  });
+  const tx = await event.createSingleEvent(
+    1654588275,
+    1654595424,
+    1654681824,
+    "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+    {
+      data: ["1", "2"],
+      odds: [10000, 10000],
+    },
+    [
+      "Duc tesst t",
+      "https://ipfs.infura.io/ipfs/QmcsoGEKj5cBnN991qh3k3jfYkihfnjbMk6q6tFYNkKhaq",
+      "",
+      "9",
+      "8",
+      "12",
+      "Group Predict",
+      "Multiple choices",
+      "adad",
+      '{"eventType":"user vs user","tokens":["0x0000000000000000000000000000000000000000"]}',
+      "d",
+      "",
+    ],
+  );
+  console.log("\x1b[36m%s\x1b[0m", "tx", tx);
+});
 
 task("update:event:result")
   .addParam("eventId", "EventId")

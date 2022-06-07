@@ -36,6 +36,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     IEvent public eventData;
     address public eventDataAddress;
     mapping(address => mapping(address => uint256)) private liquidityPool;
+    mapping(uint256 => mapping(address => bool)) private claimedLiquidityPool;
     mapping(uint256 => mapping(address => uint256)) private liquidityPoolEvent;
 
     function initialize(uint256 _participateRate, uint256 _oneHundredPrecent) public initializer {
@@ -89,6 +90,26 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
     function getLiquidityPool(uint256 _eventId, address _token) public view returns (uint256) {
         return liquidityPoolEvent[_eventId][_token];
+    }
+
+    /**
+     * @dev Get remaining lp
+     */
+    function getRemainingLP(uint256 _eventId, address _token) public view returns (uint256) {
+        EDataTypes.Event memory _event = eventData.info(_eventId);
+        IHelper _helper = IHelper(_event.helperAddress);
+        uint256 _liquidityPool = liquidityPoolEvent[_eventId][_token];
+
+        return
+            _helper.calculateRemainLP(
+                eventDataAddress,
+                _eventId,
+                predictStats[_token][_eventId],
+                predictOptionStats[_token][_eventId],
+                _event.odds,
+                oneHundredPrecent,
+                _liquidityPool
+            );
     }
 
     function getMaxPayout(
@@ -271,6 +292,40 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         emit RewardClaimed(_eventId, _predictNum, msg.sender, _token, _reward);
     }
 
+    /**
+     * @dev Claims remaining lp
+     */
+    function claimRemainingLP(uint256 _eventId, address[] calldata _tokens) public {
+        EDataTypes.Event memory _event = eventData.info(_eventId);
+        IHelper _helper = IHelper(_event.helperAddress);
+
+        require(_event.status == EDataTypes.EventStatus.FINISH, "event-not-finish");
+        require(_event.creator == msg.sender, "unauthorized");
+
+        for (uint256 i = 0; i < _tokens.length; ++i) {
+            address _token = _tokens[i];
+            uint256 _liquidityPool = liquidityPoolEvent[_eventId][_token];
+            require(claimedLiquidityPool[_eventId][_token] == false, "claimed");
+            claimedLiquidityPool[_eventId][_token] = true;
+
+            uint256 _amount = _helper.calculateRemainLP(
+                eventDataAddress,
+                _eventId,
+                predictStats[_token][_eventId],
+                predictOptionStats[_token][_eventId],
+                _event.odds,
+                oneHundredPrecent,
+                _liquidityPool
+            );
+            if (_token == address(0)) {
+                payable(msg.sender).transfer(_amount);
+            } else {
+                IERC20Upgradeable(payable(_token)).safeTransfer(msg.sender, _amount);
+            }
+            emit LPClaimed(_eventId, _token, _amount);
+        }
+    }
+
     function transferMoney(
         address _token,
         address _toAddress,
@@ -351,6 +406,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     }
 
     event LPDeposited(uint256 eventId, address token, uint256 amount);
+    event LPClaimed(uint256 eventId, address token, uint256 amount);
     event PredictionCreated(
         uint256 eventId,
         uint256 predictNum,

@@ -36,6 +36,7 @@ export declare namespace EDataTypes {
 
 export interface IHelperInterface extends utils.Interface {
   functions: {
+    "calculateRemainLP(address,uint256,uint256,uint256[],uint256[],uint256,uint256)": FunctionFragment;
     "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256,uint256)": FunctionFragment;
     "maxPayout(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256)": FunctionFragment;
     "validatePrediction(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
@@ -43,11 +44,24 @@ export interface IHelperInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "calculateRemainLP"
       | "calculateReward"
       | "maxPayout"
       | "validatePrediction"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "calculateRemainLP",
+    values: [
+      string,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish[],
+      BigNumberish[],
+      BigNumberish,
+      BigNumberish
+    ]
+  ): string;
   encodeFunctionData(
     functionFragment: "calculateReward",
     values: [
@@ -91,6 +105,10 @@ export interface IHelperInterface extends utils.Interface {
   ): string;
 
   decodeFunctionResult(
+    functionFragment: "calculateRemainLP",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "calculateReward",
     data: BytesLike
   ): Result;
@@ -130,6 +148,17 @@ export interface IHelper extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    calculateRemainLP(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _odds: BigNumberish[],
+      _oneHundredPrecent: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { _remainLP: BigNumber }>;
+
     calculateReward(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -168,6 +197,17 @@ export interface IHelper extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
   };
+
+  calculateRemainLP(
+    _eventDataAddress: string,
+    _eventId: BigNumberish,
+    _predictStats: BigNumberish,
+    _predictOptionStats: BigNumberish[],
+    _odds: BigNumberish[],
+    _oneHundredPrecent: BigNumberish,
+    _liquidityPool: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   calculateReward(
     _eventDataAddress: string,
@@ -208,6 +248,17 @@ export interface IHelper extends BaseContract {
   ): Promise<boolean>;
 
   callStatic: {
+    calculateRemainLP(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _odds: BigNumberish[],
+      _oneHundredPrecent: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     calculateReward(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -250,6 +301,17 @@ export interface IHelper extends BaseContract {
   filters: {};
 
   estimateGas: {
+    calculateRemainLP(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _odds: BigNumberish[],
+      _oneHundredPrecent: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     calculateReward(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -290,6 +352,17 @@ export interface IHelper extends BaseContract {
   };
 
   populateTransaction: {
+    calculateRemainLP(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _odds: BigNumberish[],
+      _oneHundredPrecent: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     calculateReward(
       _eventDataAddress: string,
       _eventId: BigNumberish,

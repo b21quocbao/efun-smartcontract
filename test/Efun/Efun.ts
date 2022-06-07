@@ -48,7 +48,7 @@ describe("Unit tests", function () {
         await waffle.deployContract(this.signers.admin, erc20TokenArtifact, ["EFUN", "EFUN", toWei("100000")])
       );
 
-      await this.event.initialize(0);
+      await this.event.initialize();
       await this.prediction.initialize(100, 10000);
       await this.prediction.connect(this.signers.admin).setEventData(this.event.address);
 

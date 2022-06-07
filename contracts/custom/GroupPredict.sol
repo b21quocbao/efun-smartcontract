@@ -58,4 +58,20 @@ contract GroupPredict is Initializable {
 
         _reward = ((_predictStats + _liquidityPool) * _predictions.predictionAmount) / _predictOptionStats[_index];
     }
+
+    /**
+     * @dev Calculates reward
+     */
+    function calculateRemainLP(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        uint256[] calldata _odds,
+        uint256 _oneHundredPrecent,
+        uint256 _liquidityPool
+    ) public view returns (uint256 _remainLP) {
+        EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
+        _remainLP = 0;
+    }
 }
