@@ -32,6 +32,7 @@ export declare namespace EDataTypes {
     creator: string;
     options: string[];
     odds: BigNumberish[];
+    _datas: string[];
   };
 
   export type EventStructOutput = [
@@ -44,7 +45,8 @@ export declare namespace EDataTypes {
     string,
     string,
     string[],
-    BigNumber[]
+    BigNumber[],
+    string[]
   ] & {
     startTime: BigNumber;
     deadlineTime: BigNumber;
@@ -56,6 +58,7 @@ export declare namespace EDataTypes {
     creator: string;
     options: string[];
     odds: BigNumber[];
+    _datas: string[];
   };
 }
 

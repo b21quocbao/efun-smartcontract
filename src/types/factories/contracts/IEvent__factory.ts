@@ -69,6 +69,11 @@ const _abi = [
             name: "odds",
             type: "uint256[]",
           },
+          {
+            internalType: "string[12]",
+            name: "_datas",
+            type: "string[12]",
+          },
         ],
         internalType: "struct EDataTypes.Event",
         name: "_event",

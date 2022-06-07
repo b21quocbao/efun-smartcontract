@@ -26,6 +26,20 @@ task("create:Event")
         data: ["Liverpool", "Manchester City"],
         odds: [45000, 67000],
       },
+      [
+        "name",
+        "thumbnailUrl",
+        "bannerUrl",
+        "0",
+        "0",
+        "0",
+        "type",
+        "marketType",
+        "description",
+        "metadata",
+        "shortDescription",
+        "streamUrl",
+      ],
     );
     console.log("\x1b[36m%s\x1b[0m", "tx", tx);
   });

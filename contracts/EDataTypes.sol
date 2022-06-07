@@ -19,6 +19,7 @@ library EDataTypes {
         address creator;
         string[] options;
         uint256[] odds;
+        string[12] _datas;
     }
 
     struct Prediction {

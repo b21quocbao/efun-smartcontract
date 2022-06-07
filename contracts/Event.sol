@@ -44,7 +44,8 @@ contract Event is OwnableUpgradeable {
         uint256 _deadlineTime,
         uint256 _endTime,
         address _helperAddress,
-        EDataTypes.Option calldata _options
+        EDataTypes.Option calldata _options,
+        string[12] memory _datas
     ) external {
         require(_startTime < _deadlineTime, "deadline_time > start_time");
         require(_deadlineTime < _endTime, "end_time > deadline_time");
@@ -61,9 +62,10 @@ contract Event is OwnableUpgradeable {
             _helperAddress,
             msg.sender,
             _options.data,
-            _options.odds
+            _options.odds,
+            _datas
         );
-        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, msg.sender, _options);
+        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, msg.sender, _options, _datas);
     }
 
     /* ========== INTERNAL FUNCTIONS ========== */
@@ -91,6 +93,7 @@ contract Event is OwnableUpgradeable {
         uint256 endTime,
         address helperAddress,
         address creator,
-        EDataTypes.Option options
+        EDataTypes.Option options,
+        string[12] _datas
     );
 }

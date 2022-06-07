@@ -54,70 +54,118 @@ describe("Unit tests", function () {
 
       const { timestamp } = await ethers.provider.getBlock("latest");
 
-      await this.event
-        .connect(this.signers.admin)
-        .createSingleEvent(
-          0,
-          timestamp + 20,
-          timestamp + 7 * 24 * 3600,
-          timestamp + 10 * 24 * 3600,
-          this.groupPredict.address,
-          {
-            data: ["Liverpool", "Manchester City", "Manchester United", "Chelsea"],
-            odds: [0, 0, 0, 0],
-          },
-        );
+      await this.event.connect(this.signers.admin).createSingleEvent(
+        0,
+        timestamp + 20,
+        timestamp + 7 * 24 * 3600,
+        timestamp + 10 * 24 * 3600,
+        this.groupPredict.address,
+        {
+          data: ["Liverpool", "Manchester City", "Manchester United", "Chelsea"],
+          odds: [0, 0, 0, 0],
+        },
+        [
+          "name",
+          "thumbnailUrl",
+          "bannerUrl",
+          "0",
+          "0",
+          "0",
+          "type",
+          "marketType",
+          "description",
+          "metadata",
+          "shortDescription",
+          "streamUrl",
+        ],
+      );
 
-      await this.event
-        .connect(this.signers.admin)
-        .createSingleEvent(
-          1,
-          timestamp + 20,
-          timestamp + 7 * 24 * 3600,
-          timestamp + 10 * 24 * 3600,
-          this.multipleChoices.address,
-          {
-            data: ["Liverpool", "Manchester City", "Manchester United", "Chelsea"],
-            odds: [23000, 12700, 47600, 35600],
-          },
-        );
+      await this.event.connect(this.signers.admin).createSingleEvent(
+        1,
+        timestamp + 20,
+        timestamp + 7 * 24 * 3600,
+        timestamp + 10 * 24 * 3600,
+        this.multipleChoices.address,
+        {
+          data: ["Liverpool", "Manchester City", "Manchester United", "Chelsea"],
+          odds: [23000, 12700, 47600, 35600],
+        },
+        [
+          "name",
+          "thumbnailUrl",
+          "bannerUrl",
+          "0",
+          "0",
+          "0",
+          "type",
+          "marketType",
+          "description",
+          "metadata",
+          "shortDescription",
+          "streamUrl",
+        ],
+      );
 
-      await this.event
-        .connect(this.signers.admin)
-        .createSingleEvent(
-          2,
-          timestamp + 20,
-          timestamp + 7 * 24 * 3600,
-          timestamp + 10 * 24 * 3600,
-          this.handicap.address,
-          {
-            data: ["Win - Lose", "Half Win - Half Lose", "Draw - Draw", "Half Lose - Half Win", "Lose - Win"],
-            odds: [23000, 23000, 10000, 13000, 13000],
-          },
-        );
+      await this.event.connect(this.signers.admin).createSingleEvent(
+        2,
+        timestamp + 20,
+        timestamp + 7 * 24 * 3600,
+        timestamp + 10 * 24 * 3600,
+        this.handicap.address,
+        {
+          data: ["Win - Lose", "Half Win - Half Lose", "Draw - Draw", "Half Lose - Half Win", "Lose - Win"],
+          odds: [23000, 23000, 10000, 13000, 13000],
+        },
+        [
+          "name",
+          "thumbnailUrl",
+          "bannerUrl",
+          "0",
+          "0",
+          "0",
+          "type",
+          "marketType",
+          "description",
+          "metadata",
+          "shortDescription",
+          "streamUrl",
+        ],
+      );
 
-      await this.event
-        .connect(this.signers.admin)
-        .createSingleEvent(
-          3,
-          timestamp + 20,
-          timestamp + 7 * 24 * 3600,
-          timestamp + 10 * 24 * 3600,
-          this.overUnder.address,
-          {
-            data: ["<0.5", ">0.5", "<1.5", ">1.5", "<2.5", ">2.5", "<3.5", ">3.5"],
-            odds: [
-              30 * 10000,
-              1.01 * 10000,
-              8 * 10000,
-              1.1 * 10000,
-              3.65 * 10000,
-              1.3 * 10000,
-              2.1 * 10000,
-              1.76 * 10000,
-            ],
-          },
-        );
+      await this.event.connect(this.signers.admin).createSingleEvent(
+        3,
+        timestamp + 20,
+        timestamp + 7 * 24 * 3600,
+        timestamp + 10 * 24 * 3600,
+        this.overUnder.address,
+        {
+          data: ["<0.5", ">0.5", "<1.5", ">1.5", "<2.5", ">2.5", "<3.5", ">3.5"],
+          odds: [
+            30 * 10000,
+            1.01 * 10000,
+            8 * 10000,
+            1.1 * 10000,
+            3.65 * 10000,
+            1.3 * 10000,
+            2.1 * 10000,
+            1.76 * 10000,
+          ],
+        },
+        [
+          "name",
+          "thumbnailUrl",
+          "bannerUrl",
+          "0",
+          "0",
+          "0",
+          "type",
+          "marketType",
+          "description",
+          "metadata",
+          "shortDescription",
+          "streamUrl",
+        ],
+      );
     });
 
     shouldBehaveLikeEvent();
