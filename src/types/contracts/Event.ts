@@ -176,7 +176,7 @@ export interface EventCreatedEventObject {
   helperAddress: string;
   creator: string;
   options: EDataTypes.OptionStructOutput;
-  _datas: string[];
+  datas: string[];
 }
 export type EventCreatedEvent = TypedEvent<
   [
@@ -449,7 +449,7 @@ export interface Event extends BaseContract {
       helperAddress?: null,
       creator?: null,
       options?: null,
-      _datas?: null
+      datas?: null
     ): EventCreatedEventFilter;
     EventCreated(
       idx?: null,
@@ -459,7 +459,7 @@ export interface Event extends BaseContract {
       helperAddress?: null,
       creator?: null,
       options?: null,
-      _datas?: null
+      datas?: null
     ): EventCreatedEventFilter;
 
     "EventResultUpdated(address,uint256,string)"(

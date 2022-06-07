@@ -66,7 +66,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "string[12]",
-        name: "_datas",
+        name: "datas",
         type: "string[12]",
       },
     ],

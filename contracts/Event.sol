@@ -94,6 +94,6 @@ contract Event is OwnableUpgradeable {
         address helperAddress,
         address creator,
         EDataTypes.Option options,
-        string[12] _datas
+        string[12] datas
     );
 }
