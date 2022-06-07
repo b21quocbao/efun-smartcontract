@@ -193,37 +193,6 @@ export function shouldBehaveLikeEvent(): void {
     console.log(await this.signers.user3.getBalance(), "user 3");
   });
 
-  it("error duplicate event", async function () {
-    const { timestamp } = await ethers.provider.getBlock("latest");
-    await expect(
-      this.event.connect(this.signers.user1).createSingleEvent(
-        0,
-        timestamp + 20,
-        timestamp + 7 * 24 * 3600,
-        timestamp + 10 * 24 * 3600,
-        this.groupPredict.address,
-        {
-          data: ["Liverpool", "Manchester City", "Manchester United", "Chelsea"],
-          odds: [0, 0, 0, 0],
-        },
-        [
-          "name",
-          "thumbnailUrl",
-          "bannerUrl",
-          "0",
-          "0",
-          "0",
-          "type",
-          "marketType",
-          "description",
-          "metadata",
-          "shortDescription",
-          "streamUrl",
-        ],
-      ),
-    ).to.be.revertedWith("already existed");
-  });
-
   it("error cannot-find-index", async function () {
     await increase(duration.seconds(50));
 
@@ -265,7 +234,6 @@ export function shouldBehaveLikeEvent(): void {
 
     await expect(
       this.event.connect(this.signers.user1).createSingleEvent(
-        122,
         1653907007,
         1653914187,
         1653914187,

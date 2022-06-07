@@ -17,7 +17,6 @@ task("create:Event")
     const { timestamp } = await ethers.provider.getBlock("latest");
 
     const tx = await event.createSingleEvent(
-      Number(_taskArgs.eventId),
       timestamp + 60,
       timestamp + 7 * 24 * 3600,
       timestamp + 10 * 24 * 3600,

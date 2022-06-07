@@ -48,14 +48,13 @@ describe("Unit tests", function () {
         await waffle.deployContract(this.signers.admin, erc20TokenArtifact, ["EFUN", "EFUN", toWei("100000")])
       );
 
-      await this.event.initialize();
+      await this.event.initialize(0);
       await this.prediction.initialize(100, 10000);
       await this.prediction.connect(this.signers.admin).setEventData(this.event.address);
 
       const { timestamp } = await ethers.provider.getBlock("latest");
 
       await this.event.connect(this.signers.admin).createSingleEvent(
-        0,
         timestamp + 20,
         timestamp + 7 * 24 * 3600,
         timestamp + 10 * 24 * 3600,
@@ -81,7 +80,6 @@ describe("Unit tests", function () {
       );
 
       await this.event.connect(this.signers.admin).createSingleEvent(
-        1,
         timestamp + 20,
         timestamp + 7 * 24 * 3600,
         timestamp + 10 * 24 * 3600,
@@ -107,7 +105,6 @@ describe("Unit tests", function () {
       );
 
       await this.event.connect(this.signers.admin).createSingleEvent(
-        2,
         timestamp + 20,
         timestamp + 7 * 24 * 3600,
         timestamp + 10 * 24 * 3600,
@@ -133,7 +130,6 @@ describe("Unit tests", function () {
       );
 
       await this.event.connect(this.signers.admin).createSingleEvent(
-        3,
         timestamp + 20,
         timestamp + 7 * 24 * 3600,
         timestamp + 10 * 24 * 3600,

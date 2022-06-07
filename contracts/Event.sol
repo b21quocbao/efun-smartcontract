@@ -10,8 +10,10 @@ import "hardhat/console.sol";
 
 contract Event is OwnableUpgradeable {
     mapping(uint256 => EDataTypes.Event) public events;
+    uint256 public nEvents;
 
     function initialize() public initializer {
+        nEvents = 0;
         OwnableUpgradeable.__Ownable_init();
     }
 
@@ -39,18 +41,17 @@ contract Event is OwnableUpgradeable {
     }
 
     function createSingleEvent(
-        uint256 _idx,
         uint256 _startTime,
         uint256 _deadlineTime,
         uint256 _endTime,
         address _helperAddress,
         EDataTypes.Option calldata _options,
         string[12] memory _datas
-    ) external {
+    ) external returns (uint256 _idx) {
         require(_startTime < _deadlineTime, "deadline_time > start_time");
         require(_deadlineTime < _endTime, "end_time > deadline_time");
         require(_options.data.length == _options.odds.length, "not-match-length-option-odd");
-        require(events[_idx].creator == address(0), "already existed");
+        _idx = nEvents;
 
         events[_idx] = EDataTypes.Event(
             _startTime,
@@ -66,6 +67,7 @@ contract Event is OwnableUpgradeable {
             _datas
         );
         emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, msg.sender, _options, _datas);
+        nEvents++;
     }
 
     /* ========== INTERNAL FUNCTIONS ========== */
