@@ -121,8 +121,8 @@ export function shouldBehaveLikeEvent(): void {
         (
           await this.prediction
             .connect(this.signers.admin)
-            .getRemainingLP(1, "0x0000000000000000000000000000000000000000")
-        ).toString(),
+            .getRemainingLP(1, ["0x0000000000000000000000000000000000000000"])
+        )[0].toString(),
       ),
       "zxcvoiu",
     );

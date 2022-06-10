@@ -95,21 +95,25 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     /**
      * @dev Get remaining lp
      */
-    function getRemainingLP(uint256 _eventId, address _token) public view returns (uint256) {
+    function getRemainingLP(uint256 _eventId, address[] calldata _tokens) public view returns (uint256[] memory) {
         EDataTypes.Event memory _event = eventData.info(_eventId);
+        uint256 _localEventId = _eventId;
         IHelper _helper = IHelper(_event.helperAddress);
-        uint256 _liquidityPool = liquidityPoolEvent[_eventId][_token];
-
-        return
-            _helper.calculateRemainLP(
+        uint256[] memory _results = new uint256[](_tokens.length);
+        for (uint256 i = 0; i < _tokens.length; ++i) {
+            address _token = _tokens[i];
+            uint256 _liquidityPool = liquidityPoolEvent[_eventId][_token];
+            _results[i] = _helper.calculateRemainLP(
                 eventDataAddress,
-                _eventId,
-                predictStats[_token][_eventId],
-                predictOptionStats[_token][_eventId],
+                _localEventId,
+                predictStats[_token][_localEventId],
+                predictOptionStats[_token][_localEventId],
                 _event.odds,
                 oneHundredPrecent,
                 _liquidityPool
             );
+        }
+        return _results;
     }
 
     function getMaxPayout(

@@ -54,7 +54,7 @@ function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
       jsonRpcUrl = "https://bsc-dataseed1.binance.org";
       break;
     case "bscTestnet":
-      jsonRpcUrl = "https://data-seed-prebsc-1-s3.binance.org:8545/";
+      jsonRpcUrl = "https://nd-394-273-780.p2pify.com/e802bfe1984a87c7361dfd153b09d4de";
       break;
     case "opera":
       jsonRpcUrl = "https://rpc.ftm.tools";

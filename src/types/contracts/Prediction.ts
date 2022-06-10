@@ -58,7 +58,7 @@ export interface PredictionInterface extends utils.Interface {
     "getMaxPayout(uint256,address,uint256)": FunctionFragment;
     "getPotentialReward(uint256,address,uint256,uint256)": FunctionFragment;
     "getPredictInfo(uint256,address,address,uint256)": FunctionFragment;
-    "getRemainingLP(uint256,address)": FunctionFragment;
+    "getRemainingLP(uint256,address[])": FunctionFragment;
     "getTokenAmount(address)": FunctionFragment;
     "initialize(uint256,uint256)": FunctionFragment;
     "lotCollector()": FunctionFragment;
@@ -171,7 +171,7 @@ export interface PredictionInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getRemainingLP",
-    values: [BigNumberish, string]
+    values: [BigNumberish, string[]]
   ): string;
   encodeFunctionData(
     functionFragment: "getTokenAmount",
@@ -546,9 +546,9 @@ export interface Prediction extends BaseContract {
 
     getRemainingLP(
       _eventId: BigNumberish,
-      _token: string,
+      _tokens: string[],
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[BigNumber[]]>;
 
     getTokenAmount(
       token: string,
@@ -725,9 +725,9 @@ export interface Prediction extends BaseContract {
 
   getRemainingLP(
     _eventId: BigNumberish,
-    _token: string,
+    _tokens: string[],
     overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  ): Promise<BigNumber[]>;
 
   getTokenAmount(token: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -901,9 +901,9 @@ export interface Prediction extends BaseContract {
 
     getRemainingLP(
       _eventId: BigNumberish,
-      _token: string,
+      _tokens: string[],
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<BigNumber[]>;
 
     getTokenAmount(
       token: string,
@@ -1138,7 +1138,7 @@ export interface Prediction extends BaseContract {
 
     getRemainingLP(
       _eventId: BigNumberish,
-      _token: string,
+      _tokens: string[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1312,7 +1312,7 @@ export interface Prediction extends BaseContract {
 
     getRemainingLP(
       _eventId: BigNumberish,
-      _token: string,
+      _tokens: string[],
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
