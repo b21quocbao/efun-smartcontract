@@ -36,8 +36,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     IEvent public eventData;
     address public eventDataAddress;
     mapping(address => mapping(address => uint256)) private liquidityPool;
-    mapping(uint256 => mapping(address => bool)) private claimedLiquidityPool;
     mapping(uint256 => mapping(address => uint256)) private liquidityPoolEvent;
+    mapping(uint256 => mapping(address => bool)) private claimedLiquidityPool;
 
     function initialize(uint256 _participateRate, uint256 _oneHundredPrecent) public initializer {
         OwnableUpgradeable.__Ownable_init();
@@ -134,6 +134,30 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 oneHundredPrecent,
                 _index
             );
+    }
+
+    function getPotentialReward(
+        uint256 _eventId,
+        address _token,
+        uint256 _index,
+        uint256 _amount
+    ) public view returns (uint256) {
+        EDataTypes.Event memory _event = eventData.info(_eventId);
+        IHelper _helper = IHelper(_event.helperAddress);
+        uint256 _liquidityPool = liquidityPoolEvent[_eventId][_token];
+
+        return
+            _helper.calculatePotentialReward(
+                eventDataAddress,
+                _eventId,
+                predictStats[_token][_eventId],
+                predictOptionStats[_token][_eventId],
+                _amount,
+                _event.odds[_index],
+                oneHundredPrecent,
+                _index,
+                _liquidityPool
+            ) - _amount;
     }
 
     function depositLP(

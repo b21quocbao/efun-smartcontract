@@ -77,6 +77,21 @@ export function shouldBehaveLikeEvent(): void {
         value: toWei("30"),
       });
 
+    console.log(
+      Math.round(
+        Number(
+          fromWei(
+            (
+              await this.prediction
+                .connect(this.signers.user1)
+                .getPotentialReward(1, "0x0000000000000000000000000000000000000000", 0, toWei("30"))
+            ).toString(),
+          ),
+        ),
+      ),
+      "potential",
+    );
+
     await expect(
       this.prediction.connect(this.signers.admin).claimRemainingLP(1, ["0x0000000000000000000000000000000000000000"]),
     ).to.be.revertedWith("event-not-finish");

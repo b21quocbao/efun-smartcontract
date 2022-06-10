@@ -40,6 +40,7 @@ export declare namespace EDataTypes {
 
 export interface OverUnderInterface extends utils.Interface {
   functions: {
+    "calculatePotentialReward(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
     "calculateRemainLP(address,uint256,uint256,uint256[],uint256[],uint256,uint256)": FunctionFragment;
     "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256,uint256)": FunctionFragment;
     "maxPayout(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256)": FunctionFragment;
@@ -48,12 +49,27 @@ export interface OverUnderInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "calculatePotentialReward"
       | "calculateRemainLP"
       | "calculateReward"
       | "maxPayout"
       | "validatePrediction"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "calculatePotentialReward",
+    values: [
+      string,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish[],
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ]
+  ): string;
   encodeFunctionData(
     functionFragment: "calculateRemainLP",
     values: [
@@ -109,6 +125,10 @@ export interface OverUnderInterface extends utils.Interface {
   ): string;
 
   decodeFunctionResult(
+    functionFragment: "calculatePotentialReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "calculateRemainLP",
     data: BytesLike
   ): Result;
@@ -163,6 +183,19 @@ export interface OverUnder extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    calculatePotentialReward(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _predictionAmount: BigNumberish,
+      _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { _reward: BigNumber }>;
+
     calculateRemainLP(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -212,6 +245,19 @@ export interface OverUnder extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
   };
+
+  calculatePotentialReward(
+    _eventDataAddress: string,
+    _eventId: BigNumberish,
+    _predictStats: BigNumberish,
+    _predictOptionStats: BigNumberish[],
+    _predictionAmount: BigNumberish,
+    _odd: BigNumberish,
+    _oneHundredPrecent: BigNumberish,
+    _index: BigNumberish,
+    _liquidityPool: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   calculateRemainLP(
     _eventDataAddress: string,
@@ -263,6 +309,19 @@ export interface OverUnder extends BaseContract {
   ): Promise<boolean>;
 
   callStatic: {
+    calculatePotentialReward(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _predictionAmount: BigNumberish,
+      _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     calculateRemainLP(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -319,6 +378,19 @@ export interface OverUnder extends BaseContract {
   };
 
   estimateGas: {
+    calculatePotentialReward(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _predictionAmount: BigNumberish,
+      _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     calculateRemainLP(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -370,6 +442,19 @@ export interface OverUnder extends BaseContract {
   };
 
   populateTransaction: {
+    calculatePotentialReward(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _predictionAmount: BigNumberish,
+      _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     calculateRemainLP(
       _eventDataAddress: string,
       _eventId: BigNumberish,

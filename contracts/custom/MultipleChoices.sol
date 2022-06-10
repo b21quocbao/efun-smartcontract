@@ -70,6 +70,25 @@ contract MultipleChoices is Initializable {
     /**
      * @dev Calculates reward
      */
+    function calculatePotentialReward(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        uint256 _predictionAmount,
+        uint256 _odd,
+        uint256 _oneHundredPrecent,
+        uint256 _index,
+        uint256 _liquidityPool
+    ) public view returns (uint256 _reward) {
+        EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
+
+        _reward = (_predictionAmount * _odd) / _oneHundredPrecent;
+    }
+
+    /**
+     * @dev Calculates reward
+     */
     function calculateRemainLP(
         address _eventDataAddress,
         uint256 _eventId,
