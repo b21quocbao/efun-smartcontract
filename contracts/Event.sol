@@ -75,7 +75,7 @@ contract Event is OwnableUpgradeable {
         uint256 endTime,
         address helperAddress,
         address creator,
-        uint256[] _odds,
+        uint256[] odds,
         string datas
     );
 }

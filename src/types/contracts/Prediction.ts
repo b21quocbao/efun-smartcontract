@@ -44,6 +44,7 @@ export declare namespace EDataTypes {
 export interface PredictionInterface extends utils.Interface {
   functions: {
     "bnbRate()": FunctionFragment;
+    "claimCashBack(uint256,address,uint256)": FunctionFragment;
     "claimRemainingLP(uint256,address[])": FunctionFragment;
     "claimReward(uint256,address,uint256)": FunctionFragment;
     "depositLP(uint256,address[],uint256[])": FunctionFragment;
@@ -84,6 +85,7 @@ export interface PredictionInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "bnbRate"
+      | "claimCashBack"
       | "claimRemainingLP"
       | "claimReward"
       | "depositLP"
@@ -122,6 +124,10 @@ export interface PredictionInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "bnbRate", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "claimCashBack",
+    values: [BigNumberish, string, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "claimRemainingLP",
     values: [BigNumberish, string[]]
@@ -250,6 +256,10 @@ export interface PredictionInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "bnbRate", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "claimCashBack",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "claimRemainingLP",
     data: BytesLike
   ): Result;
@@ -355,6 +365,7 @@ export interface PredictionInterface extends utils.Interface {
   ): Result;
 
   events: {
+    "CashBackClaimed(uint256,uint256,address,address)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "LPClaimed(uint256,address,uint256)": EventFragment;
     "LPDeposited(uint256,address,uint256)": EventFragment;
@@ -363,6 +374,7 @@ export interface PredictionInterface extends utils.Interface {
     "RewardClaimed(uint256,uint256,address,address,uint256)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "CashBackClaimed"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LPClaimed"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LPDeposited"): EventFragment;
@@ -370,6 +382,19 @@ export interface PredictionInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "PredictionCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RewardClaimed"): EventFragment;
 }
+
+export interface CashBackClaimedEventObject {
+  eventId: BigNumber;
+  predictNum: BigNumber;
+  user: string;
+  token: string;
+}
+export type CashBackClaimedEvent = TypedEvent<
+  [BigNumber, BigNumber, string, string],
+  CashBackClaimedEventObject
+>;
+
+export type CashBackClaimedEventFilter = TypedEventFilter<CashBackClaimedEvent>;
 
 export interface InitializedEventObject {
   version: number;
@@ -472,6 +497,13 @@ export interface Prediction extends BaseContract {
 
   functions: {
     bnbRate(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    claimCashBack(
+      _eventId: BigNumberish,
+      _token: string,
+      _predictNum: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     claimRemainingLP(
       _eventId: BigNumberish,
@@ -652,6 +684,13 @@ export interface Prediction extends BaseContract {
 
   bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
 
+  claimCashBack(
+    _eventId: BigNumberish,
+    _token: string,
+    _predictNum: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   claimRemainingLP(
     _eventId: BigNumberish,
     _tokens: string[],
@@ -828,6 +867,13 @@ export interface Prediction extends BaseContract {
   callStatic: {
     bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
 
+    claimCashBack(
+      _eventId: BigNumberish,
+      _token: string,
+      _predictNum: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     claimRemainingLP(
       _eventId: BigNumberish,
       _tokens: string[],
@@ -995,6 +1041,19 @@ export interface Prediction extends BaseContract {
   };
 
   filters: {
+    "CashBackClaimed(uint256,uint256,address,address)"(
+      eventId?: null,
+      predictNum?: null,
+      user?: null,
+      token?: null
+    ): CashBackClaimedEventFilter;
+    CashBackClaimed(
+      eventId?: null,
+      predictNum?: null,
+      user?: null,
+      token?: null
+    ): CashBackClaimedEventFilter;
+
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
 
@@ -1064,6 +1123,13 @@ export interface Prediction extends BaseContract {
 
   estimateGas: {
     bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    claimCashBack(
+      _eventId: BigNumberish,
+      _token: string,
+      _predictNum: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     claimRemainingLP(
       _eventId: BigNumberish,
@@ -1238,6 +1304,13 @@ export interface Prediction extends BaseContract {
 
   populateTransaction: {
     bnbRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    claimCashBack(
+      _eventId: BigNumberish,
+      _token: string,
+      _predictNum: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     claimRemainingLP(
       _eventId: BigNumberish,

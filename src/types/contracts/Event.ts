@@ -165,7 +165,7 @@ export interface EventCreatedEventObject {
   endTime: BigNumber;
   helperAddress: string;
   creator: string;
-  _odds: BigNumber[];
+  odds: BigNumber[];
   datas: string;
 }
 export type EventCreatedEvent = TypedEvent<
@@ -441,7 +441,7 @@ export interface Event extends BaseContract {
       endTime?: null,
       helperAddress?: null,
       creator?: null,
-      _odds?: null,
+      odds?: null,
       datas?: null
     ): EventCreatedEventFilter;
     EventCreated(
@@ -451,7 +451,7 @@ export interface Event extends BaseContract {
       endTime?: null,
       helperAddress?: null,
       creator?: null,
-      _odds?: null,
+      odds?: null,
       datas?: null
     ): EventCreatedEventFilter;
 

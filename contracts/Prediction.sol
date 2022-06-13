@@ -412,6 +412,26 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         }
     }
 
+    /**
+     * @dev Claims reward
+     */
+    function claimCashBack(
+        uint256 _eventId,
+        address _token,
+        uint256 _predictNum
+    ) external {
+        EDataTypes.Event memory _event = eventData.info(_eventId);
+
+        require(_event.status != EDataTypes.EventStatus.FINISH, "event-finish");
+        require(_event.endTime + 172800 < block.timestamp, "event-not-end");
+        require(predictions[_token][msg.sender][_eventId][_predictNum].claimed == false, "claimed");
+
+        transferMoney(_token, msg.sender, predictions[_token][msg.sender][_eventId][_predictNum].predictionAmount);
+        predictions[_token][msg.sender][_eventId][_predictNum].claimed = true;
+
+        emit CashBackClaimed(_eventId, _predictNum, msg.sender, _token);
+    }
+
     function emergencyWithdraw(address _token, uint256 amount) public onlyOwner {
         if (_token == address(0)) {
             payable(msg.sender).transfer(address(this).balance);
@@ -431,4 +451,5 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256 amount
     );
     event RewardClaimed(uint256 eventId, uint256 predictNum, address user, address token, uint256 reward);
+    event CashBackClaimed(uint256 eventId, uint256 predictNum, address user, address token);
 }

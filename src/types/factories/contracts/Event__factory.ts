@@ -48,7 +48,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256[]",
-        name: "_odds",
+        name: "odds",
         type: "uint256[]",
       },
       {
