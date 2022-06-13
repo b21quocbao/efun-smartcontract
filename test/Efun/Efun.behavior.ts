@@ -12,15 +12,15 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.prediction
       .connect(this.signers.user2)
-      .predict(0, ["Liverpool"], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
+      .predict(0, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
 
     await this.prediction
       .connect(this.signers.user3)
-      .predict(0, ["Liverpool"], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
+      .predict(0, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
 
     await this.prediction
       .connect(this.signers.user1)
-      .predict(0, ["Manchester City"], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+      .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
         value: toWei("30"),
       });
 
@@ -40,7 +40,7 @@ export function shouldBehaveLikeEvent(): void {
     await increase(duration.days(10));
     console.log("----------------------------------------------------------------------------------");
 
-    await this.event.connect(this.signers.admin).updateEventResult(0, "Liverpool");
+    await this.event.connect(this.signers.admin).updateEventResult(0, 0);
 
     await this.prediction.connect(this.signers.user2).claimReward(0, "0x0000000000000000000000000000000000000000", 0);
 
@@ -65,15 +65,15 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.prediction
       .connect(this.signers.user2)
-      .predict(1, ["Liverpool"], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
+      .predict(1, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
 
     await this.prediction
       .connect(this.signers.user3)
-      .predict(1, ["Liverpool"], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
+      .predict(1, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
 
     await this.prediction
       .connect(this.signers.user1)
-      .predict(1, ["Manchester City"], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+      .predict(1, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
         value: toWei("30"),
       });
 
@@ -112,7 +112,7 @@ export function shouldBehaveLikeEvent(): void {
     await increase(duration.days(10));
     console.log("----------------------------------------------------------------------------------");
 
-    await this.event.connect(this.signers.admin).updateEventResult(1, "Liverpool");
+    await this.event.connect(this.signers.admin).updateEventResult(1, 0);
     await expect(
       this.prediction.connect(this.signers.user1).claimRemainingLP(1, ["0x0000000000000000000000000000000000000000"]),
     ).to.be.revertedWith("unauthorized");
@@ -168,19 +168,19 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.prediction
       .connect(this.signers.user2)
-      .predict(2, ["Win - Lose"], ["0x0000000000000000000000000000000000000000"], [toWei("20")], {
+      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], {
         value: toWei("20"),
       });
 
     await this.prediction
       .connect(this.signers.user3)
-      .predict(2, ["Win - Lose"], ["0x0000000000000000000000000000000000000000"], [toWei("10")], {
+      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], {
         value: toWei("10"),
       });
 
     await this.prediction
       .connect(this.signers.user1)
-      .predict(2, ["Lose - Win"], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+      .predict(2, [4], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
         value: toWei("30"),
       });
 
@@ -200,7 +200,7 @@ export function shouldBehaveLikeEvent(): void {
     await increase(duration.days(10));
     console.log("----------------------------------------------------------------------------------");
 
-    await this.event.connect(this.signers.admin).updateEventResult(2, "Win - Lose");
+    await this.event.connect(this.signers.admin).updateEventResult(2, 0);
 
     await this.prediction.connect(this.signers.user2).claimReward(2, "0x0000000000000000000000000000000000000000", 0);
 
@@ -225,15 +225,15 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.prediction
       .connect(this.signers.user2)
-      .predict(3, [">1.5"], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
+      .predict(3, [3], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
 
     await this.prediction
       .connect(this.signers.user3)
-      .predict(3, [">2.5"], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
+      .predict(3, [5], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
 
     await this.prediction
       .connect(this.signers.user1)
-      .predict(3, ["<1.5"], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+      .predict(3, [2], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
         value: toWei("30"),
       });
 
@@ -253,7 +253,7 @@ export function shouldBehaveLikeEvent(): void {
     await increase(duration.days(10));
     console.log("----------------------------------------------------------------------------------");
 
-    await this.event.connect(this.signers.admin).updateEventResult(3, ">2.5");
+    await this.event.connect(this.signers.admin).updateEventResult(3, [5]);
 
     await this.prediction.connect(this.signers.user2).claimReward(3, "0x0000000000000000000000000000000000000000", 0);
 
@@ -275,14 +275,12 @@ export function shouldBehaveLikeEvent(): void {
     await expect(
       this.prediction
         .connect(this.signers.user1)
-        .predict(0, ["Manchester City123"], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+        .predict(0, [5], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
           value: toWei("30"),
         }),
     ).to.be.revertedWith("cannot-find-index");
 
-    await expect(this.event.connect(this.signers.admin).updateEventResult(0, "Manchester City123")).to.be.revertedWith(
-      "cannot-find-index",
-    );
+    await expect(this.event.connect(this.signers.admin).updateEventResult(0, 0), "cannot-find-index");
   });
 
   it("one user can predict multiple times", async function () {
@@ -290,49 +288,33 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.prediction
       .connect(this.signers.user1)
-      .predict(0, ["Manchester City"], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+      .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
         value: toWei("30"),
       });
 
     await this.prediction
       .connect(this.signers.user1)
-      .predict(0, ["Manchester City"], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+      .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
         value: toWei("30"),
       });
 
-    await expect(this.event.connect(this.signers.admin).updateEventResult(0, "Manchester City123")).to.be.revertedWith(
-      "cannot-find-index",
-    );
+    await expect(this.event.connect(this.signers.admin).updateEventResult(0, 5), "cannot-find-index");
   });
 
   it("test false vent", async function () {
     await increase(duration.seconds(50));
 
     await expect(
-      this.event.connect(this.signers.user1).createSingleEvent(
-        1653907007,
-        1653914187,
-        1653914187,
-        "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
-        {
-          data: ["1", "2"],
-          odds: [10000, 10000],
-        },
-        [
-          "name",
-          "thumbnailUrl",
-          "bannerUrl",
-          "0",
-          "0",
-          "0",
-          "type",
-          "marketType",
-          "description",
-          "metadata",
-          "shortDescription",
-          "streamUrl",
-        ],
-      ),
+      this.event
+        .connect(this.signers.user1)
+        .createSingleEvent(
+          1653907007,
+          1653914187,
+          1653914187,
+          "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+          [10000, 10000],
+          "",
+        ),
     ).to.be.revertedWith("end_time > deadline_time");
   });
 

@@ -19,19 +19,17 @@ contract Event is OwnableUpgradeable {
 
     /* ========== RESTRICTED FUNCTIONS ========== */
 
-    function updateEventResult(uint256 _eventId, string memory _result) external {
+    function updateEventResult(uint256 _eventId, uint256 _index) external {
         EDataTypes.Event storage _event = events[_eventId];
-        uint256 _index = indexOf(_event.options, _result);
-
+        require(_index < _event.odds.length, "cannot-find-index");
         require(_event.creator == msg.sender, "unauthorized");
         require(_event.endTime <= block.timestamp, "end_time <= timestamp");
         require(_event.endTime + 172800 >= block.timestamp, "end_time + 2 days >= timestamp");
 
-        _event.result = _result;
         _event.resultIndex = _index;
         _event.status = EDataTypes.EventStatus.FINISH;
 
-        emit EventResultUpdated(msg.sender, _eventId, _result);
+        emit EventResultUpdated(msg.sender, _eventId, _index);
     }
 
     /* ========== PUBLIC FUNCTIONS ========== */
@@ -45,12 +43,11 @@ contract Event is OwnableUpgradeable {
         uint256 _deadlineTime,
         uint256 _endTime,
         address _helperAddress,
-        EDataTypes.Option calldata _options,
-        string[12] memory _datas
+        uint256[] calldata _odds,
+        string memory _datas
     ) external returns (uint256 _idx) {
         require(_startTime < _deadlineTime, "deadline_time > start_time");
         require(_deadlineTime < _endTime, "end_time > deadline_time");
-        require(_options.data.length == _options.odds.length, "not-match-length-option-odd");
         _idx = nEvents;
 
         events[_idx] = EDataTypes.Event(
@@ -58,36 +55,19 @@ contract Event is OwnableUpgradeable {
             _deadlineTime,
             _endTime,
             0,
-            "",
             EDataTypes.EventStatus.AVAILABLE,
             _helperAddress,
             msg.sender,
-            _options.data,
-            _options.odds,
+            _odds,
             _datas
         );
-        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, msg.sender, _options, _datas);
+        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, msg.sender, _odds, _datas);
         nEvents++;
-    }
-
-    /* ========== INTERNAL FUNCTIONS ========== */
-
-    function indexOf(string[] memory a, string memory b) internal pure returns (uint256) {
-        for (uint256 i = 0; i < a.length; i++) {
-            if (compareStrings(a[i], b)) {
-                return i;
-            }
-        }
-        require(false, "cannot-find-index");
-    }
-
-    function compareStrings(string memory a, string memory b) internal pure returns (bool) {
-        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
 
     /* =============== EVENTS ==================== */
 
-    event EventResultUpdated(address caller, uint256 eventId, string result);
+    event EventResultUpdated(address caller, uint256 eventId, uint256 index);
     event EventCreated(
         uint256 idx,
         uint256 startTime,
@@ -95,7 +75,7 @@ contract Event is OwnableUpgradeable {
         uint256 endTime,
         address helperAddress,
         address creator,
-        EDataTypes.Option options,
-        string[12] datas
+        uint256[] _odds,
+        string datas
     );
 }

@@ -27,25 +27,16 @@ import type {
 } from "../common";
 
 export declare namespace EDataTypes {
-  export type OptionStruct = { data: string[]; odds: BigNumberish[] };
-
-  export type OptionStructOutput = [string[], BigNumber[]] & {
-    data: string[];
-    odds: BigNumber[];
-  };
-
   export type EventStruct = {
     startTime: BigNumberish;
     deadlineTime: BigNumberish;
     endTime: BigNumberish;
     resultIndex: BigNumberish;
-    result: string;
     status: BigNumberish;
     helperAddress: string;
     creator: string;
-    options: string[];
     odds: BigNumberish[];
-    _datas: string[];
+    _datas: string;
   };
 
   export type EventStructOutput = [
@@ -53,31 +44,27 @@ export declare namespace EDataTypes {
     BigNumber,
     BigNumber,
     BigNumber,
-    string,
     number,
     string,
     string,
-    string[],
     BigNumber[],
-    string[]
+    string
   ] & {
     startTime: BigNumber;
     deadlineTime: BigNumber;
     endTime: BigNumber;
     resultIndex: BigNumber;
-    result: string;
     status: number;
     helperAddress: string;
     creator: string;
-    options: string[];
     odds: BigNumber[];
-    _datas: string[];
+    _datas: string;
   };
 }
 
 export interface EventInterface extends utils.Interface {
   functions: {
-    "createSingleEvent(uint256,uint256,uint256,address,(string[],uint256[]),string[12])": FunctionFragment;
+    "createSingleEvent(uint256,uint256,uint256,address,uint256[],string)": FunctionFragment;
     "events(uint256)": FunctionFragment;
     "info(uint256)": FunctionFragment;
     "initialize()": FunctionFragment;
@@ -85,7 +72,7 @@ export interface EventInterface extends utils.Interface {
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "updateEventResult(uint256,string)": FunctionFragment;
+    "updateEventResult(uint256,uint256)": FunctionFragment;
   };
 
   getFunction(
@@ -108,8 +95,8 @@ export interface EventInterface extends utils.Interface {
       BigNumberish,
       BigNumberish,
       string,
-      EDataTypes.OptionStruct,
-      string[]
+      BigNumberish[],
+      string
     ]
   ): string;
   encodeFunctionData(
@@ -133,7 +120,7 @@ export interface EventInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "updateEventResult",
-    values: [BigNumberish, string]
+    values: [BigNumberish, BigNumberish]
   ): string;
 
   decodeFunctionResult(
@@ -159,8 +146,8 @@ export interface EventInterface extends utils.Interface {
   ): Result;
 
   events: {
-    "EventCreated(uint256,uint256,uint256,uint256,address,address,tuple,string[12])": EventFragment;
-    "EventResultUpdated(address,uint256,string)": EventFragment;
+    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string)": EventFragment;
+    "EventResultUpdated(address,uint256,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
@@ -178,8 +165,8 @@ export interface EventCreatedEventObject {
   endTime: BigNumber;
   helperAddress: string;
   creator: string;
-  options: EDataTypes.OptionStructOutput;
-  datas: string[];
+  _odds: BigNumber[];
+  datas: string;
 }
 export type EventCreatedEvent = TypedEvent<
   [
@@ -189,8 +176,8 @@ export type EventCreatedEvent = TypedEvent<
     BigNumber,
     string,
     string,
-    EDataTypes.OptionStructOutput,
-    string[]
+    BigNumber[],
+    string
   ],
   EventCreatedEventObject
 >;
@@ -200,10 +187,10 @@ export type EventCreatedEventFilter = TypedEventFilter<EventCreatedEvent>;
 export interface EventResultUpdatedEventObject {
   caller: string;
   eventId: BigNumber;
-  result: string;
+  index: BigNumber;
 }
 export type EventResultUpdatedEvent = TypedEvent<
-  [string, BigNumber, string],
+  [string, BigNumber, BigNumber],
   EventResultUpdatedEventObject
 >;
 
@@ -261,8 +248,8 @@ export interface Event extends BaseContract {
       _deadlineTime: BigNumberish,
       _endTime: BigNumberish,
       _helperAddress: string,
-      _options: EDataTypes.OptionStruct,
-      _datas: string[],
+      _odds: BigNumberish[],
+      _datas: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -275,8 +262,8 @@ export interface Event extends BaseContract {
         BigNumber,
         BigNumber,
         BigNumber,
-        string,
         number,
+        string,
         string,
         string
       ] & {
@@ -284,10 +271,10 @@ export interface Event extends BaseContract {
         deadlineTime: BigNumber;
         endTime: BigNumber;
         resultIndex: BigNumber;
-        result: string;
         status: number;
         helperAddress: string;
         creator: string;
+        _datas: string;
       }
     >;
 
@@ -317,7 +304,7 @@ export interface Event extends BaseContract {
 
     updateEventResult(
       _eventId: BigNumberish,
-      _result: string,
+      _index: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
@@ -327,8 +314,8 @@ export interface Event extends BaseContract {
     _deadlineTime: BigNumberish,
     _endTime: BigNumberish,
     _helperAddress: string,
-    _options: EDataTypes.OptionStruct,
-    _datas: string[],
+    _odds: BigNumberish[],
+    _datas: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -341,8 +328,8 @@ export interface Event extends BaseContract {
       BigNumber,
       BigNumber,
       BigNumber,
-      string,
       number,
+      string,
       string,
       string
     ] & {
@@ -350,10 +337,10 @@ export interface Event extends BaseContract {
       deadlineTime: BigNumber;
       endTime: BigNumber;
       resultIndex: BigNumber;
-      result: string;
       status: number;
       helperAddress: string;
       creator: string;
+      _datas: string;
     }
   >;
 
@@ -381,7 +368,7 @@ export interface Event extends BaseContract {
 
   updateEventResult(
     _eventId: BigNumberish,
-    _result: string,
+    _index: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -391,8 +378,8 @@ export interface Event extends BaseContract {
       _deadlineTime: BigNumberish,
       _endTime: BigNumberish,
       _helperAddress: string,
-      _options: EDataTypes.OptionStruct,
-      _datas: string[],
+      _odds: BigNumberish[],
+      _datas: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -405,8 +392,8 @@ export interface Event extends BaseContract {
         BigNumber,
         BigNumber,
         BigNumber,
-        string,
         number,
+        string,
         string,
         string
       ] & {
@@ -414,10 +401,10 @@ export interface Event extends BaseContract {
         deadlineTime: BigNumber;
         endTime: BigNumber;
         resultIndex: BigNumber;
-        result: string;
         status: number;
         helperAddress: string;
         creator: string;
+        _datas: string;
       }
     >;
 
@@ -441,20 +428,20 @@ export interface Event extends BaseContract {
 
     updateEventResult(
       _eventId: BigNumberish,
-      _result: string,
+      _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
   filters: {
-    "EventCreated(uint256,uint256,uint256,uint256,address,address,tuple,string[12])"(
+    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string)"(
       idx?: null,
       startTime?: null,
       deadlineTime?: null,
       endTime?: null,
       helperAddress?: null,
       creator?: null,
-      options?: null,
+      _odds?: null,
       datas?: null
     ): EventCreatedEventFilter;
     EventCreated(
@@ -464,19 +451,19 @@ export interface Event extends BaseContract {
       endTime?: null,
       helperAddress?: null,
       creator?: null,
-      options?: null,
+      _odds?: null,
       datas?: null
     ): EventCreatedEventFilter;
 
-    "EventResultUpdated(address,uint256,string)"(
+    "EventResultUpdated(address,uint256,uint256)"(
       caller?: null,
       eventId?: null,
-      result?: null
+      index?: null
     ): EventResultUpdatedEventFilter;
     EventResultUpdated(
       caller?: null,
       eventId?: null,
-      result?: null
+      index?: null
     ): EventResultUpdatedEventFilter;
 
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
@@ -498,8 +485,8 @@ export interface Event extends BaseContract {
       _deadlineTime: BigNumberish,
       _endTime: BigNumberish,
       _helperAddress: string,
-      _options: EDataTypes.OptionStruct,
-      _datas: string[],
+      _odds: BigNumberish[],
+      _datas: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -526,7 +513,7 @@ export interface Event extends BaseContract {
 
     updateEventResult(
       _eventId: BigNumberish,
-      _result: string,
+      _index: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -537,8 +524,8 @@ export interface Event extends BaseContract {
       _deadlineTime: BigNumberish,
       _endTime: BigNumberish,
       _helperAddress: string,
-      _options: EDataTypes.OptionStruct,
-      _datas: string[],
+      _odds: BigNumberish[],
+      _datas: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -571,7 +558,7 @@ export interface Event extends BaseContract {
 
     updateEventResult(
       _eventId: BigNumberish,
-      _result: string,
+      _index: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

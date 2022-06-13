@@ -10,33 +10,17 @@ task("create:Event").setAction(async function (_taskArgs, hre) {
   const { ethers } = hre;
   const [deployer] = await ethers.getSigners();
 
-  const event = await Event__factory.connect("0x9BBfAC96A5220a030fDDbD2702B8F5A225Dbe645", deployer);
+  const event = await Event__factory.connect("0x5192Df0a655812d339aE88de83769e40789E0c4d", deployer);
 
   const { timestamp } = await ethers.provider.getBlock("latest");
 
   const tx = await event.createSingleEvent(
-    1654588275,
-    1654595424,
-    1654681824,
+    timestamp + 60,
+    timestamp + 7 * 24 * 3600,
+    timestamp + 10 * 24 * 3600,
     "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
-    {
-      data: ["1", "2"],
-      odds: [10000, 10000],
-    },
-    [
-      "Duc tesst t",
-      "https://ipfs.infura.io/ipfs/QmcsoGEKj5cBnN991qh3k3jfYkihfnjbMk6q6tFYNkKhaq",
-      "",
-      "9",
-      "8",
-      "12",
-      "Group Predict",
-      "Multiple choices",
-      "adad",
-      '{"eventType":"user vs user","tokens":["0x0000000000000000000000000000000000000000"]}',
-      "d",
-      "",
-    ],
+    [10000, 10000],
+    "",
   );
   console.log("\x1b[36m%s\x1b[0m", "tx", tx);
 });
@@ -48,7 +32,7 @@ task("update:event:result")
     const { ethers } = hre;
     const [deployer] = await ethers.getSigners();
 
-    const event = await Event__factory.connect("0x9BBfAC96A5220a030fDDbD2702B8F5A225Dbe645", deployer);
+    const event = await Event__factory.connect("0x5192Df0a655812d339aE88de83769e40789E0c4d", deployer);
 
     console.log(Number(_taskArgs.eventId), _taskArgs.result, "Line #46 action.ts");
 
@@ -117,6 +101,6 @@ task("update:event:data").setAction(async function (_taskArgs, hre) {
 
   const prediction = await Prediction__factory.connect("0x522608829526221417EDC35194A9060De79428C4", deployer);
 
-  const tx = await prediction.connect(deployer).setEventData("0x9BBfAC96A5220a030fDDbD2702B8F5A225Dbe645");
+  const tx = await prediction.connect(deployer).setEventData("0x5192Df0a655812d339aE88de83769e40789E0c4d");
   console.log("\x1b[36m%s\x1b[0m", "tx", tx);
 });

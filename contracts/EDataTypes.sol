@@ -13,23 +13,16 @@ library EDataTypes {
         uint256 deadlineTime;
         uint256 endTime;
         uint256 resultIndex;
-        string result;
         EventStatus status;
         address helperAddress;
         address creator;
-        string[] options;
         uint256[] odds;
-        string[12] _datas;
+        string _datas;
     }
 
     struct Prediction {
         uint256 predictionAmount;
         uint256 predictOptions;
         bool claimed;
-    }
-
-    struct Option {
-        string[] data;
-        uint256[] odds;
     }
 }

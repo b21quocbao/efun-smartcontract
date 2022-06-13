@@ -40,11 +40,6 @@ const _abi = [
             type: "uint256",
           },
           {
-            internalType: "string",
-            name: "result",
-            type: "string",
-          },
-          {
             internalType: "enum EDataTypes.EventStatus",
             name: "status",
             type: "uint8",
@@ -60,19 +55,14 @@ const _abi = [
             type: "address",
           },
           {
-            internalType: "string[]",
-            name: "options",
-            type: "string[]",
-          },
-          {
             internalType: "uint256[]",
             name: "odds",
             type: "uint256[]",
           },
           {
-            internalType: "string[12]",
+            internalType: "string",
             name: "_datas",
-            type: "string[12]",
+            type: "string",
           },
         ],
         internalType: "struct EDataTypes.Event",

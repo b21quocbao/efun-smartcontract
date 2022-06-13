@@ -9,7 +9,7 @@ task("verify:address").setAction(async function (_taskArgs, hre) {
   const { ethers } = hre;
   const addresses = [
     "0x522608829526221417EDC35194A9060De79428C4",
-    "0x9BBfAC96A5220a030fDDbD2702B8F5A225Dbe645",
+    "0x5192Df0a655812d339aE88de83769e40789E0c4d",
     "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
     "0xd4cf937089DAc1FA149B8cc87Daa04fC920B0C90",
     "0x77380fEcA9C1AFE1b6d1Bb077FbD637EE1bC921e",

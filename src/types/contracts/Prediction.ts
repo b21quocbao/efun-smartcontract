@@ -66,7 +66,7 @@ export interface PredictionInterface extends utils.Interface {
     "numPredicts(address,address,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "participateRate()": FunctionFragment;
-    "predict(uint256,string[],address[],uint256[])": FunctionFragment;
+    "predict(uint256,uint256[],address[],uint256[])": FunctionFragment;
     "predictions(address,address,uint256,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "rewardToken()": FunctionFragment;
@@ -197,7 +197,7 @@ export interface PredictionInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "predict",
-    values: [BigNumberish, string[], string[], BigNumberish[]]
+    values: [BigNumberish, BigNumberish[], string[], BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "predictions",
@@ -578,7 +578,7 @@ export interface Prediction extends BaseContract {
 
     predict(
       _eventId: BigNumberish,
-      _options: string[],
+      _optionIndexs: BigNumberish[],
       _tokens: string[],
       _amounts: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -754,7 +754,7 @@ export interface Prediction extends BaseContract {
 
   predict(
     _eventId: BigNumberish,
-    _options: string[],
+    _optionIndexs: BigNumberish[],
     _tokens: string[],
     _amounts: BigNumberish[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -933,7 +933,7 @@ export interface Prediction extends BaseContract {
 
     predict(
       _eventId: BigNumberish,
-      _options: string[],
+      _optionIndexs: BigNumberish[],
       _tokens: string[],
       _amounts: BigNumberish[],
       overrides?: CallOverrides
@@ -1170,7 +1170,7 @@ export interface Prediction extends BaseContract {
 
     predict(
       _eventId: BigNumberish,
-      _options: string[],
+      _optionIndexs: BigNumberish[],
       _tokens: string[],
       _amounts: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -1344,7 +1344,7 @@ export interface Prediction extends BaseContract {
 
     predict(
       _eventId: BigNumberish,
-      _options: string[],
+      _optionIndexs: BigNumberish[],
       _tokens: string[],
       _amounts: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }

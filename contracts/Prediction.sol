@@ -192,7 +192,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
      */
     function predict(
         uint256 _eventId,
-        string[] memory _options,
+        uint256[] calldata _optionIndexs,
         address[] calldata _tokens,
         uint256[] calldata _amounts
     ) public payable {
@@ -201,13 +201,12 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256 _totalAmount = msg.value;
         uint256 _localEventId = _eventId;
 
-        require(_tokens.length == _amounts.length && _tokens.length == _options.length, "not-match-length");
+        require(_tokens.length == _amounts.length && _tokens.length == _optionIndexs.length, "not-match-length");
 
         for (uint256 i = 0; i < _tokens.length; ++i) {
-            string memory _option = _options[i];
             address _token = _tokens[i];
             uint256 _amount = _amounts[i];
-            uint256 _index = indexOf(_event.options, _option);
+            uint256 _index = _optionIndexs[i];
             if (_token == address(0)) {
                 require(_totalAmount >= _amount, "total-amount-not-same");
                 _totalAmount -= _amount;
@@ -216,6 +215,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 predictOptionStats[_token][_localEventId] = new uint256[](_event.odds.length);
             }
 
+            require(_index < _event.odds.length, "cannot-find-index");
             require(_amount > 0, "predict-value = 0");
             require(
                 _event.startTime <= block.timestamp && block.timestamp <= _event.deadlineTime,
@@ -418,19 +418,6 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         } else {
             IERC20Upgradeable(payable(_token)).safeTransfer(msg.sender, amount);
         }
-    }
-
-    function indexOf(string[] memory a, string memory b) internal pure returns (uint256) {
-        for (uint256 i = 0; i < a.length; i++) {
-            if (compareStrings(a[i], b)) {
-                return i;
-            }
-        }
-        require(false, "cannot-find-index");
-    }
-
-    function compareStrings(string memory a, string memory b) internal pure returns (bool) {
-        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
 
     event LPDeposited(uint256 eventId, address token, uint256 amount);
