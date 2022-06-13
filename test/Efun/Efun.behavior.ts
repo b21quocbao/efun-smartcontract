@@ -346,4 +346,60 @@ export function shouldBehaveLikeEvent(): void {
       ),
     );
   });
+
+  it("test cashback", async function () {
+    await increase(duration.seconds(50));
+
+    await this.prediction
+      .connect(this.signers.user2)
+      .predict(0, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
+
+    await this.prediction
+      .connect(this.signers.user3)
+      .predict(0, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
+
+    await this.prediction
+      .connect(this.signers.user1)
+      .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+        value: toWei("30"),
+      });
+
+    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+    console.log(
+      Math.round(
+        Number(
+          fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
+        ),
+      ),
+      "contract",
+    );
+
+    await increase(duration.days(10));
+    console.log("----------------------------------------------------------------------------------");
+
+    await expect(
+      this.prediction.connect(this.signers.user1).claimCashBack(0, "0x0000000000000000000000000000000000000000", 0),
+    ).to.be.revertedWith("event-not-end");
+
+    await increase(duration.days(10));
+
+    await expect(
+      this.prediction.connect(this.signers.user1).claimReward(0, "0x0000000000000000000000000000000000000000", 0),
+    ).to.be.revertedWith("not-finish");
+
+    await this.prediction.connect(this.signers.user1).claimCashBack(0, "0x0000000000000000000000000000000000000000", 0),
+      await this.prediction
+        .connect(this.signers.user2)
+        .claimCashBack(0, "0x0000000000000000000000000000000000000000", 0);
+
+    await this.prediction.connect(this.signers.user3).claimCashBack(0, "0x0000000000000000000000000000000000000000", 0);
+
+    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  });
 }
