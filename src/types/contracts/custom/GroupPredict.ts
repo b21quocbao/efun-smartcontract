@@ -43,6 +43,7 @@ export interface GroupPredictInterface extends utils.Interface {
     "calculatePotentialReward(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
     "calculateRemainLP(address,uint256,uint256,uint256[],uint256[],uint256,uint256)": FunctionFragment;
     "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256,uint256)": FunctionFragment;
+    "calculateSponsor(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
     "maxPayout(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256)": FunctionFragment;
     "validatePrediction(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
@@ -52,6 +53,7 @@ export interface GroupPredictInterface extends utils.Interface {
       | "calculatePotentialReward"
       | "calculateRemainLP"
       | "calculateReward"
+      | "calculateSponsor"
       | "maxPayout"
       | "validatePrediction"
   ): FunctionFragment;
@@ -97,6 +99,20 @@ export interface GroupPredictInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "calculateSponsor",
+    values: [
+      string,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish[],
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "maxPayout",
     values: [
       string,
@@ -134,6 +150,10 @@ export interface GroupPredictInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "calculateReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "calculateSponsor",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "maxPayout", data: BytesLike): Result;
@@ -220,6 +240,19 @@ export interface GroupPredict extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { _reward: BigNumber }>;
 
+    calculateSponsor(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _predictionAmount: BigNumberish,
+      _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { _reward: BigNumber }>;
+
     maxPayout(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -283,6 +316,19 @@ export interface GroupPredict extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  calculateSponsor(
+    _eventDataAddress: string,
+    _eventId: BigNumberish,
+    _predictStats: BigNumberish,
+    _predictOptionStats: BigNumberish[],
+    _predictionAmount: BigNumberish,
+    _odd: BigNumberish,
+    _oneHundredPrecent: BigNumberish,
+    _index: BigNumberish,
+    _liquidityPool: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   maxPayout(
     _eventDataAddress: string,
     _eventId: BigNumberish,
@@ -339,6 +385,19 @@ export interface GroupPredict extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
+      _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    calculateSponsor(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _predictionAmount: BigNumberish,
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,
@@ -415,6 +474,19 @@ export interface GroupPredict extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    calculateSponsor(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _predictionAmount: BigNumberish,
+      _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     maxPayout(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -472,6 +544,19 @@ export interface GroupPredict extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
+      _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    calculateSponsor(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _predictionAmount: BigNumberish,
       _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,

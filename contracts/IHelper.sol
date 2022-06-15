@@ -54,6 +54,18 @@ interface IHelper {
         uint256 _liquidityPool
     ) external view returns (uint256 _reward);
 
+    function calculateSponsor(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        uint256 _predictionAmount,
+        uint256 _odd,
+        uint256 _oneHundredPrecent,
+        uint256 _index,
+        uint256 _liquidityPool
+    ) external view returns (uint256 _reward);
+
     function calculateRemainLP(
         address _eventDataAddress,
         uint256 _eventId,

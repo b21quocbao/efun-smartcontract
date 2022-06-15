@@ -44,11 +44,13 @@ export declare namespace EDataTypes {
 export interface PredictionInterface extends utils.Interface {
   functions: {
     "bnbRate()": FunctionFragment;
+    "calculateSponsor(uint256,address,uint256,uint256)": FunctionFragment;
     "claimCashBack(uint256,address,uint256)": FunctionFragment;
     "claimRemainingLP(uint256,address[])": FunctionFragment;
     "claimReward(uint256,address,uint256)": FunctionFragment;
     "depositLP(uint256,address[],uint256[])": FunctionFragment;
     "emergencyWithdraw(address,uint256)": FunctionFragment;
+    "estimateReward(uint256,address,address,uint256)": FunctionFragment;
     "eventData()": FunctionFragment;
     "eventDataAddress()": FunctionFragment;
     "feeBNB()": FunctionFragment;
@@ -68,6 +70,8 @@ export interface PredictionInterface extends utils.Interface {
     "owner()": FunctionFragment;
     "participateRate()": FunctionFragment;
     "predict(uint256,uint256[],address[],uint256[])": FunctionFragment;
+    "predictOptionStats(address,uint256,uint256)": FunctionFragment;
+    "predictStats(address,uint256)": FunctionFragment;
     "predictions(address,address,uint256,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "rewardToken()": FunctionFragment;
@@ -85,11 +89,13 @@ export interface PredictionInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "bnbRate"
+      | "calculateSponsor"
       | "claimCashBack"
       | "claimRemainingLP"
       | "claimReward"
       | "depositLP"
       | "emergencyWithdraw"
+      | "estimateReward"
       | "eventData"
       | "eventDataAddress"
       | "feeBNB"
@@ -109,6 +115,8 @@ export interface PredictionInterface extends utils.Interface {
       | "owner"
       | "participateRate"
       | "predict"
+      | "predictOptionStats"
+      | "predictStats"
       | "predictions"
       | "renounceOwnership"
       | "rewardToken"
@@ -124,6 +132,10 @@ export interface PredictionInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "bnbRate", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "calculateSponsor",
+    values: [BigNumberish, string, BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "claimCashBack",
     values: [BigNumberish, string, BigNumberish]
@@ -143,6 +155,10 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "emergencyWithdraw",
     values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "estimateReward",
+    values: [BigNumberish, string, string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "eventData", values?: undefined): string;
   encodeFunctionData(
@@ -206,6 +222,14 @@ export interface PredictionInterface extends utils.Interface {
     values: [BigNumberish, BigNumberish[], string[], BigNumberish[]]
   ): string;
   encodeFunctionData(
+    functionFragment: "predictOptionStats",
+    values: [string, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "predictStats",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "predictions",
     values: [string, string, BigNumberish, BigNumberish]
   ): string;
@@ -256,6 +280,10 @@ export interface PredictionInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "bnbRate", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "calculateSponsor",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "claimCashBack",
     data: BytesLike
   ): Result;
@@ -270,6 +298,10 @@ export interface PredictionInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "depositLP", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "emergencyWithdraw",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "estimateReward",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "eventData", data: BytesLike): Result;
@@ -327,6 +359,14 @@ export interface PredictionInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "predict", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "predictOptionStats",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "predictStats",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "predictions",
     data: BytesLike
@@ -498,6 +538,14 @@ export interface Prediction extends BaseContract {
   functions: {
     bnbRate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    calculateSponsor(
+      _eventId: BigNumberish,
+      _token: string,
+      _index: BigNumberish,
+      _amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     claimCashBack(
       _eventId: BigNumberish,
       _token: string,
@@ -530,6 +578,14 @@ export interface Prediction extends BaseContract {
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    estimateReward(
+      _eventId: BigNumberish,
+      _user: string,
+      _token: string,
+      _predictNum: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     eventData(overrides?: CallOverrides): Promise<[string]>;
 
@@ -616,6 +672,19 @@ export interface Prediction extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    predictOptionStats(
+      arg0: string,
+      arg1: BigNumberish,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    predictStats(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     predictions(
       arg0: string,
       arg1: string,
@@ -684,6 +753,14 @@ export interface Prediction extends BaseContract {
 
   bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
 
+  calculateSponsor(
+    _eventId: BigNumberish,
+    _token: string,
+    _index: BigNumberish,
+    _amount: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   claimCashBack(
     _eventId: BigNumberish,
     _token: string,
@@ -716,6 +793,14 @@ export interface Prediction extends BaseContract {
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  estimateReward(
+    _eventId: BigNumberish,
+    _user: string,
+    _token: string,
+    _predictNum: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   eventData(overrides?: CallOverrides): Promise<string>;
 
@@ -799,6 +884,19 @@ export interface Prediction extends BaseContract {
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  predictOptionStats(
+    arg0: string,
+    arg1: BigNumberish,
+    arg2: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  predictStats(
+    arg0: string,
+    arg1: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   predictions(
     arg0: string,
     arg1: string,
@@ -867,6 +965,14 @@ export interface Prediction extends BaseContract {
   callStatic: {
     bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
 
+    calculateSponsor(
+      _eventId: BigNumberish,
+      _token: string,
+      _index: BigNumberish,
+      _amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     claimCashBack(
       _eventId: BigNumberish,
       _token: string,
@@ -899,6 +1005,14 @@ export interface Prediction extends BaseContract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    estimateReward(
+      _eventId: BigNumberish,
+      _user: string,
+      _token: string,
+      _predictNum: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     eventData(overrides?: CallOverrides): Promise<string>;
 
@@ -984,6 +1098,19 @@ export interface Prediction extends BaseContract {
       _amounts: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
+
+    predictOptionStats(
+      arg0: string,
+      arg1: BigNumberish,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    predictStats(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     predictions(
       arg0: string,
@@ -1124,6 +1251,14 @@ export interface Prediction extends BaseContract {
   estimateGas: {
     bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
 
+    calculateSponsor(
+      _eventId: BigNumberish,
+      _token: string,
+      _index: BigNumberish,
+      _amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     claimCashBack(
       _eventId: BigNumberish,
       _token: string,
@@ -1155,6 +1290,14 @@ export interface Prediction extends BaseContract {
       _token: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    estimateReward(
+      _eventId: BigNumberish,
+      _user: string,
+      _token: string,
+      _predictNum: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     eventData(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1242,6 +1385,19 @@ export interface Prediction extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    predictOptionStats(
+      arg0: string,
+      arg1: BigNumberish,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    predictStats(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     predictions(
       arg0: string,
       arg1: string,
@@ -1305,6 +1461,14 @@ export interface Prediction extends BaseContract {
   populateTransaction: {
     bnbRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    calculateSponsor(
+      _eventId: BigNumberish,
+      _token: string,
+      _index: BigNumberish,
+      _amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     claimCashBack(
       _eventId: BigNumberish,
       _token: string,
@@ -1336,6 +1500,14 @@ export interface Prediction extends BaseContract {
       _token: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    estimateReward(
+      _eventId: BigNumberish,
+      _user: string,
+      _token: string,
+      _predictNum: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     eventData(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1421,6 +1593,19 @@ export interface Prediction extends BaseContract {
       _tokens: string[],
       _amounts: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    predictOptionStats(
+      arg0: string,
+      arg1: BigNumberish,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    predictStats(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     predictions(

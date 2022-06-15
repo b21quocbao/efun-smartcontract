@@ -83,7 +83,7 @@ describe("Unit tests", function () {
           timestamp + 7 * 24 * 3600,
           timestamp + 10 * 24 * 3600,
           this.handicap.address,
-          [23000, 23000, 10000, 13000, 13000],
+          [12000, 12000, 10000, 20000, 20000],
           "",
         );
 

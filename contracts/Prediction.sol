@@ -19,8 +19,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     mapping(address => mapping(address => mapping(uint256 => mapping(uint256 => EDataTypes.Prediction))))
         public predictions;
     mapping(address => mapping(address => mapping(uint256 => uint256))) public numPredicts;
-    mapping(address => mapping(uint256 => uint256)) private predictStats;
-    mapping(address => mapping(uint256 => uint256[])) private predictOptionStats;
+    mapping(address => mapping(uint256 => uint256)) public predictStats;
+    mapping(address => mapping(uint256 => uint256[])) public predictOptionStats;
     mapping(address => mapping(uint256 => uint256)) private sponsorTotal;
 
     uint256 private oneHundredPrecent;
@@ -140,28 +140,90 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             );
     }
 
+    function getPRInfo(
+        uint256 _eventId,
+        address _token,
+        uint256 _index,
+        uint256 _amount
+    )
+        internal
+        view
+        returns (
+            EDataTypes.Event memory _event,
+            IHelper _helper,
+            uint256 _liquidityPool,
+            uint256[] memory _predictOptionStat
+        )
+    {
+        _event = eventData.info(_eventId);
+        _helper = IHelper(_event.helperAddress);
+        _liquidityPool = liquidityPoolEvent[_eventId][_token];
+        _predictOptionStat = predictOptionStats[_token][_eventId];
+        if (_predictOptionStat.length == 0) {
+            _predictOptionStat = new uint256[](_event.odds.length);
+        }
+    }
+
     function getPotentialReward(
         uint256 _eventId,
         address _token,
         uint256 _index,
         uint256 _amount
     ) public view returns (uint256) {
-        EDataTypes.Event memory _event = eventData.info(_eventId);
-        IHelper _helper = IHelper(_event.helperAddress);
-        uint256 _liquidityPool = liquidityPoolEvent[_eventId][_token];
+        uint256 eventId = _eventId;
+        address token = _token;
+        uint256 index = _index;
+        uint256 amount = _amount;
+        (
+            EDataTypes.Event memory _event,
+            IHelper _helper,
+            uint256 _liquidityPool,
+            uint256[] memory _predictOptionStat
+        ) = getPRInfo(eventId, token, index, amount);
 
         return
             _helper.calculatePotentialReward(
                 eventDataAddress,
-                _eventId,
-                predictStats[_token][_eventId],
-                predictOptionStats[_token][_eventId],
-                _amount,
-                _event.odds[_index],
+                eventId,
+                predictStats[token][eventId],
+                _predictOptionStat,
+                amount,
+                _event.odds[index],
                 oneHundredPrecent,
-                _index,
+                index,
                 _liquidityPool
-            ) - _amount;
+            ) - amount;
+    }
+
+    function calculateSponsor(
+        uint256 _eventId,
+        address _token,
+        uint256 _index,
+        uint256 _amount
+    ) public view returns (uint256) {
+        uint256 eventId = _eventId;
+        address token = _token;
+        uint256 index = _index;
+        uint256 amount = _amount;
+        (
+            EDataTypes.Event memory _event,
+            IHelper _helper,
+            uint256 _liquidityPool,
+            uint256[] memory _predictOptionStat
+        ) = getPRInfo(eventId, token, index, amount);
+
+        return
+            _helper.calculateSponsor(
+                eventDataAddress,
+                eventId,
+                predictStats[token][eventId],
+                _predictOptionStat,
+                amount,
+                _event.odds[index],
+                oneHundredPrecent,
+                index,
+                _liquidityPool
+            ) - amount;
     }
 
     function depositLP(
@@ -169,6 +231,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         address[] calldata _tokens,
         uint256[] calldata _amounts
     ) public payable {
+        EDataTypes.Event memory _event = eventData.info(_eventId);
         uint256 _totalAmount = msg.value;
 
         for (uint256 i = 0; i < _tokens.length; ++i) {
@@ -181,6 +244,9 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             } else {
                 require(_totalAmount >= _amount, "total-amount-not-same");
                 _totalAmount -= _amount;
+            }
+            if (predictOptionStats[_token][_eventId].length == 0) {
+                predictOptionStats[_token][_eventId] = new uint256[](_event.odds.length);
             }
 
             emit LPDeposited(_eventId, _token, liquidityPoolEvent[_eventId][_token]);
@@ -318,6 +384,40 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         }
 
         emit RewardClaimed(_eventId, _predictNum, msg.sender, _token, _reward);
+    }
+
+    /**
+     * @dev Claims reward
+     */
+    function estimateReward(
+        uint256 _eventId,
+        address _user,
+        address _token,
+        uint256 _predictNum
+    ) public view returns (uint256) {
+        uint256 _localEventId = _eventId;
+        address _localToken = _token;
+        uint256 _localPredictNum = _predictNum;
+        address _localUser = _user;
+        EDataTypes.Event memory _event = eventData.info(_localEventId);
+
+        uint256 _index = predictions[_localToken][_localUser][_localEventId][_localPredictNum].predictOptions;
+        uint256 _liquidityPool = liquidityPoolEvent[_localEventId][_localToken];
+
+        IHelper _helper = IHelper(_event.helperAddress);
+
+        return
+            _helper.calculateReward(
+                eventDataAddress,
+                _localEventId,
+                predictStats[_localToken][_localEventId],
+                predictOptionStats[_localToken][_localEventId],
+                predictions[_localToken][_localUser][_localEventId][_localPredictNum],
+                _event.odds[_index],
+                oneHundredPrecent,
+                _index,
+                _liquidityPool
+            );
     }
 
     /**

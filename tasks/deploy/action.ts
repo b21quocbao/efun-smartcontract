@@ -1,10 +1,11 @@
 import { task } from "hardhat/config";
 import web3 from "web3";
 
+import { GroupPredict__factory } from "../../src/types";
 import { Event__factory } from "../../src/types/factories/contracts/Event__factory";
 import { Prediction__factory } from "../../src/types/factories/contracts/Prediction__factory";
 
-const { toWei } = web3.utils;
+const { toWei, fromWei } = web3.utils;
 
 task("create:Event").setAction(async function (_taskArgs, hre) {
   const { ethers } = hre;
@@ -46,7 +47,6 @@ task("create:Prediction")
     console.log(_taskArgs, "Line #39 create-event.ts");
 
     const { ethers } = hre;
-    const [deployer] = await ethers.getSigners();
     const caller = new ethers.Wallet(
       "8dc49be4fc73bc613cf35cc17104531f129411fbfb73236d037a3733bed1a803",
       ethers.provider,
@@ -74,7 +74,6 @@ task("deposit:LP")
     console.log(_taskArgs, "Line #39 create-event.ts");
 
     const { ethers } = hre;
-    const [deployer] = await ethers.getSigners();
     const caller = new ethers.Wallet(
       "8dc49be4fc73bc613cf35cc17104531f129411fbfb73236d037a3733bed1a803",
       ethers.provider,
@@ -103,4 +102,60 @@ task("update:event:data").setAction(async function (_taskArgs, hre) {
 
   const tx = await prediction.connect(deployer).setEventData("0x5192Df0a655812d339aE88de83769e40789E0c4d");
   console.log("\x1b[36m%s\x1b[0m", "tx", tx);
+});
+
+task("calculate:reward").setAction(async function (_taskArgs, hre) {
+  const { ethers } = hre;
+  const [deployer] = await ethers.getSigners();
+
+  const groupPredict = await GroupPredict__factory.connect("0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208", deployer);
+  const event = await Event__factory.connect("0x5192Df0a655812d339aE88de83769e40789E0c4d", deployer);
+  console.log(await event.info(503));
+  console.log(
+    await groupPredict.calculatePotentialReward(
+      "0x5192Df0a655812d339aE88de83769e40789E0c4d",
+      503,
+      "11000000000000000",
+      [5000000000000000, 6000000000000000, 0, 0],
+      6000000000000000,
+      10000,
+      10000,
+      1,
+      0,
+    ),
+  );
+
+  const tx = await groupPredict.calculateReward(
+    "0x5192Df0a655812d339aE88de83769e40789E0c4d",
+    503,
+    "11000000000000000",
+    [5000000000000000, 6000000000000000, 0, 0],
+    { predictionAmount: 6000000000000000, predictOptions: 1, claimed: false },
+    10000,
+    10000,
+    1,
+    0,
+  );
+
+  console.log("\x1b[36m%s\x1b[0m", "tx", tx);
+});
+
+task("calculate:potential:reward").setAction(async function (_taskArgs, hre) {
+  const { ethers } = hre;
+  const [deployer] = await ethers.getSigners();
+
+  const prediction = await Prediction__factory.connect("0x522608829526221417EDC35194A9060De79428C4", deployer);
+
+  console.log(
+    Math.round(
+      Number(
+        fromWei(
+          (
+            await prediction.getPotentialReward(527, "0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d", 1, toWei("2"))
+          ).toString(),
+        ),
+      ),
+    ),
+    "potential 1",
+  );
 });

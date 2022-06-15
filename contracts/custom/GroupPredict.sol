@@ -60,6 +60,23 @@ contract GroupPredict is Initializable {
     }
 
     /**
+     * @dev Calculates sponsor
+     */
+    function calculateSponsor(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        uint256 _predictionAmount,
+        uint256 _odd,
+        uint256 _oneHundredPrecent,
+        uint256 _index,
+        uint256 _liquidityPool
+    ) public view returns (uint256 _reward) {
+        _reward = (_liquidityPool * _predictionAmount) / _predictOptionStats[_index];
+    }
+
+    /**
      * @dev Calculates reward
      */
     function calculatePotentialReward(
@@ -73,8 +90,6 @@ contract GroupPredict is Initializable {
         uint256 _index,
         uint256 _liquidityPool
     ) public view returns (uint256 _reward) {
-        EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-
         _reward = ((_predictStats + _liquidityPool) * _predictionAmount) / _predictOptionStats[_index];
     }
 

@@ -215,6 +215,65 @@ const _abi = [
       },
       {
         internalType: "uint256",
+        name: "_predictionAmount",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_odd",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_oneHundredPrecent",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_index",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_liquidityPool",
+        type: "uint256",
+      },
+    ],
+    name: "calculateSponsor",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "_reward",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_eventDataAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_eventId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_predictStats",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256[]",
+        name: "_predictOptionStats",
+        type: "uint256[]",
+      },
+      {
+        internalType: "uint256",
         name: "_odd",
         type: "uint256",
       },

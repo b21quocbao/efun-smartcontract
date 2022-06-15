@@ -58,6 +58,20 @@ export function shouldBehaveLikeEvent(): void {
 
   it("can predict multiple choices event", async function () {
     await increase(duration.seconds(50));
+    console.log(
+      Math.round(
+        Number(
+          fromWei(
+            (
+              await this.prediction
+                .connect(this.signers.user1)
+                .getPotentialReward(1, "0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d", 0, toWei("2"))
+            ).toString(),
+          ),
+        ),
+      ),
+      "potential 1",
+    );
 
     await this.prediction
       .connect(this.signers.admin)
@@ -84,7 +98,7 @@ export function shouldBehaveLikeEvent(): void {
             (
               await this.prediction
                 .connect(this.signers.user1)
-                .getPotentialReward(1, "0x0000000000000000000000000000000000000000", 0, toWei("30"))
+                .getPotentialReward(1, "0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d", 0, toWei("2"))
             ).toString(),
           ),
         ),
@@ -325,7 +339,7 @@ export function shouldBehaveLikeEvent(): void {
       (
         await this.prediction
           .connect(this.signers.user2)
-          .getMaxPayout(1, "0x0000000000000000000000000000000000000000", 0)
+          .getMaxPayout(1, "0x0000000000000000000000000000000000000000", 1)
       ).toNumber(),
     );
 
@@ -338,11 +352,37 @@ export function shouldBehaveLikeEvent(): void {
         (
           await this.prediction
             .connect(this.signers.user2)
-            .getMaxPayout(1, "0x0000000000000000000000000000000000000000", 0)
+            .getMaxPayout(1, "0x0000000000000000000000000000000000000000", 1)
         )
-          .mul(130)
+          .mul(127)
           .div(100)
           .toString(),
+      ),
+    );
+  });
+
+  it("test max payout2", async function () {
+    await increase(duration.seconds(50));
+
+    console.log(
+      (
+        await this.prediction
+          .connect(this.signers.user2)
+          .getMaxPayout(2, "0x0000000000000000000000000000000000000000", 0)
+      ).toNumber(),
+    );
+
+    await this.prediction
+      .connect(this.signers.admin)
+      .depositLP(2, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
+
+    console.log(
+      fromWei(
+        (
+          await this.prediction
+            .connect(this.signers.user2)
+            .getMaxPayout(2, "0x0000000000000000000000000000000000000000", 0)
+        ).toString(),
       ),
     );
   });
