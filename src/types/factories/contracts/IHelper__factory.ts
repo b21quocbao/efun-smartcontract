@@ -179,8 +179,89 @@ const _abi = [
         name: "_liquidityPool",
         type: "uint256",
       },
+      {
+        internalType: "bool",
+        name: "_validate",
+        type: "bool",
+      },
     ],
     name: "calculateReward",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "_reward",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_eventDataAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_eventId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_predictStats",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256[]",
+        name: "_predictOptionStats",
+        type: "uint256[]",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "predictionAmount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "predictOptions",
+            type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "claimed",
+            type: "bool",
+          },
+        ],
+        internalType: "struct EDataTypes.Prediction",
+        name: "_predictions",
+        type: "tuple",
+      },
+      {
+        internalType: "uint256",
+        name: "_odd",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_oneHundredPrecent",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_index",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_liquidityPool",
+        type: "uint256",
+      },
+    ],
+    name: "calculateRewardSponsor",
     outputs: [
       {
         internalType: "uint256",

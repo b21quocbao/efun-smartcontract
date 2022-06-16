@@ -38,7 +38,8 @@ export interface IHelperInterface extends utils.Interface {
   functions: {
     "calculatePotentialReward(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
     "calculateRemainLP(address,uint256,uint256,uint256[],uint256[],uint256,uint256)": FunctionFragment;
-    "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256,uint256)": FunctionFragment;
+    "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256,uint256,bool)": FunctionFragment;
+    "calculateRewardSponsor(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256,uint256)": FunctionFragment;
     "calculateSponsor(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
     "maxPayout(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256)": FunctionFragment;
     "validatePrediction(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
@@ -49,6 +50,7 @@ export interface IHelperInterface extends utils.Interface {
       | "calculatePotentialReward"
       | "calculateRemainLP"
       | "calculateReward"
+      | "calculateRewardSponsor"
       | "calculateSponsor"
       | "maxPayout"
       | "validatePrediction"
@@ -82,6 +84,21 @@ export interface IHelperInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "calculateReward",
+    values: [
+      string,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish[],
+      EDataTypes.PredictionStruct,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      boolean
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "calculateRewardSponsor",
     values: [
       string,
       BigNumberish,
@@ -149,6 +166,10 @@ export interface IHelperInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "calculateRewardSponsor",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "calculateSponsor",
     data: BytesLike
   ): Result;
@@ -213,6 +234,20 @@ export interface IHelper extends BaseContract {
     ): Promise<[BigNumber] & { _remainLP: BigNumber }>;
 
     calculateReward(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _predictions: EDataTypes.PredictionStruct,
+      _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      _liquidityPool: BigNumberish,
+      _validate: boolean,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { _reward: BigNumber }>;
+
+    calculateRewardSponsor(
       _eventDataAddress: string,
       _eventId: BigNumberish,
       _predictStats: BigNumberish,
@@ -298,6 +333,20 @@ export interface IHelper extends BaseContract {
     _oneHundredPrecent: BigNumberish,
     _index: BigNumberish,
     _liquidityPool: BigNumberish,
+    _validate: boolean,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  calculateRewardSponsor(
+    _eventDataAddress: string,
+    _eventId: BigNumberish,
+    _predictStats: BigNumberish,
+    _predictOptionStats: BigNumberish[],
+    _predictions: EDataTypes.PredictionStruct,
+    _odd: BigNumberish,
+    _oneHundredPrecent: BigNumberish,
+    _index: BigNumberish,
+    _liquidityPool: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -365,6 +414,20 @@ export interface IHelper extends BaseContract {
     ): Promise<BigNumber>;
 
     calculateReward(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _predictions: EDataTypes.PredictionStruct,
+      _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      _liquidityPool: BigNumberish,
+      _validate: boolean,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    calculateRewardSponsor(
       _eventDataAddress: string,
       _eventId: BigNumberish,
       _predictStats: BigNumberish,
@@ -453,6 +516,20 @@ export interface IHelper extends BaseContract {
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,
       _liquidityPool: BigNumberish,
+      _validate: boolean,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    calculateRewardSponsor(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _predictions: EDataTypes.PredictionStruct,
+      _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      _liquidityPool: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -521,6 +598,20 @@ export interface IHelper extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     calculateReward(
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      _predictStats: BigNumberish,
+      _predictOptionStats: BigNumberish[],
+      _predictions: EDataTypes.PredictionStruct,
+      _odd: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _index: BigNumberish,
+      _liquidityPool: BigNumberish,
+      _validate: boolean,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    calculateRewardSponsor(
       _eventDataAddress: string,
       _eventId: BigNumberish,
       _predictStats: BigNumberish,

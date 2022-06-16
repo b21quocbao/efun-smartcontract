@@ -59,10 +59,14 @@ contract MultipleChoices is Initializable {
         uint256 _odd,
         uint256 _oneHundredPrecent,
         uint256 _index,
-        uint256 _liquidityPool
+        uint256 _liquidityPool,
+        bool _validate
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-        require(_event.resultIndex == _predictions.predictOptions, "no-reward");
+
+        if (_validate) {
+            require(_event.resultIndex == _predictions.predictOptions, "no-reward");
+        }
 
         _reward = (_predictions.predictionAmount * _odd) / _oneHundredPrecent;
     }

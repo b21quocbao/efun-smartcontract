@@ -51,12 +51,35 @@ contract GroupPredict is Initializable {
         uint256 _odd,
         uint256 _oneHundredPrecent,
         uint256 _index,
+        uint256 _liquidityPool,
+        bool _validate
+    ) public view returns (uint256 _reward) {
+        EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
+
+        if (_validate) {
+            require(_event.resultIndex == _predictions.predictOptions, "no-reward");
+        }
+
+        _reward = ((_predictStats + _liquidityPool) * _predictions.predictionAmount) / _predictOptionStats[_index];
+    }
+
+    /**
+     * @dev Calculates reward
+     */
+    function calculateRewardSponsor(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        EDataTypes.Prediction calldata _predictions,
+        uint256 _odd,
+        uint256 _oneHundredPrecent,
+        uint256 _index,
         uint256 _liquidityPool
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-        require(_event.resultIndex == _predictions.predictOptions, "no-reward");
 
-        _reward = ((_predictStats + _liquidityPool) * _predictions.predictionAmount) / _predictOptionStats[_index];
+        _reward = (_liquidityPool * _predictions.predictionAmount) / _predictOptionStats[_index];
     }
 
     /**
@@ -73,7 +96,7 @@ contract GroupPredict is Initializable {
         uint256 _index,
         uint256 _liquidityPool
     ) public view returns (uint256 _reward) {
-        _reward = (_liquidityPool * _predictionAmount) / _predictOptionStats[_index];
+        _reward = (_liquidityPool * _predictionAmount) / (_predictOptionStats[_index] + _predictionAmount);
     }
 
     /**
@@ -90,7 +113,9 @@ contract GroupPredict is Initializable {
         uint256 _index,
         uint256 _liquidityPool
     ) public view returns (uint256 _reward) {
-        _reward = ((_predictStats + _liquidityPool) * _predictionAmount) / _predictOptionStats[_index];
+        _reward =
+            ((_predictStats + _liquidityPool + _predictionAmount) * _predictionAmount) /
+            (_predictOptionStats[_index] + _predictionAmount);
     }
 
     /**

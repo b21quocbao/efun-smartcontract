@@ -73,14 +73,17 @@ contract OverUnder is Initializable {
         uint256 _odd,
         uint256 _oneHundredPrecent,
         uint256 _index,
-        uint256 _liquidityPool
+        uint256 _liquidityPool,
+        bool _validate
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
 
         bool validate1 = _predictions.predictOptions % 2 == 0 && _predictions.predictOptions >= _event.resultIndex;
         bool validate2 = _predictions.predictOptions % 2 == 1 && _predictions.predictOptions <= _event.resultIndex;
 
-        require(validate1 || validate2, "no-reward");
+        if (_validate) {
+            require(validate1 || validate2, "no-reward");
+        }
 
         _reward = (_predictions.predictionAmount * _odd) / _oneHundredPrecent;
     }

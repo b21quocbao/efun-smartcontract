@@ -89,26 +89,29 @@ contract Handicap is Initializable {
         uint256 _odd,
         uint256 _oneHundredPrecent,
         uint256 _index,
-        uint256 _liquidityPool
+        uint256 _liquidityPool,
+        bool _validate
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
         uint256 _indexOption = _predictions.predictOptions;
 
-        require(
-            (_indexOption == 0 && _event.resultIndex != 4) || (_indexOption == 4 && _event.resultIndex != 0),
-            "no-reward"
-        );
+        if (_validate) {
+            require(
+                (_indexOption == 0 && _event.resultIndex != 4) || (_indexOption == 4 && _event.resultIndex != 0),
+                "no-reward"
+            );
+        }
 
-        if ((_indexOption == 0 && _event.resultIndex == 0) || (_indexOption == 1 && _event.resultIndex == 4)) {
+        if ((_indexOption == 0 && _event.resultIndex == 0) || (_indexOption == 4 && _event.resultIndex == 4)) {
             _reward = (_predictions.predictionAmount * _odd) / _oneHundredPrecent;
         }
-        if ((_indexOption == 0 && _event.resultIndex == 1) || (_indexOption == 1 && _event.resultIndex == 3)) {
+        if ((_indexOption == 0 && _event.resultIndex == 1) || (_indexOption == 4 && _event.resultIndex == 3)) {
             _reward = (_predictions.predictionAmount * (_oneHundredPrecent + _odd)) / 2 / _oneHundredPrecent;
         }
-        if ((_indexOption == 0 && _event.resultIndex == 2) || (_indexOption == 1 && _event.resultIndex == 2)) {
+        if ((_indexOption == 0 && _event.resultIndex == 2) || (_indexOption == 4 && _event.resultIndex == 2)) {
             _reward = _predictions.predictionAmount;
         }
-        if ((_indexOption == 0 && _event.resultIndex == 3) || (_indexOption == 1 && _event.resultIndex == 1)) {
+        if ((_indexOption == 0 && _event.resultIndex == 3) || (_indexOption == 4 && _event.resultIndex == 1)) {
             _reward = _predictions.predictionAmount / 2;
         }
     }
@@ -151,19 +154,19 @@ contract Handicap is Initializable {
             _remainLP += _predictOptionStats[idx];
 
             if ((idx == 0 && _event.resultIndex != 4) || (idx == 4 && _event.resultIndex != 0)) {
-                if ((idx == 0 && _event.resultIndex == 0) || (idx == 1 && _event.resultIndex == 4)) {
+                if ((idx == 0 && _event.resultIndex == 0) || (idx == 4 && _event.resultIndex == 4)) {
                     _remainLP -= (_predictOptionStats[idx] * _odds[idx]) / _oneHundredPrecent;
                 }
-                if ((idx == 0 && _event.resultIndex == 1) || (idx == 1 && _event.resultIndex == 3)) {
+                if ((idx == 0 && _event.resultIndex == 1) || (idx == 4 && _event.resultIndex == 3)) {
                     _remainLP -=
                         (_predictOptionStats[idx] * (_oneHundredPrecent + _odds[idx])) /
                         2 /
                         _oneHundredPrecent;
                 }
-                if ((idx == 0 && _event.resultIndex == 2) || (idx == 1 && _event.resultIndex == 2)) {
+                if ((idx == 0 && _event.resultIndex == 2) || (idx == 4 && _event.resultIndex == 2)) {
                     _remainLP -= _predictOptionStats[idx];
                 }
-                if ((idx == 0 && _event.resultIndex == 3) || (idx == 1 && _event.resultIndex == 1)) {
+                if ((idx == 0 && _event.resultIndex == 3) || (idx == 4 && _event.resultIndex == 1)) {
                     _remainLP -= _predictOptionStats[idx] / 2;
                 }
             }

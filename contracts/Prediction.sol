@@ -223,7 +223,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 oneHundredPrecent,
                 index,
                 _liquidityPool
-            ) - amount;
+            );
     }
 
     function depositLP(
@@ -375,7 +375,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             _event.odds[_index],
             oneHundredPrecent,
             _index,
-            _liquidityPool
+            _liquidityPool,
+            true
         );
 
         if (_reward > 0) {
@@ -387,7 +388,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     }
 
     /**
-     * @dev Claims reward
+     * @dev Estimate reward Sponsor
      */
     function estimateReward(
         uint256 _eventId,
@@ -408,6 +409,41 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
         return
             _helper.calculateReward(
+                eventDataAddress,
+                _localEventId,
+                predictStats[_localToken][_localEventId],
+                predictOptionStats[_localToken][_localEventId],
+                predictions[_localToken][_localUser][_localEventId][_localPredictNum],
+                _event.odds[_index],
+                oneHundredPrecent,
+                _index,
+                _liquidityPool,
+                false
+            );
+    }
+
+    /**
+     * @dev Estimate reward Sponsor
+     */
+    function estimateRewardSponsor(
+        uint256 _eventId,
+        address _user,
+        address _token,
+        uint256 _predictNum
+    ) public view returns (uint256) {
+        uint256 _localEventId = _eventId;
+        address _localToken = _token;
+        uint256 _localPredictNum = _predictNum;
+        address _localUser = _user;
+        EDataTypes.Event memory _event = eventData.info(_localEventId);
+
+        uint256 _index = predictions[_localToken][_localUser][_localEventId][_localPredictNum].predictOptions;
+        uint256 _liquidityPool = liquidityPoolEvent[_localEventId][_localToken];
+
+        IHelper _helper = IHelper(_event.helperAddress);
+
+        return
+            _helper.calculateRewardSponsor(
                 eventDataAddress,
                 _localEventId,
                 predictStats[_localToken][_localEventId],

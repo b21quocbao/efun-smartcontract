@@ -135,6 +135,7 @@ task("calculate:reward").setAction(async function (_taskArgs, hre) {
     10000,
     1,
     0,
+    false,
   );
 
   console.log("\x1b[36m%s\x1b[0m", "tx", tx);
