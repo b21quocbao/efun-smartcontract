@@ -150,11 +150,12 @@ contract HandicapGroupPredict is Initializable {
         uint256 _liquidityPool
     ) public view returns (uint256 _remainLP) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
+        bool cont0 = (_event.endTime + 86400 <= block.timestamp && _event.status != EDataTypes.EventStatus.FINISH);
         bool cont1 = (_event.resultIndex == 0 || _event.resultIndex == 1) && _predictOptionStats[0] == 0;
         bool cont2 = (_event.resultIndex == 4 || _event.resultIndex == 3) && _predictOptionStats[4] == 0;
         bool cont3 = _event.resultIndex == 2;
 
-        if (cont1 || cont2 || cont3) {
+        if (cont1 || cont2 || cont3 || cont0) {
             _remainLP = _liquidityPool;
         } else {
             _remainLP = 0;

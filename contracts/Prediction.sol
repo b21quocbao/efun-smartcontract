@@ -540,7 +540,10 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         EDataTypes.Event memory _event = eventData.info(_eventId);
         IHelper _helper = IHelper(_event.helperAddress);
 
-        require(_event.status == EDataTypes.EventStatus.FINISH, "event-not-finish");
+        require(
+            _event.status == EDataTypes.EventStatus.FINISH || _event.endTime + 86400 <= block.timestamp,
+            "event-not-finish"
+        );
         require(_event.creator == msg.sender, "unauthorized");
 
         for (uint256 i = 0; i < _tokens.length; ++i) {

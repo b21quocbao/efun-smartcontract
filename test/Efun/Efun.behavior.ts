@@ -338,6 +338,7 @@ export function shouldBehaveLikeEvent(): void {
           "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
           [10000, 10000],
           "",
+          this.signers.user1.address,
         ),
     ).to.be.revertedWith("end_time > deadline_time");
   });
@@ -576,4 +577,14 @@ export function shouldBehaveLikeEvent(): void {
     console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
     console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
   });
+
+  // it("can predict handicap group predict event", async function () {
+  //   await increase(duration.seconds(50));
+
+  //   console.log(await this.event.checkUpkeep("0x"), 'Line #583 Efun.behavior.ts');
+
+  //   await increase(duration.days(10));
+
+  // await this.event.combine("0x");
+  // });
 }

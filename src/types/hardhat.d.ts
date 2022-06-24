@@ -13,6 +13,18 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "KeeperCompatibleInterface",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.KeeperCompatibleInterface__factory>;
+    getContractFactory(
+      name: "KeeperBase",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.KeeperBase__factory>;
+    getContractFactory(
+      name: "KeeperCompatible",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.KeeperCompatible__factory>;
+    getContractFactory(
       name: "OwnableUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OwnableUpgradeable__factory>;
@@ -89,6 +101,21 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Prediction__factory>;
 
+    getContractAt(
+      name: "KeeperCompatibleInterface",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.KeeperCompatibleInterface>;
+    getContractAt(
+      name: "KeeperBase",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.KeeperBase>;
+    getContractAt(
+      name: "KeeperCompatible",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.KeeperCompatible>;
     getContractAt(
       name: "OwnableUpgradeable",
       address: string,
