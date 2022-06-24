@@ -5,20 +5,11 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../EDataTypes.sol";
 import "../IEvent.sol";
 
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 
-contract Handicap is Initializable {
+contract HandicapGroupPredict is Initializable {
     function compareStrings(string memory a, string memory b) internal pure returns (bool) {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
-    }
-
-    function indexOf(string[] memory a, string memory b) internal pure returns (uint256) {
-        for (uint256 i = 0; i < a.length; i++) {
-            if (compareStrings(a[i], b)) {
-                return i;
-            }
-        }
-        require(false, "cannot-find-index");
     }
 
     function maxPayout(
@@ -31,12 +22,7 @@ contract Handicap is Initializable {
         uint256 _oneHundredPrecent,
         uint256 _index
     ) external view returns (uint256) {
-        uint256 totalAmount = _predictStats + _liquidityPool;
-        uint256 winAmount = (_predictOptionStats[_index] * _odd) / _oneHundredPrecent;
-
-        uint256 winPercent = _odd - _oneHundredPrecent;
-
-        return ((totalAmount - winAmount) * _oneHundredPrecent) / winPercent;
+        return 0;
     }
 
     function validatePrediction(
@@ -50,14 +36,7 @@ contract Handicap is Initializable {
         uint256 _oneHundredPrecent,
         uint256 _index
     ) external view returns (bool) {
-        uint256 totalAmount = (_predictStats + _predictValue + _liquidityPool) * _oneHundredPrecent;
-        uint256 totalAmountA = _predictOptionStats[_index] + _predictValue;
-        uint256 winAmountA = totalAmountA * _odd;
-
-        bool validate1 = totalAmount >= winAmountA;
-        bool validate4 = (_index == 0 || _index == 4);
-
-        return validate1 && validate4;
+        return true;
     }
 
     /**
@@ -84,14 +63,16 @@ contract Handicap is Initializable {
                 "no-reward"
             );
         } else {
-            return (_predictions.predictionAmount * _odd) / _oneHundredPrecent;
+            return ((_predictStats + _liquidityPool) * _predictions.predictionAmount) / _predictOptionStats[_index];
         }
 
         if ((_indexOption == 0 && _event.resultIndex == 0) || (_indexOption == 4 && _event.resultIndex == 4)) {
-            _reward = (_predictions.predictionAmount * _odd) / _oneHundredPrecent;
+            _reward = ((_predictStats + _liquidityPool) * _predictions.predictionAmount) / _predictOptionStats[_index];
         }
         if ((_indexOption == 0 && _event.resultIndex == 1) || (_indexOption == 4 && _event.resultIndex == 3)) {
-            _reward = (_predictions.predictionAmount * (_oneHundredPrecent + _odd)) / 2 / _oneHundredPrecent;
+            _reward =
+                (((_predictOptionStats[_index] + _predictStats) / 2 + _liquidityPool) * _predictions.predictionAmount) /
+                _predictOptionStats[_index];
         }
         if ((_indexOption == 0 && _event.resultIndex == 2) || (_indexOption == 4 && _event.resultIndex == 2)) {
             _reward = _predictions.predictionAmount;
@@ -99,6 +80,42 @@ contract Handicap is Initializable {
         if ((_indexOption == 0 && _event.resultIndex == 3) || (_indexOption == 4 && _event.resultIndex == 1)) {
             _reward = _predictions.predictionAmount / 2;
         }
+    }
+
+    /**
+     * @dev Calculates reward
+     */
+    function calculateRewardSponsor(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        EDataTypes.Prediction calldata _predictions,
+        uint256 _odd,
+        uint256 _oneHundredPrecent,
+        uint256 _index,
+        uint256 _liquidityPool
+    ) public view returns (uint256 _reward) {
+        EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
+
+        _reward = (_liquidityPool * _predictions.predictionAmount) / _predictOptionStats[_index];
+    }
+
+    /**
+     * @dev Calculates sponsor
+     */
+    function calculateSponsor(
+        address _eventDataAddress,
+        uint256 _eventId,
+        uint256 _predictStats,
+        uint256[] calldata _predictOptionStats,
+        uint256 _predictionAmount,
+        uint256 _odd,
+        uint256 _oneHundredPrecent,
+        uint256 _index,
+        uint256 _liquidityPool
+    ) public view returns (uint256 _reward) {
+        _reward = (_liquidityPool * _predictionAmount) / (_predictOptionStats[_index] + _predictionAmount);
     }
 
     /**
@@ -115,9 +132,9 @@ contract Handicap is Initializable {
         uint256 _index,
         uint256 _liquidityPool
     ) public view returns (uint256 _reward) {
-        EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-
-        _reward = (_predictionAmount * _odd) / _oneHundredPrecent;
+        _reward =
+            ((_predictStats + _liquidityPool + _predictionAmount) * _predictionAmount) /
+            (_predictOptionStats[_index] + _predictionAmount);
     }
 
     /**
@@ -133,28 +150,14 @@ contract Handicap is Initializable {
         uint256 _liquidityPool
     ) public view returns (uint256 _remainLP) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-        _remainLP = _liquidityPool;
+        bool cont1 = (_event.resultIndex == 0 || _event.resultIndex == 1) && _predictOptionStats[0] == 0;
+        bool cont2 = (_event.resultIndex == 4 || _event.resultIndex == 3) && _predictOptionStats[4] == 0;
+        bool cont3 = _event.resultIndex == 2;
 
-        for (uint256 idx = 0; idx < _predictOptionStats.length; ++idx) {
-            _remainLP += _predictOptionStats[idx];
-
-            if ((idx == 0 && _event.resultIndex != 4) || (idx == 4 && _event.resultIndex != 0)) {
-                if ((idx == 0 && _event.resultIndex == 0) || (idx == 4 && _event.resultIndex == 4)) {
-                    _remainLP -= (_predictOptionStats[idx] * _odds[idx]) / _oneHundredPrecent;
-                }
-                if ((idx == 0 && _event.resultIndex == 1) || (idx == 4 && _event.resultIndex == 3)) {
-                    _remainLP -=
-                        (_predictOptionStats[idx] * (_oneHundredPrecent + _odds[idx])) /
-                        2 /
-                        _oneHundredPrecent;
-                }
-                if ((idx == 0 && _event.resultIndex == 2) || (idx == 4 && _event.resultIndex == 2)) {
-                    _remainLP -= _predictOptionStats[idx];
-                }
-                if ((idx == 0 && _event.resultIndex == 3) || (idx == 4 && _event.resultIndex == 1)) {
-                    _remainLP -= _predictOptionStats[idx] / 2;
-                }
-            }
+        if (cont1 || cont2 || cont3) {
+            _remainLP = _liquidityPool;
+        } else {
+            _remainLP = 0;
         }
     }
 }

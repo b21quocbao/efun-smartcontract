@@ -48,6 +48,7 @@ export interface PredictionInterface extends utils.Interface {
     "claimCashBack(uint256,address,uint256)": FunctionFragment;
     "claimRemainingLP(uint256,address[])": FunctionFragment;
     "claimReward(uint256,address,uint256)": FunctionFragment;
+    "createSingleEvent(uint256,uint256,uint256,address,uint256[],string,address[],uint256[])": FunctionFragment;
     "depositLP(uint256,address[],uint256[])": FunctionFragment;
     "emergencyWithdraw(address,uint256)": FunctionFragment;
     "estimateReward(uint256,address,address,uint256)": FunctionFragment;
@@ -85,6 +86,7 @@ export interface PredictionInterface extends utils.Interface {
     "setLotCollector(address)": FunctionFragment;
     "setRewardToken(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "validateEstimateReward(uint256,address,address,uint256)": FunctionFragment;
   };
 
   getFunction(
@@ -94,6 +96,7 @@ export interface PredictionInterface extends utils.Interface {
       | "claimCashBack"
       | "claimRemainingLP"
       | "claimReward"
+      | "createSingleEvent"
       | "depositLP"
       | "emergencyWithdraw"
       | "estimateReward"
@@ -131,6 +134,7 @@ export interface PredictionInterface extends utils.Interface {
       | "setLotCollector"
       | "setRewardToken"
       | "transferOwnership"
+      | "validateEstimateReward"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "bnbRate", values?: undefined): string;
@@ -149,6 +153,19 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "claimReward",
     values: [BigNumberish, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createSingleEvent",
+    values: [
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      string,
+      BigNumberish[],
+      string,
+      string[],
+      BigNumberish[]
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "depositLP",
@@ -283,6 +300,10 @@ export interface PredictionInterface extends utils.Interface {
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "validateEstimateReward",
+    values: [BigNumberish, string, string, BigNumberish]
+  ): string;
 
   decodeFunctionResult(functionFragment: "bnbRate", data: BytesLike): Result;
   decodeFunctionResult(
@@ -299,6 +320,10 @@ export interface PredictionInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "claimReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "createSingleEvent",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "depositLP", data: BytesLike): Result;
@@ -413,9 +438,14 @@ export interface PredictionInterface extends utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "validateEstimateReward",
+    data: BytesLike
+  ): Result;
 
   events: {
     "CashBackClaimed(uint256,uint256,address,address)": EventFragment;
+    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "LPClaimed(uint256,address,uint256)": EventFragment;
     "LPDeposited(uint256,address,uint256)": EventFragment;
@@ -425,6 +455,7 @@ export interface PredictionInterface extends utils.Interface {
   };
 
   getEvent(nameOrSignatureOrTopic: "CashBackClaimed"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "EventCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LPClaimed"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "LPDeposited"): EventFragment;
@@ -445,6 +476,32 @@ export type CashBackClaimedEvent = TypedEvent<
 >;
 
 export type CashBackClaimedEventFilter = TypedEventFilter<CashBackClaimedEvent>;
+
+export interface EventCreatedEventObject {
+  idx: BigNumber;
+  startTime: BigNumber;
+  deadlineTime: BigNumber;
+  endTime: BigNumber;
+  helperAddress: string;
+  creator: string;
+  odds: BigNumber[];
+  datas: string;
+}
+export type EventCreatedEvent = TypedEvent<
+  [
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    string,
+    string,
+    BigNumber[],
+    string
+  ],
+  EventCreatedEventObject
+>;
+
+export type EventCreatedEventFilter = TypedEventFilter<EventCreatedEvent>;
 
 export interface InitializedEventObject {
   version: number;
@@ -574,6 +631,18 @@ export interface Prediction extends BaseContract {
       _token: string,
       _predictNum: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    createSingleEvent(
+      _startTime: BigNumberish,
+      _deadlineTime: BigNumberish,
+      _endTime: BigNumberish,
+      _helperAddress: string,
+      _odds: BigNumberish[],
+      _datas: string,
+      _tokens: string[],
+      _amounts: BigNumberish[],
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     depositLP(
@@ -767,6 +836,14 @@ export interface Prediction extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    validateEstimateReward(
+      _eventId: BigNumberish,
+      _user: string,
+      _token: string,
+      _predictNum: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
   };
 
   bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
@@ -797,6 +874,18 @@ export interface Prediction extends BaseContract {
     _token: string,
     _predictNum: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  createSingleEvent(
+    _startTime: BigNumberish,
+    _deadlineTime: BigNumberish,
+    _endTime: BigNumberish,
+    _helperAddress: string,
+    _odds: BigNumberish[],
+    _datas: string,
+    _tokens: string[],
+    _amounts: BigNumberish[],
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   depositLP(
@@ -988,6 +1077,14 @@ export interface Prediction extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  validateEstimateReward(
+    _eventId: BigNumberish,
+    _user: string,
+    _token: string,
+    _predictNum: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   callStatic: {
     bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1018,6 +1115,18 @@ export interface Prediction extends BaseContract {
       _predictNum: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    createSingleEvent(
+      _startTime: BigNumberish,
+      _deadlineTime: BigNumberish,
+      _endTime: BigNumberish,
+      _helperAddress: string,
+      _odds: BigNumberish[],
+      _datas: string,
+      _tokens: string[],
+      _amounts: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     depositLP(
       _eventId: BigNumberish,
@@ -1199,6 +1308,14 @@ export interface Prediction extends BaseContract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    validateEstimateReward(
+      _eventId: BigNumberish,
+      _user: string,
+      _token: string,
+      _predictNum: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   filters: {
@@ -1214,6 +1331,27 @@ export interface Prediction extends BaseContract {
       user?: null,
       token?: null
     ): CashBackClaimedEventFilter;
+
+    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string)"(
+      idx?: null,
+      startTime?: null,
+      deadlineTime?: null,
+      endTime?: null,
+      helperAddress?: null,
+      creator?: null,
+      odds?: null,
+      datas?: null
+    ): EventCreatedEventFilter;
+    EventCreated(
+      idx?: null,
+      startTime?: null,
+      deadlineTime?: null,
+      endTime?: null,
+      helperAddress?: null,
+      creator?: null,
+      odds?: null,
+      datas?: null
+    ): EventCreatedEventFilter;
 
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
     Initialized(version?: null): InitializedEventFilter;
@@ -1311,6 +1449,18 @@ export interface Prediction extends BaseContract {
       _token: string,
       _predictNum: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    createSingleEvent(
+      _startTime: BigNumberish,
+      _deadlineTime: BigNumberish,
+      _endTime: BigNumberish,
+      _helperAddress: string,
+      _odds: BigNumberish[],
+      _datas: string,
+      _tokens: string[],
+      _amounts: BigNumberish[],
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     depositLP(
@@ -1498,6 +1648,14 @@ export interface Prediction extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    validateEstimateReward(
+      _eventId: BigNumberish,
+      _user: string,
+      _token: string,
+      _predictNum: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -1529,6 +1687,18 @@ export interface Prediction extends BaseContract {
       _token: string,
       _predictNum: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    createSingleEvent(
+      _startTime: BigNumberish,
+      _deadlineTime: BigNumberish,
+      _endTime: BigNumberish,
+      _helperAddress: string,
+      _odds: BigNumberish[],
+      _datas: string,
+      _tokens: string[],
+      _amounts: BigNumberish[],
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     depositLP(
@@ -1715,6 +1885,14 @@ export interface Prediction extends BaseContract {
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    validateEstimateReward(
+      _eventId: BigNumberish,
+      _user: string,
+      _token: string,
+      _predictNum: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

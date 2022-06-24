@@ -8,6 +8,7 @@ import type { Event } from "../../src/types/contracts/Event";
 import type { Prediction } from "../../src/types/contracts/Prediction";
 import type { GroupPredict } from "../../src/types/contracts/custom/GroupPredict";
 import { Handicap } from "../../src/types/contracts/custom/Handicap";
+import type { HandicapGroupPredict } from "../../src/types/contracts/custom/HandicapGroupPredict";
 import type { MultipleChoices } from "../../src/types/contracts/custom/MultipleChoices";
 import type { OverUnder } from "../../src/types/contracts/custom/OverUnder";
 import { Signers } from "../types";
@@ -31,6 +32,7 @@ describe("Unit tests", function () {
       const eventArtifact: Artifact = await artifacts.readArtifact("Event");
       const predictionArtifact: Artifact = await artifacts.readArtifact("Prediction");
       const groupPredictArtifact: Artifact = await artifacts.readArtifact("GroupPredict");
+      const handicapGroupPredictArtifact: Artifact = await artifacts.readArtifact("HandicapGroupPredict");
       const multipleChoicesArtifact: Artifact = await artifacts.readArtifact("MultipleChoices");
       const handicapArtifact: Artifact = await artifacts.readArtifact("Handicap");
       const overUnderArtifact: Artifact = await artifacts.readArtifact("OverUnder");
@@ -39,6 +41,9 @@ describe("Unit tests", function () {
       this.event = <Event>await waffle.deployContract(this.signers.admin, eventArtifact, []);
       this.prediction = <Prediction>await waffle.deployContract(this.signers.admin, predictionArtifact, []);
       this.groupPredict = <GroupPredict>await waffle.deployContract(this.signers.admin, groupPredictArtifact, []);
+      this.handicapGroupPredict = <HandicapGroupPredict>(
+        await waffle.deployContract(this.signers.admin, handicapGroupPredictArtifact, [])
+      );
       this.multipleChoices = <MultipleChoices>(
         await waffle.deployContract(this.signers.admin, multipleChoicesArtifact, [])
       );
@@ -95,6 +100,17 @@ describe("Unit tests", function () {
           timestamp + 10 * 24 * 3600,
           this.overUnder.address,
           [30 * 10000, 1.01 * 10000, 8 * 10000, 1.1 * 10000, 3.65 * 10000, 1.3 * 10000, 2.1 * 10000, 1.76 * 10000],
+          "",
+        );
+
+      await this.event
+        .connect(this.signers.admin)
+        .createSingleEvent(
+          timestamp + 20,
+          timestamp + 7 * 24 * 3600,
+          timestamp + 10 * 24 * 3600,
+          this.handicapGroupPredict.address,
+          [12000, 12000, 10000, 20000, 20000],
           "",
         );
     });

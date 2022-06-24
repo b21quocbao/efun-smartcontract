@@ -24,7 +24,7 @@ contract Event is OwnableUpgradeable {
         require(_index < _event.odds.length, "cannot-find-index");
         require(_event.creator == msg.sender, "unauthorized");
         require(_event.endTime <= block.timestamp, "end_time <= timestamp");
-        require(_event.endTime + 172800 >= block.timestamp, "end_time + 2 days >= timestamp");
+        require(_event.endTime + 86400 >= block.timestamp, "end_time + 2 days >= timestamp");
 
         _event.resultIndex = _index;
         _event.status = EDataTypes.EventStatus.FINISH;
@@ -44,7 +44,8 @@ contract Event is OwnableUpgradeable {
         uint256 _endTime,
         address _helperAddress,
         uint256[] calldata _odds,
-        string memory _datas
+        string memory _datas,
+        address _creator
     ) external returns (uint256 _idx) {
         require(_startTime < _deadlineTime, "deadline_time > start_time");
         require(_deadlineTime < _endTime, "end_time > deadline_time");
@@ -57,11 +58,11 @@ contract Event is OwnableUpgradeable {
             0,
             EDataTypes.EventStatus.AVAILABLE,
             _helperAddress,
-            msg.sender,
+            _creator,
             _odds,
             _datas
         );
-        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, msg.sender, _odds, _datas);
+        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, _creator, _odds, _datas);
         nEvents++;
     }
 

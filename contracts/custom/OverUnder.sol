@@ -29,12 +29,12 @@ contract OverUnder is Initializable {
             predictStats = _predictOptionStats[_index] + _predictOptionStats[_index - 1];
         }
         uint256 liquidityPool = (_liquidityPool * 2) / _predictOptionStats.length;
-        uint256 totalAmount = (predictStats + liquidityPool) * _oneHundredPrecent;
-        uint256 winAmount = _predictOptionStats[_index] * _odd;
+        uint256 totalAmount = predictStats + liquidityPool;
+        uint256 winAmount = (_predictOptionStats[_index] * _odd) / _oneHundredPrecent;
 
         uint256 winPercent = _odd - _oneHundredPrecent;
 
-        return ((totalAmount - winAmount) / winPercent) * _oneHundredPrecent;
+        return ((totalAmount - winAmount) * _oneHundredPrecent) / winPercent;
     }
 
     function validatePrediction(

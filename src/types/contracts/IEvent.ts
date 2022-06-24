@@ -7,6 +7,8 @@ import type {
   BigNumberish,
   BytesLike,
   CallOverrides,
+  ContractTransaction,
+  Overrides,
   PopulatedTransaction,
   Signer,
   utils,
@@ -58,13 +60,32 @@ export declare namespace EDataTypes {
 
 export interface IEventInterface extends utils.Interface {
   functions: {
+    "createSingleEvent(uint256,uint256,uint256,address,uint256[],string,address)": FunctionFragment;
     "info(uint256)": FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: "info"): FunctionFragment;
+  getFunction(
+    nameOrSignatureOrTopic: "createSingleEvent" | "info"
+  ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "createSingleEvent",
+    values: [
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      string,
+      BigNumberish[],
+      string,
+      string
+    ]
+  ): string;
   encodeFunctionData(functionFragment: "info", values: [BigNumberish]): string;
 
+  decodeFunctionResult(
+    functionFragment: "createSingleEvent",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "info", data: BytesLike): Result;
 
   events: {};
@@ -97,6 +118,17 @@ export interface IEvent extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    createSingleEvent(
+      _startTime: BigNumberish,
+      _deadlineTime: BigNumberish,
+      _endTime: BigNumberish,
+      _helperAddress: string,
+      _odds: BigNumberish[],
+      _datas: string,
+      _creator: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     info(
       _eventId: BigNumberish,
       overrides?: CallOverrides
@@ -105,12 +137,34 @@ export interface IEvent extends BaseContract {
     >;
   };
 
+  createSingleEvent(
+    _startTime: BigNumberish,
+    _deadlineTime: BigNumberish,
+    _endTime: BigNumberish,
+    _helperAddress: string,
+    _odds: BigNumberish[],
+    _datas: string,
+    _creator: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   info(
     _eventId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<EDataTypes.EventStructOutput>;
 
   callStatic: {
+    createSingleEvent(
+      _startTime: BigNumberish,
+      _deadlineTime: BigNumberish,
+      _endTime: BigNumberish,
+      _helperAddress: string,
+      _odds: BigNumberish[],
+      _datas: string,
+      _creator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     info(
       _eventId: BigNumberish,
       overrides?: CallOverrides
@@ -120,10 +174,32 @@ export interface IEvent extends BaseContract {
   filters: {};
 
   estimateGas: {
+    createSingleEvent(
+      _startTime: BigNumberish,
+      _deadlineTime: BigNumberish,
+      _endTime: BigNumberish,
+      _helperAddress: string,
+      _odds: BigNumberish[],
+      _datas: string,
+      _creator: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     info(_eventId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    createSingleEvent(
+      _startTime: BigNumberish,
+      _deadlineTime: BigNumberish,
+      _endTime: BigNumberish,
+      _helperAddress: string,
+      _odds: BigNumberish[],
+      _datas: string,
+      _creator: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     info(
       _eventId: BigNumberish,
       overrides?: CallOverrides

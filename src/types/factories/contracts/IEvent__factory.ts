@@ -11,6 +11,55 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
+        name: "_startTime",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_deadlineTime",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_endTime",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "_helperAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256[]",
+        name: "_odds",
+        type: "uint256[]",
+      },
+      {
+        internalType: "string",
+        name: "_datas",
+        type: "string",
+      },
+      {
+        internalType: "address",
+        name: "_creator",
+        type: "address",
+      },
+    ],
+    name: "createSingleEvent",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "_idx",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
         name: "_eventId",
         type: "uint256",
       },

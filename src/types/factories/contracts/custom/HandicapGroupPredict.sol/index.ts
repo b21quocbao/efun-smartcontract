@@ -2,7 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { GroupPredict__factory } from "./GroupPredict__factory";
-export { Handicap__factory } from "./Handicap__factory";
 export { HandicapGroupPredict__factory } from "./HandicapGroupPredict__factory";
-export { MultipleChoices__factory } from "./MultipleChoices__factory";
-export { OverUnder__factory } from "./OverUnder__factory";

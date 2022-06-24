@@ -64,7 +64,7 @@ export declare namespace EDataTypes {
 
 export interface EventInterface extends utils.Interface {
   functions: {
-    "createSingleEvent(uint256,uint256,uint256,address,uint256[],string)": FunctionFragment;
+    "createSingleEvent(uint256,uint256,uint256,address,uint256[],string,address)": FunctionFragment;
     "events(uint256)": FunctionFragment;
     "info(uint256)": FunctionFragment;
     "initialize()": FunctionFragment;
@@ -96,6 +96,7 @@ export interface EventInterface extends utils.Interface {
       BigNumberish,
       string,
       BigNumberish[],
+      string,
       string
     ]
   ): string;
@@ -250,6 +251,7 @@ export interface Event extends BaseContract {
       _helperAddress: string,
       _odds: BigNumberish[],
       _datas: string,
+      _creator: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -316,6 +318,7 @@ export interface Event extends BaseContract {
     _helperAddress: string,
     _odds: BigNumberish[],
     _datas: string,
+    _creator: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -380,6 +383,7 @@ export interface Event extends BaseContract {
       _helperAddress: string,
       _odds: BigNumberish[],
       _datas: string,
+      _creator: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -487,6 +491,7 @@ export interface Event extends BaseContract {
       _helperAddress: string,
       _odds: BigNumberish[],
       _datas: string,
+      _creator: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -526,6 +531,7 @@ export interface Event extends BaseContract {
       _helperAddress: string,
       _odds: BigNumberish[],
       _datas: string,
+      _creator: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

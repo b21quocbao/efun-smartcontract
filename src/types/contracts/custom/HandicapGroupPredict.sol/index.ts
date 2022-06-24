@@ -2,7 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { GroupPredict } from "./GroupPredict";
-export type { Handicap } from "./Handicap";
 export type { HandicapGroupPredict } from "./HandicapGroupPredict";
-export type { MultipleChoices } from "./MultipleChoices";
-export type { OverUnder } from "./OverUnder";

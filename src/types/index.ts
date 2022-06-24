@@ -28,6 +28,8 @@ export type { GroupPredict } from "./contracts/custom/GroupPredict";
 export { GroupPredict__factory } from "./factories/contracts/custom/GroupPredict__factory";
 export type { Handicap } from "./contracts/custom/Handicap";
 export { Handicap__factory } from "./factories/contracts/custom/Handicap__factory";
+export type { HandicapGroupPredict } from "./contracts/custom/HandicapGroupPredict";
+export { HandicapGroupPredict__factory } from "./factories/contracts/custom/HandicapGroupPredict__factory";
 export type { MultipleChoices } from "./contracts/custom/MultipleChoices";
 export { MultipleChoices__factory } from "./factories/contracts/custom/MultipleChoices__factory";
 export type { OverUnder } from "./contracts/custom/OverUnder";

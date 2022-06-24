@@ -57,6 +57,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Handicap__factory>;
     getContractFactory(
+      name: "HandicapGroupPredict",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.HandicapGroupPredict__factory>;
+    getContractFactory(
       name: "MultipleChoices",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MultipleChoices__factory>;
@@ -140,6 +144,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Handicap>;
+    getContractAt(
+      name: "HandicapGroupPredict",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.HandicapGroupPredict>;
     getContractAt(
       name: "MultipleChoices",
       address: string,

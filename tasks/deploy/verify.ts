@@ -14,6 +14,7 @@ task("verify:address").setAction(async function (_taskArgs, hre) {
     "0xd4cf937089DAc1FA149B8cc87Daa04fC920B0C90",
     "0x77380fEcA9C1AFE1b6d1Bb077FbD637EE1bC921e",
     "0x0CE4809548ADc080F203da3F4AF56fBAdDE8Ae00",
+    "0xF212e709550EAcf106E7Ad8823eA65C154c86113",
   ];
 
   await Promise.all(

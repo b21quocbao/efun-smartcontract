@@ -5,7 +5,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../EDataTypes.sol";
 import "../IEvent.sol";
 
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 contract GroupPredict is Initializable {
     function compareStrings(string memory a, string memory b) internal pure returns (bool) {
@@ -131,6 +131,10 @@ contract GroupPredict is Initializable {
         uint256 _liquidityPool
     ) public view returns (uint256 _remainLP) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-        _remainLP = 0;
+        if (_predictOptionStats[_event.resultIndex] == 0) {
+            _remainLP = _liquidityPool;
+        } else {
+            _remainLP = 0;
+        }
     }
 }

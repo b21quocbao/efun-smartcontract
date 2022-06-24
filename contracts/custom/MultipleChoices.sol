@@ -22,12 +22,12 @@ contract MultipleChoices is Initializable {
         uint256 _oneHundredPrecent,
         uint256 _index
     ) external view returns (uint256) {
-        uint256 totalAmount = (_predictStats + _liquidityPool);
-        uint256 winAmount = (_predictOptionStats[_index]);
+        uint256 totalAmount = _predictStats + _liquidityPool;
+        uint256 winAmount = (_predictOptionStats[_index] * _odd) / _oneHundredPrecent;
 
         uint256 winPercent = _odd - _oneHundredPrecent;
 
-        return ((totalAmount - winAmount) / winPercent) * _oneHundredPrecent;
+        return ((totalAmount - winAmount) * _oneHundredPrecent) / winPercent;
     }
 
     function validatePrediction(

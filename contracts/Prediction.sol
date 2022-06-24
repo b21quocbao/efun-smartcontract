@@ -46,6 +46,48 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         oneHundredPrecent = _oneHundredPrecent;
     }
 
+    function createSingleEvent(
+        uint256 _startTime,
+        uint256 _deadlineTime,
+        uint256 _endTime,
+        address _helperAddress,
+        uint256[] calldata _odds,
+        string memory _datas,
+        address[] calldata _tokens,
+        uint256[] calldata _amounts
+    ) external payable returns (uint256 _idx) {
+        _idx = eventData.createSingleEvent(
+            _startTime,
+            _deadlineTime,
+            _endTime,
+            _helperAddress,
+            _odds,
+            _datas,
+            msg.sender
+        );
+        EDataTypes.Event memory _event = eventData.info(_idx);
+        uint256 _totalAmount = msg.value;
+
+        for (uint256 i = 0; i < _tokens.length; ++i) {
+            address _token = _tokens[i];
+            uint256 _amount = _amounts[i];
+
+            liquidityPoolEvent[_idx][_token] += _amount;
+            if (_token != address(0)) {
+                IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
+            } else {
+                require(_totalAmount >= _amount, "total-amount-not-same");
+                _totalAmount -= _amount;
+            }
+            if (predictOptionStats[_token][_idx].length == 0) {
+                predictOptionStats[_token][_idx] = new uint256[](_event.odds.length);
+            }
+
+            emit LPDeposited(_idx, _token, liquidityPoolEvent[_idx][_token]);
+        }
+        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, msg.sender, _event.odds, _datas);
+    }
+
     /**
      * @dev Updates commission information
      */
@@ -425,6 +467,41 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     /**
      * @dev Estimate reward Sponsor
      */
+    function validateEstimateReward(
+        uint256 _eventId,
+        address _user,
+        address _token,
+        uint256 _predictNum
+    ) public view returns (uint256) {
+        uint256 _localEventId = _eventId;
+        address _localToken = _token;
+        uint256 _localPredictNum = _predictNum;
+        address _localUser = _user;
+        EDataTypes.Event memory _event = eventData.info(_localEventId);
+
+        uint256 _index = predictions[_localToken][_localUser][_localEventId][_localPredictNum].predictOptions;
+        uint256 _liquidityPool = liquidityPoolEvent[_localEventId][_localToken];
+
+        IHelper _helper = IHelper(_event.helperAddress);
+
+        return
+            _helper.calculateReward(
+                eventDataAddress,
+                _localEventId,
+                predictStats[_localToken][_localEventId],
+                predictOptionStats[_localToken][_localEventId],
+                predictions[_localToken][_localUser][_localEventId][_localPredictNum],
+                _event.odds[_index],
+                oneHundredPrecent,
+                _index,
+                _liquidityPool,
+                true
+            );
+    }
+
+    /**
+     * @dev Estimate reward Sponsor
+     */
     function estimateRewardSponsor(
         uint256 _eventId,
         address _user,
@@ -559,7 +636,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         EDataTypes.Event memory _event = eventData.info(_eventId);
 
         require(_event.status != EDataTypes.EventStatus.FINISH, "event-finish");
-        require(_event.endTime + 172800 < block.timestamp, "event-not-end");
+        require(_event.endTime + 86400 < block.timestamp, "event-not-end");
         require(predictions[_token][msg.sender][_eventId][_predictNum].claimed == false, "claimed");
 
         transferMoney(_token, msg.sender, predictions[_token][msg.sender][_eventId][_predictNum].predictionAmount);
@@ -576,6 +653,16 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         }
     }
 
+    event EventCreated(
+        uint256 idx,
+        uint256 startTime,
+        uint256 deadlineTime,
+        uint256 endTime,
+        address helperAddress,
+        address creator,
+        uint256[] odds,
+        string datas
+    );
     event LPDeposited(uint256 eventId, address token, uint256 amount);
     event LPClaimed(uint256 eventId, address token, uint256 amount);
     event PredictionCreated(

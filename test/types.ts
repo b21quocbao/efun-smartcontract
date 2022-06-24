@@ -6,6 +6,7 @@ import type { Event } from "../src/types/contracts/Event";
 import type { Prediction } from "../src/types/contracts/Prediction";
 import type { GroupPredict } from "../src/types/contracts/custom/GroupPredict";
 import type { Handicap } from "../src/types/contracts/custom/Handicap";
+import type { HandicapGroupPredict } from "../src/types/contracts/custom/HandicapGroupPredict";
 import type { MultipleChoices } from "../src/types/contracts/custom/MultipleChoices";
 import type { OverUnder } from "../src/types/contracts/custom/OverUnder";
 
@@ -16,6 +17,7 @@ declare module "mocha" {
     overUnder: OverUnder;
     groupPredict: GroupPredict;
     multipleChoices: MultipleChoices;
+    handicapGroupPredict: HandicapGroupPredict;
     handicap: Handicap;
     erc20Token: ERC20Token;
     loadFixture: <T>(fixture: Fixture<T>) => Promise<T>;
