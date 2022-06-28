@@ -131,7 +131,7 @@ contract GroupPredict is Initializable {
         uint256 _liquidityPool
     ) public view returns (uint256 _remainLP) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-        bool cont0 = (_event.endTime + 86400 <= block.timestamp && _event.status != EDataTypes.EventStatus.FINISH);
+        bool cont0 = (_event.endTime + 172800 <= block.timestamp && _event.status != EDataTypes.EventStatus.FINISH);
         if (_predictOptionStats[_event.resultIndex] == 0 || cont0) {
             _remainLP = _liquidityPool;
         } else {

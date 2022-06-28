@@ -2,5 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as interfaces from "./interfaces";
+export * as vendor from "./vendor";
+export { ChainlinkClient__factory } from "./ChainlinkClient__factory";
+export { ConfirmedOwner__factory } from "./ConfirmedOwner__factory";
+export { ConfirmedOwnerWithProposal__factory } from "./ConfirmedOwnerWithProposal__factory";
 export { KeeperBase__factory } from "./KeeperBase__factory";
 export { KeeperCompatible__factory } from "./KeeperCompatible__factory";

@@ -13,9 +13,49 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "ChainlinkClient",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ChainlinkClient__factory>;
+    getContractFactory(
+      name: "ConfirmedOwner",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ConfirmedOwner__factory>;
+    getContractFactory(
+      name: "ConfirmedOwnerWithProposal",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ConfirmedOwnerWithProposal__factory>;
+    getContractFactory(
+      name: "ChainlinkRequestInterface",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ChainlinkRequestInterface__factory>;
+    getContractFactory(
+      name: "ENSInterface",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ENSInterface__factory>;
+    getContractFactory(
       name: "KeeperCompatibleInterface",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.KeeperCompatibleInterface__factory>;
+    getContractFactory(
+      name: "LinkTokenInterface",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.LinkTokenInterface__factory>;
+    getContractFactory(
+      name: "OperatorInterface",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OperatorInterface__factory>;
+    getContractFactory(
+      name: "OracleInterface",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OracleInterface__factory>;
+    getContractFactory(
+      name: "OwnableInterface",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OwnableInterface__factory>;
+    getContractFactory(
+      name: "PointerInterface",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PointerInterface__factory>;
     getContractFactory(
       name: "KeeperBase",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -24,6 +64,10 @@ declare module "hardhat/types/runtime" {
       name: "KeeperCompatible",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.KeeperCompatible__factory>;
+    getContractFactory(
+      name: "ENSResolver",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ENSResolver__factory>;
     getContractFactory(
       name: "OwnableUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -60,6 +104,10 @@ declare module "hardhat/types/runtime" {
       name: "IERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20__factory>;
+    getContractFactory(
+      name: "APIConsumer",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.APIConsumer__factory>;
     getContractFactory(
       name: "GroupPredict",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -102,10 +150,60 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.Prediction__factory>;
 
     getContractAt(
+      name: "ChainlinkClient",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ChainlinkClient>;
+    getContractAt(
+      name: "ConfirmedOwner",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ConfirmedOwner>;
+    getContractAt(
+      name: "ConfirmedOwnerWithProposal",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ConfirmedOwnerWithProposal>;
+    getContractAt(
+      name: "ChainlinkRequestInterface",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ChainlinkRequestInterface>;
+    getContractAt(
+      name: "ENSInterface",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ENSInterface>;
+    getContractAt(
       name: "KeeperCompatibleInterface",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.KeeperCompatibleInterface>;
+    getContractAt(
+      name: "LinkTokenInterface",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.LinkTokenInterface>;
+    getContractAt(
+      name: "OperatorInterface",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OperatorInterface>;
+    getContractAt(
+      name: "OracleInterface",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OracleInterface>;
+    getContractAt(
+      name: "OwnableInterface",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OwnableInterface>;
+    getContractAt(
+      name: "PointerInterface",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PointerInterface>;
     getContractAt(
       name: "KeeperBase",
       address: string,
@@ -116,6 +214,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.KeeperCompatible>;
+    getContractAt(
+      name: "ENSResolver",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ENSResolver>;
     getContractAt(
       name: "OwnableUpgradeable",
       address: string,
@@ -161,6 +264,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC20>;
+    getContractAt(
+      name: "APIConsumer",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.APIConsumer>;
     getContractAt(
       name: "GroupPredict",
       address: string,

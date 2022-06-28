@@ -1,6 +1,7 @@
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 import type { Fixture } from "ethereum-waffle";
 
+import type { APIConsumer } from "../src/types/contracts/APIConsumer";
 import type { ERC20Token } from "../src/types/contracts/Erc20Token.sol/ERC20Token";
 import type { Event } from "../src/types/contracts/Event";
 import type { Prediction } from "../src/types/contracts/Prediction";
@@ -20,6 +21,7 @@ declare module "mocha" {
     handicapGroupPredict: HandicapGroupPredict;
     handicap: Handicap;
     erc20Token: ERC20Token;
+    apiConsumer: APIConsumer;
     loadFixture: <T>(fixture: Fixture<T>) => Promise<T>;
     signers: Signers;
   }

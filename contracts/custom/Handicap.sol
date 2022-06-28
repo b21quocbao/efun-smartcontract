@@ -134,7 +134,7 @@ contract Handicap is Initializable {
     ) public view returns (uint256 _remainLP) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
         _remainLP = _liquidityPool;
-        bool cont0 = (_event.endTime + 86400 <= block.timestamp && _event.status != EDataTypes.EventStatus.FINISH);
+        bool cont0 = (_event.endTime + 172800 <= block.timestamp && _event.status != EDataTypes.EventStatus.FINISH);
         if (cont0) {
             return _remainLP;
         }

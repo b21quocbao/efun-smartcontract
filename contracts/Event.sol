@@ -24,7 +24,7 @@ contract Event is OwnableUpgradeable {
         require(_index < _event.odds.length, "cannot-find-index");
         require(_event.creator == msg.sender, "unauthorized");
         require(_event.endTime <= block.timestamp, "end_time <= timestamp");
-        require(_event.endTime + 86400 >= block.timestamp, "end_time + 2 days >= timestamp");
+        require(_event.endTime + 172800 >= block.timestamp, "end_time + 2 days >= timestamp");
 
         _event.resultIndex = _index;
         _event.status = EDataTypes.EventStatus.FINISH;

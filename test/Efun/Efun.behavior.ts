@@ -7,584 +7,585 @@ import { duration, increase } from "../utils/time";
 const { toWei, fromWei } = web3.utils;
 
 export function shouldBehaveLikeEvent(): void {
-  it("can predict group predict event", async function () {
-    await increase(duration.seconds(50));
-
-    await this.prediction
-      .connect(this.signers.admin)
-      .depositLP(0, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
-
-    await this.prediction
-      .connect(this.signers.user2)
-      .predict(0, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
-
-    await this.prediction
-      .connect(this.signers.user3)
-      .predict(0, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
-
-    await this.prediction
-      .connect(this.signers.user1)
-      .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
-      });
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-    console.log(
-      Math.round(
-        Number(
-          fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
-        ),
-      ),
-      "contract",
-    );
-
-    await increase(duration.days(10));
-    console.log("----------------------------------------------------------------------------------");
-
-    await this.event.connect(this.signers.admin).updateEventResult(0, 0);
-
-    await this.prediction.connect(this.signers.user2).claimReward(0, "0x0000000000000000000000000000000000000000", 0);
-
-    await this.prediction.connect(this.signers.user3).claimReward(0, "0x0000000000000000000000000000000000000000", 0);
-
-    await expect(
-      this.prediction.connect(this.signers.user1).claimReward(0, "0x0000000000000000000000000000000000000000", 0),
-    ).to.be.revertedWith("no-reward");
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-  });
-
-  it("can predict multiple choices event", async function () {
-    await increase(duration.seconds(50));
-    console.log(
-      Math.round(
-        Number(
-          fromWei(
-            (
-              await this.prediction
-                .connect(this.signers.user1)
-                .getPotentialReward(1, "0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d", 0, toWei("2"))
-            ).toString(),
-          ),
-        ),
-      ),
-      "potential 1",
-    );
-
-    await this.prediction
-      .connect(this.signers.admin)
-      .depositLP(1, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
-
-    await this.prediction
-      .connect(this.signers.user2)
-      .predict(1, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
-
-    await this.prediction
-      .connect(this.signers.user3)
-      .predict(1, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
-
-    await this.prediction
-      .connect(this.signers.user1)
-      .predict(1, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
-      });
-
-    console.log(
-      Math.round(
-        Number(
-          fromWei(
-            (
-              await this.prediction
-                .connect(this.signers.user1)
-                .getPotentialReward(1, "0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d", 0, toWei("2"))
-            ).toString(),
-          ),
-        ),
-      ),
-      "potential",
-    );
-
-    await expect(
-      this.prediction.connect(this.signers.admin).claimRemainingLP(1, ["0x0000000000000000000000000000000000000000"]),
-    ).to.be.revertedWith("event-not-finish");
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-    console.log(
-      Math.round(
-        Number(
-          fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
-        ),
-      ),
-      "contract",
-    );
-
-    await increase(duration.days(10));
-    console.log("----------------------------------------------------------------------------------");
-
-    await this.event.connect(this.signers.admin).updateEventResult(1, 0);
-    await expect(
-      this.prediction.connect(this.signers.user1).claimRemainingLP(1, ["0x0000000000000000000000000000000000000000"]),
-    ).to.be.revertedWith("unauthorized");
-    console.log(
-      fromWei(
-        (
-          await this.prediction
-            .connect(this.signers.admin)
-            .getRemainingLP(1, ["0x0000000000000000000000000000000000000000"])
-        )[0].toString(),
-      ),
-      "zxcvoiu",
-    );
-    await this.prediction
-      .connect(this.signers.admin)
-      .claimRemainingLP(1, ["0x0000000000000000000000000000000000000000"]);
-
-    await this.prediction.connect(this.signers.user2).claimReward(1, "0x0000000000000000000000000000000000000000", 0);
-
-    await this.prediction.connect(this.signers.user3).claimReward(1, "0x0000000000000000000000000000000000000000", 0);
-
-    await expect(
-      this.prediction.connect(this.signers.user1).claimReward(1, "0x0000000000000000000000000000000000000000", 0),
-    ).to.be.revertedWith("no-reward");
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-  });
-
-  it("cant predict when not allow", async function () {
-    await increase(duration.seconds(50));
-
-    await expect(
-      this.prediction
-        .connect(this.signers.admin)
-        .depositLP(
-          1,
-          ["0x0000000000000000000000000000000000000000", this.erc20Token.address],
-          [toWei("100"), toWei("200")],
-          { value: toWei("100") },
-        ),
-    ).to.be.revertedWith("ERC20: insufficient allowance");
-  });
-
-  it("can predict handicap event", async function () {
-    await increase(duration.seconds(50));
-
-    await this.prediction
-      .connect(this.signers.admin)
-      .depositLP(2, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
-
-    await this.prediction
-      .connect(this.signers.user2)
-      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], {
-        value: toWei("20"),
-      });
-
-    await this.prediction
-      .connect(this.signers.user3)
-      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], {
-        value: toWei("10"),
-      });
-
-    await this.prediction
-      .connect(this.signers.user1)
-      .predict(2, [4], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
-      });
-    console.log(
-      await this.prediction
-        .connect(this.signers.user1)
-        .estimateReward(2, this.signers.user1.address, "0x0000000000000000000000000000000000000000", 3),
-      "estimetaoxicvu",
-    );
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-    console.log(
-      Math.round(
-        Number(
-          fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
-        ),
-      ),
-      "contract",
-    );
-
-    await increase(duration.days(10));
-    console.log("----------------------------------------------------------------------------------");
-
-    await this.event.connect(this.signers.admin).updateEventResult(2, 0);
-
-    await this.prediction.connect(this.signers.user2).claimReward(2, "0x0000000000000000000000000000000000000000", 0);
-
-    await this.prediction.connect(this.signers.user3).claimReward(2, "0x0000000000000000000000000000000000000000", 0);
-
-    await expect(
-      this.prediction.connect(this.signers.user1).claimReward(2, "0x0000000000000000000000000000000000000000", 0),
-    ).to.be.revertedWith("no-reward");
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-  });
-
-  it("can predict over under event", async function () {
-    await increase(duration.seconds(50));
-
-    await this.prediction
-      .connect(this.signers.admin)
-      .depositLP(3, ["0x0000000000000000000000000000000000000000"], [toWei("3000")], { value: toWei("3000") });
-
-    await this.prediction
-      .connect(this.signers.user2)
-      .predict(3, [3], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
-
-    await this.prediction
-      .connect(this.signers.user3)
-      .predict(3, [5], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
-
-    await this.prediction
-      .connect(this.signers.user1)
-      .predict(3, [2], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
-      });
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-    console.log(
-      Math.round(
-        Number(
-          fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
-        ),
-      ),
-      "contract",
-    );
-
-    await increase(duration.days(10));
-    console.log("----------------------------------------------------------------------------------");
-
-    await this.event.connect(this.signers.admin).updateEventResult(3, [5]);
-
-    await this.prediction.connect(this.signers.user2).claimReward(3, "0x0000000000000000000000000000000000000000", 0);
-
-    await this.prediction.connect(this.signers.user3).claimReward(3, "0x0000000000000000000000000000000000000000", 0);
-
-    await expect(
-      this.prediction.connect(this.signers.user1).claimReward(3, "0x0000000000000000000000000000000000000000", 0),
-    ).to.be.revertedWith("no-reward");
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-  });
-
-  it("error cannot-find-index", async function () {
-    await increase(duration.seconds(50));
-
-    await expect(
-      this.prediction
-        .connect(this.signers.user1)
-        .predict(0, [5], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-          value: toWei("30"),
-        }),
-    ).to.be.revertedWith("cannot-find-index");
-
-    await expect(this.event.connect(this.signers.admin).updateEventResult(0, 0), "cannot-find-index");
-  });
-
-  it("one user can predict multiple times", async function () {
-    await increase(duration.seconds(50));
-
-    await this.prediction
-      .connect(this.signers.user1)
-      .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
-      });
-
-    await this.prediction
-      .connect(this.signers.user1)
-      .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
-      });
-
-    await expect(this.event.connect(this.signers.admin).updateEventResult(0, 5), "cannot-find-index");
-  });
-
-  it("test false vent", async function () {
-    await increase(duration.seconds(50));
-
-    await expect(
-      this.event
-        .connect(this.signers.user1)
-        .createSingleEvent(
-          1653907007,
-          1653914187,
-          1653914187,
-          "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
-          [10000, 10000],
-          "",
-          this.signers.user1.address,
-        ),
-    ).to.be.revertedWith("end_time > deadline_time");
-  });
-
-  it("test max payout", async function () {
-    await increase(duration.seconds(50));
-
-    console.log(
-      (
-        await this.prediction
-          .connect(this.signers.user2)
-          .getMaxPayout(1, "0x0000000000000000000000000000000000000000", 1)
-      ).toNumber(),
-    );
-
-    await this.prediction
-      .connect(this.signers.admin)
-      .depositLP(1, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
-
-    console.log(
-      fromWei(
-        (
-          await this.prediction
-            .connect(this.signers.user2)
-            .getMaxPayout(1, "0x0000000000000000000000000000000000000000", 1)
-        )
-          .mul(27)
-          .div(100)
-          .toString(),
-      ),
-    );
-  });
-
-  it("test max payout2", async function () {
-    await increase(duration.seconds(50));
-
-    console.log(
-      (
-        await this.prediction
-          .connect(this.signers.user2)
-          .getMaxPayout(2, "0x0000000000000000000000000000000000000000", 0)
-      ).toNumber(),
-    );
-
-    await this.prediction
-      .connect(this.signers.admin)
-      .depositLP(2, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
-
-    await this.prediction
-      .connect(this.signers.user1)
-      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], {
-        value: toWei("20"),
-      });
-    await this.prediction
-      .connect(this.signers.user2)
-      .predict(2, [4], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
-      });
-    const maxPay = fromWei(
-      (
-        await this.prediction
-          .connect(this.signers.user2)
-          .getMaxPayout(2, "0x0000000000000000000000000000000000000000", 0)
-      ).toString(),
-    );
-    console.log(maxPay);
-    await expect(
-      this.prediction
-        .connect(this.signers.user1)
-        .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei((Number(maxPay) + 1).toString())], {
-          value: toWei((Number(maxPay) + 1).toString()),
-        }),
-    ).to.be.revertedWith("not-enough-liquidity");
-    await this.prediction
-      .connect(this.signers.user1)
-      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei(maxPay)], {
-        value: toWei(maxPay),
-      });
-  });
-
-  it("test cashback", async function () {
-    await increase(duration.seconds(50));
-
-    await this.prediction
-      .connect(this.signers.user2)
-      .predict(0, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
-
-    await this.prediction
-      .connect(this.signers.user3)
-      .predict(0, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
-
-    await this.prediction
-      .connect(this.signers.user1)
-      .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
-      });
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-    console.log(
-      Math.round(
-        Number(
-          fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
-        ),
-      ),
-      "contract",
-    );
-
-    await increase(duration.days(10));
-    console.log("----------------------------------------------------------------------------------");
-
-    await expect(
-      this.prediction.connect(this.signers.user1).claimCashBack(0, "0x0000000000000000000000000000000000000000", 0),
-    ).to.be.revertedWith("event-not-end");
-
-    await increase(duration.days(10));
-
-    await expect(
-      this.prediction.connect(this.signers.user1).claimReward(0, "0x0000000000000000000000000000000000000000", 0),
-    ).to.be.revertedWith("not-finish");
-
-    await this.prediction.connect(this.signers.user1).claimCashBack(0, "0x0000000000000000000000000000000000000000", 0),
-      await this.prediction
-        .connect(this.signers.user2)
-        .claimCashBack(0, "0x0000000000000000000000000000000000000000", 0);
-
-    await this.prediction.connect(this.signers.user3).claimCashBack(0, "0x0000000000000000000000000000000000000000", 0);
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-  });
-
-  it("claim remain lp group predict", async function () {
-    await increase(duration.seconds(50));
-
-    await this.prediction
-      .connect(this.signers.admin)
-      .depositLP(0, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
-
-    await this.prediction
-      .connect(this.signers.user2)
-      .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
-
-    await this.prediction
-      .connect(this.signers.user3)
-      .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
-
-    await this.prediction
-      .connect(this.signers.user1)
-      .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
-      });
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-    console.log(
-      Math.round(
-        Number(
-          fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
-        ),
-      ),
-      "contract",
-    );
-
-    await increase(duration.days(10));
-    console.log("----------------------------------------------------------------------------------");
-
-    await this.event.connect(this.signers.admin).updateEventResult(0, 0);
-
-    await this.prediction
-      .connect(this.signers.admin)
-      .claimRemainingLP(0, ["0x0000000000000000000000000000000000000000"]);
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-  });
-
-  it("can predict handicap group predict event", async function () {
-    await increase(duration.seconds(50));
-
-    await this.prediction
-      .connect(this.signers.admin)
-      .depositLP(4, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
-
-    await this.prediction
-      .connect(this.signers.user2)
-      .predict(4, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], {
-        value: toWei("20"),
-      });
-
-    await this.prediction
-      .connect(this.signers.user3)
-      .predict(4, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], {
-        value: toWei("10"),
-      });
-
-    await this.prediction
-      .connect(this.signers.user1)
-      .predict(4, [4], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
-      });
-
-    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-    console.log(
-      Math.round(
-        Number(
-          fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
-        ),
-      ),
-      "contract",
-    );
-
-    await increase(duration.days(10));
-    console.log("----------------------------------------------------------------------------------");
-
-    await this.event.connect(this.signers.admin).updateEventResult(4, 1);
-
-    await this.prediction.connect(this.signers.user2).claimReward(4, "0x0000000000000000000000000000000000000000", 0);
-
-    await this.prediction.connect(this.signers.user3).claimReward(4, "0x0000000000000000000000000000000000000000", 0);
-
-    await this.prediction.connect(this.signers.user1).claimReward(4, "0x0000000000000000000000000000000000000000", 0),
-      console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
-    console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
-    console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
-    console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
-  });
+  // it("can predict group predict event", async function () {
+  //   await increase(duration.seconds(50));
+
+  //   await this.prediction
+  //     .connect(this.signers.admin)
+  //     .depositLP(0, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user2)
+  //     .predict(0, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user3)
+  //     .predict(0, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user1)
+  //     .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+  //       value: toWei("30"),
+  //     });
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  //   console.log(
+  //     Math.round(
+  //       Number(
+  //         fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
+  //       ),
+  //     ),
+  //     "contract",
+  //   );
+
+  //   await increase(duration.days(10));
+  //   console.log("----------------------------------------------------------------------------------");
+
+  //   await this.event.connect(this.signers.admin).updateEventResult(0, 0);
+
+  //   await this.prediction.connect(this.signers.user2).claimReward(0, "0x0000000000000000000000000000000000000000", 0);
+
+  //   await this.prediction.connect(this.signers.user3).claimReward(0, "0x0000000000000000000000000000000000000000", 0);
+
+  //   await expect(
+  //     this.prediction.connect(this.signers.user1).claimReward(0, "0x0000000000000000000000000000000000000000", 0),
+  //   ).to.be.revertedWith("no-reward");
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  // });
+
+  // it("can predict multiple choices event", async function () {
+  //   await increase(duration.seconds(50));
+  //   console.log(
+  //     Math.round(
+  //       Number(
+  //         fromWei(
+  //           (
+  //             await this.prediction
+  //               .connect(this.signers.user1)
+  //               .getPotentialReward(1, "0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d", 0, toWei("2"))
+  //           ).toString(),
+  //         ),
+  //       ),
+  //     ),
+  //     "potential 1",
+  //   );
+
+  //   await this.prediction
+  //     .connect(this.signers.admin)
+  //     .depositLP(1, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user2)
+  //     .predict(1, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user3)
+  //     .predict(1, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user1)
+  //     .predict(1, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+  //       value: toWei("30"),
+  //     });
+
+  //   console.log(
+  //     Math.round(
+  //       Number(
+  //         fromWei(
+  //           (
+  //             await this.prediction
+  //               .connect(this.signers.user1)
+  //               .getPotentialReward(1, "0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d", 0, toWei("2"))
+  //           ).toString(),
+  //         ),
+  //       ),
+  //     ),
+  //     "potential",
+  //   );
+
+  //   await expect(
+  //     this.prediction.connect(this.signers.admin).claimRemainingLP(1, ["0x0000000000000000000000000000000000000000"]),
+  //   ).to.be.revertedWith("event-not-finish");
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  //   console.log(
+  //     Math.round(
+  //       Number(
+  //         fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
+  //       ),
+  //     ),
+  //     "contract",
+  //   );
+
+  //   await increase(duration.days(10));
+  //   console.log("----------------------------------------------------------------------------------");
+
+  //   await this.event.connect(this.signers.admin).updateEventResult(1, 0);
+  //   await expect(
+  //     this.prediction.connect(this.signers.user1).claimRemainingLP(1, ["0x0000000000000000000000000000000000000000"]),
+  //   ).to.be.revertedWith("unauthorized");
+  //   console.log(
+  //     fromWei(
+  //       (
+  //         await this.prediction
+  //           .connect(this.signers.admin)
+  //           .getRemainingLP(1, ["0x0000000000000000000000000000000000000000"])
+  //       )[0].toString(),
+  //     ),
+  //     "zxcvoiu",
+  //   );
+  //   await this.prediction
+  //     .connect(this.signers.admin)
+  //     .claimRemainingLP(1, ["0x0000000000000000000000000000000000000000"]);
+
+  //   await this.prediction.connect(this.signers.user2).claimReward(1, "0x0000000000000000000000000000000000000000", 0);
+
+  //   await this.prediction.connect(this.signers.user3).claimReward(1, "0x0000000000000000000000000000000000000000", 0);
+
+  //   await expect(
+  //     this.prediction.connect(this.signers.user1).claimReward(1, "0x0000000000000000000000000000000000000000", 0),
+  //   ).to.be.revertedWith("no-reward");
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  // });
+
+  // it("cant predict when not allow", async function () {
+  //   await increase(duration.seconds(50));
+
+  //   await expect(
+  //     this.prediction
+  //       .connect(this.signers.admin)
+  //       .depositLP(
+  //         1,
+  //         ["0x0000000000000000000000000000000000000000", this.erc20Token.address],
+  //         [toWei("100"), toWei("200")],
+  //         { value: toWei("100") },
+  //       ),
+  //   ).to.be.revertedWith("ERC20: insufficient allowance");
+  // });
+
+  // it("can predict handicap event", async function () {
+  //   await increase(duration.seconds(50));
+
+  //   await this.prediction
+  //     .connect(this.signers.admin)
+  //     .depositLP(2, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user2)
+  //     .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], {
+  //       value: toWei("20"),
+  //     });
+
+  //   await this.prediction
+  //     .connect(this.signers.user3)
+  //     .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], {
+  //       value: toWei("10"),
+  //     });
+
+  //   await this.prediction
+  //     .connect(this.signers.user1)
+  //     .predict(2, [4], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+  //       value: toWei("30"),
+  //     });
+  //   console.log(
+  //     await this.prediction
+  //       .connect(this.signers.user1)
+  //       .estimateReward(2, this.signers.user1.address, "0x0000000000000000000000000000000000000000", 3),
+  //     "estimetaoxicvu",
+  //   );
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  //   console.log(
+  //     Math.round(
+  //       Number(
+  //         fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
+  //       ),
+  //     ),
+  //     "contract",
+  //   );
+
+  //   await increase(duration.days(10));
+  //   console.log("----------------------------------------------------------------------------------");
+
+  //   await this.event.connect(this.signers.admin).updateEventResult(2, 0);
+
+  //   await this.prediction.connect(this.signers.user2).claimReward(2, "0x0000000000000000000000000000000000000000", 0);
+
+  //   await this.prediction.connect(this.signers.user3).claimReward(2, "0x0000000000000000000000000000000000000000", 0);
+
+  //   await expect(
+  //     this.prediction.connect(this.signers.user1).claimReward(2, "0x0000000000000000000000000000000000000000", 0),
+  //   ).to.be.revertedWith("no-reward");
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  // });
+
+  // it("can predict over under event", async function () {
+  //   await increase(duration.seconds(50));
+
+  //   await this.prediction
+  //     .connect(this.signers.admin)
+  //     .depositLP(3, ["0x0000000000000000000000000000000000000000"], [toWei("3000")], { value: toWei("3000") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user2)
+  //     .predict(3, [3], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user3)
+  //     .predict(3, [5], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user1)
+  //     .predict(3, [2], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+  //       value: toWei("30"),
+  //     });
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  //   console.log(
+  //     Math.round(
+  //       Number(
+  //         fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
+  //       ),
+  //     ),
+  //     "contract",
+  //   );
+
+  //   await increase(duration.days(10));
+  //   console.log("----------------------------------------------------------------------------------");
+
+  //   await this.event.connect(this.signers.admin).updateEventResult(3, [5]);
+
+  //   await this.prediction.connect(this.signers.user2).claimReward(3, "0x0000000000000000000000000000000000000000", 0);
+
+  //   await this.prediction.connect(this.signers.user3).claimReward(3, "0x0000000000000000000000000000000000000000", 0);
+
+  //   await expect(
+  //     this.prediction.connect(this.signers.user1).claimReward(3, "0x0000000000000000000000000000000000000000", 0),
+  //   ).to.be.revertedWith("no-reward");
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  // });
+
+  // it("error cannot-find-index", async function () {
+  //   await increase(duration.seconds(50));
+
+  //   await expect(
+  //     this.prediction
+  //       .connect(this.signers.user1)
+  //       .predict(0, [5], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+  //         value: toWei("30"),
+  //       }),
+  //   ).to.be.revertedWith("cannot-find-index");
+
+  //   await expect(this.event.connect(this.signers.admin).updateEventResult(0, 0), "cannot-find-index");
+  // });
+
+  // it("one user can predict multiple times", async function () {
+  //   await increase(duration.seconds(50));
+
+  //   await this.prediction
+  //     .connect(this.signers.user1)
+  //     .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+  //       value: toWei("30"),
+  //     });
+
+  //   await this.prediction
+  //     .connect(this.signers.user1)
+  //     .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+  //       value: toWei("30"),
+  //     });
+
+  //   await expect(this.event.connect(this.signers.admin).updateEventResult(0, 5), "cannot-find-index");
+  // });
+
+  // it("test false vent", async function () {
+  //   await increase(duration.seconds(50));
+
+  //   await expect(
+  //     this.event
+  //       .connect(this.signers.user1)
+  //       .createSingleEvent(
+  //         1653907007,
+  //         1653914187,
+  //         1653914187,
+  //         "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+  //         [10000, 10000],
+  //         "",
+  //         this.signers.user1.address,
+  //       ),
+  //   ).to.be.revertedWith("end_time > deadline_time");
+  // });
+
+  // it("test max payout", async function () {
+  //   await increase(duration.seconds(50));
+
+  //   console.log(
+  //     (
+  //       await this.prediction
+  //         .connect(this.signers.user2)
+  //         .getMaxPayout(1, "0x0000000000000000000000000000000000000000", 1)
+  //     ).toNumber(),
+  //   );
+
+  //   await this.prediction
+  //     .connect(this.signers.admin)
+  //     .depositLP(1, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
+
+  //   console.log(
+  //     fromWei(
+  //       (
+  //         await this.prediction
+  //           .connect(this.signers.user2)
+  //           .getMaxPayout(1, "0x0000000000000000000000000000000000000000", 1)
+  //       )
+  //         .mul(27)
+  //         .div(100)
+  //         .toString(),
+  //     ),
+  //   );
+  // });
+
+  // it("test max payout2", async function () {
+  //   await increase(duration.seconds(50));
+
+  //   console.log(
+  //     (
+  //       await this.prediction
+  //         .connect(this.signers.user2)
+  //         .getMaxPayout(2, "0x0000000000000000000000000000000000000000", 0)
+  //     ).toNumber(),
+  //   );
+
+  //   await this.prediction
+  //     .connect(this.signers.admin)
+  //     .depositLP(2, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user1)
+  //     .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], {
+  //       value: toWei("20"),
+  //     });
+  //   await this.prediction
+  //     .connect(this.signers.user2)
+  //     .predict(2, [4], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+  //       value: toWei("30"),
+  //     });
+  //   const maxPay = fromWei(
+  //     (
+  //       await this.prediction
+  //         .connect(this.signers.user2)
+  //         .getMaxPayout(2, "0x0000000000000000000000000000000000000000", 0)
+  //     ).toString(),
+  //   );
+  //   console.log(maxPay);
+  //   await expect(
+  //     this.prediction
+  //       .connect(this.signers.user1)
+  //       .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei((Number(maxPay) + 1).toString())], {
+  //         value: toWei((Number(maxPay) + 1).toString()),
+  //       }),
+  //   ).to.be.revertedWith("not-enough-liquidity");
+  //   await this.prediction
+  //     .connect(this.signers.user1)
+  //     .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei(maxPay)], {
+  //       value: toWei(maxPay),
+  //     });
+  // });
+
+  // it("test cashback", async function () {
+  //   await increase(duration.seconds(50));
+
+  //   await this.prediction
+  //     .connect(this.signers.user2)
+  //     .predict(0, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user3)
+  //     .predict(0, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user1)
+  //     .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+  //       value: toWei("30"),
+  //     });
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  //   console.log(
+  //     Math.round(
+  //       Number(
+  //         fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
+  //       ),
+  //     ),
+  //     "contract",
+  //   );
+
+  //   await increase(duration.days(10));
+  //   console.log("----------------------------------------------------------------------------------");
+
+  //   await expect(
+  //     this.prediction.connect(this.signers.user1).claimCashBack(0, "0x0000000000000000000000000000000000000000", 0),
+  //   ).to.be.revertedWith("event-not-end");
+
+  //   await increase(duration.days(10));
+
+  //   await expect(
+  //     this.prediction.connect(this.signers.user1).claimReward(0, "0x0000000000000000000000000000000000000000", 0),
+  //   ).to.be.revertedWith("not-finish");
+
+  //   await this.prediction.connect(this.signers.user1).claimCashBack(0, "0x0000000000000000000000000000000000000000", 0),
+  //     await this.prediction
+  //       .connect(this.signers.user2)
+  //       .claimCashBack(0, "0x0000000000000000000000000000000000000000", 0);
+
+  //   await this.prediction.connect(this.signers.user3).claimCashBack(0, "0x0000000000000000000000000000000000000000", 0);
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  // });
+
+  // it("claim remain lp group predict", async function () {
+  //   await increase(duration.seconds(50));
+
+  //   await this.prediction
+  //     .connect(this.signers.admin)
+  //     .depositLP(0, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user2)
+  //     .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user3)
+  //     .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user1)
+  //     .predict(0, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+  //       value: toWei("30"),
+  //     });
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  //   console.log(
+  //     Math.round(
+  //       Number(
+  //         fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
+  //       ),
+  //     ),
+  //     "contract",
+  //   );
+
+  //   await increase(duration.days(10));
+  //   console.log("----------------------------------------------------------------------------------");
+
+  //   await this.event.connect(this.signers.admin).updateEventResult(0, 0);
+
+  //   await this.prediction
+  //     .connect(this.signers.admin)
+  //     .claimRemainingLP(0, ["0x0000000000000000000000000000000000000000"]);
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  // });
 
   // it("can predict handicap group predict event", async function () {
   //   await increase(duration.seconds(50));
 
-  //   console.log(await this.event.checkUpkeep("0x"), 'Line #583 Efun.behavior.ts');
+  //   await this.prediction
+  //     .connect(this.signers.admin)
+  //     .depositLP(4, ["0x0000000000000000000000000000000000000000"], [toWei("100")], { value: toWei("100") });
+
+  //   await this.prediction
+  //     .connect(this.signers.user2)
+  //     .predict(4, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], {
+  //       value: toWei("20"),
+  //     });
+
+  //   await this.prediction
+  //     .connect(this.signers.user3)
+  //     .predict(4, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], {
+  //       value: toWei("10"),
+  //     });
+
+  //   await this.prediction
+  //     .connect(this.signers.user1)
+  //     .predict(4, [4], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
+  //       value: toWei("30"),
+  //     });
+
+  //   console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  //   console.log(
+  //     Math.round(
+  //       Number(
+  //         fromWei((await this.prediction.getTokenAmount("0x0000000000000000000000000000000000000000")).toString()),
+  //       ),
+  //     ),
+  //     "contract",
+  //   );
 
   //   await increase(duration.days(10));
+  //   console.log("----------------------------------------------------------------------------------");
 
-  // await this.event.combine("0x");
+  //   await this.event.connect(this.signers.admin).updateEventResult(4, 1);
+
+  //   await this.prediction.connect(this.signers.user2).claimReward(4, "0x0000000000000000000000000000000000000000", 0);
+
+  //   await this.prediction.connect(this.signers.user3).claimReward(4, "0x0000000000000000000000000000000000000000", 0);
+
+  //   await this.prediction.connect(this.signers.user1).claimReward(4, "0x0000000000000000000000000000000000000000", 0),
+  //     console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
+  //   console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
   // });
+
+  it("can predict handicap group predict event", async function () {
+    console.log(await this.apiConsumer.requestVolumeData());
+    // await increase(duration.seconds(50));
+
+    // console.log(await this.event.checkUpkeep("0x"), "Line #583 Efun.behavior.ts");
+
+    // await increase(duration.days(10));
+
+    // await this.event.combine("0x");
+  });
 }

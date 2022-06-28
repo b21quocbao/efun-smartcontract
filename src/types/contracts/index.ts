@@ -5,6 +5,7 @@ import type * as erc20TokenSol from "./Erc20Token.sol";
 export type { erc20TokenSol };
 import type * as custom from "./custom";
 export type { custom };
+export type { APIConsumer } from "./APIConsumer";
 export type { Event } from "./Event";
 export type { IEvent } from "./IEvent";
 export type { IHelper } from "./IHelper";

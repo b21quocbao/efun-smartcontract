@@ -8,16 +8,15 @@ import "@chainlink/contracts/src/v0.8/KeeperCompatible.sol";
 import "./EDataTypes.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
-import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 
 import "hardhat/console.sol";
 
-contract Event is OwnableUpgradeable, KeeperCompatibleInterface, ChainlinkClient, ConfirmedOwner {
+contract Event is OwnableUpgradeable, KeeperCompatibleInterface, ChainlinkClient {
     mapping(uint256 => EDataTypes.Event) public events;
     uint256 public nEvents;
     uint256 private fee;
 
-    function initialize() public initializer ConfirmedOwner(msg.sender) {
+    function initialize() public initializer {
         nEvents = 0;
         fee = (1 * LINK_DIVISIBILITY) / 10;
         OwnableUpgradeable.__Ownable_init();
@@ -30,7 +29,7 @@ contract Event is OwnableUpgradeable, KeeperCompatibleInterface, ChainlinkClient
         require(_index < _event.odds.length, "cannot-find-index");
         require(_event.creator == msg.sender, "unauthorized");
         require(_event.endTime <= block.timestamp, "end_time <= timestamp");
-        require(_event.endTime + 86400 >= block.timestamp, "end_time + 2 days >= timestamp");
+        require(_event.endTime + 172800 >= block.timestamp, "end_time + 2 days >= timestamp");
 
         _event.resultIndex = _index;
         _event.status = EDataTypes.EventStatus.FINISH;
@@ -114,12 +113,12 @@ contract Event is OwnableUpgradeable, KeeperCompatibleInterface, ChainlinkClient
                 number = number * 10 + c - 48;
             } else {
                 Chainlink.Request memory req = buildChainlinkRequest(
-                    jobId,
+                    "7d80a6386ef543a3abb52817f6707e3b",
                     address(this),
                     this.fulfill.selector
                 );
-                req.add("urlBTC", "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC", "");
-                req.add("pathBTC", "BTC");
+                // req.add("urlBTC", "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=BTC");
+                // req.add("pathBTC", "BTC");
                 sendChainlinkRequest(req, fee);
                 events[number].resultIndex = 1;
                 events[number].status = EDataTypes.EventStatus.FINISH;

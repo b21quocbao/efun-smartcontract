@@ -541,7 +541,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         IHelper _helper = IHelper(_event.helperAddress);
 
         require(
-            _event.status == EDataTypes.EventStatus.FINISH || _event.endTime + 86400 <= block.timestamp,
+            _event.status == EDataTypes.EventStatus.FINISH || _event.endTime + 172800 <= block.timestamp,
             "event-not-finish"
         );
         require(_event.creator == msg.sender, "unauthorized");
@@ -639,7 +639,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         EDataTypes.Event memory _event = eventData.info(_eventId);
 
         require(_event.status != EDataTypes.EventStatus.FINISH, "event-finish");
-        require(_event.endTime + 86400 < block.timestamp, "event-not-end");
+        require(_event.endTime + 172800 < block.timestamp, "event-not-end");
         require(predictions[_token][msg.sender][_eventId][_predictNum].claimed == false, "claimed");
 
         transferMoney(_token, msg.sender, predictions[_token][msg.sender][_eventId][_predictNum].predictionAmount);
