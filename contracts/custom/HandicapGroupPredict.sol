@@ -57,6 +57,18 @@ contract HandicapGroupPredict is Initializable {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
         uint256 _indexOption = _predictions.predictOptions;
 
+        if (_event.resultIndex == 4 || _event.resultIndex == 3) {
+            if (_predictOptionStats[4] == 0) {
+                return _predictions.predictionAmount;
+            }
+        }
+
+        if (_event.resultIndex == 0 || _event.resultIndex == 1) {
+            if (_predictOptionStats[0] == 0) {
+                return _predictions.predictionAmount;
+            }
+        }
+
         if (_validate) {
             require(
                 (_indexOption == 0 && _event.resultIndex != 4) || (_indexOption == 4 && _event.resultIndex != 0),

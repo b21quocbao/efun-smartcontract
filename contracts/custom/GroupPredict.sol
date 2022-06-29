@@ -56,6 +56,10 @@ contract GroupPredict is Initializable {
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
 
+        if (_predictOptionStats[_event.resultIndex] == 0) {
+            return _predictions.predictionAmount;
+        }
+
         if (_validate) {
             require(_event.resultIndex == _predictions.predictOptions, "no-reward");
         }
