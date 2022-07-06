@@ -16,18 +16,33 @@ contract EventStorage {
     uint256 public nEvents;
 }
 
-contract Event is EventStorage, OwnableUpgradeable, ChainlinkClientUpgradable, KeeperCompatibleInterface {
+contract EventStorageV2 {
+    bytes32 public jobId;
+}
+
+contract Event is
+    EventStorage,
+    OwnableUpgradeable,
+    ChainlinkClientUpgradable,
+    KeeperCompatibleInterface,
+    EventStorageV2
+{
     using Chainlink for Chainlink.Request;
 
     function initialize() public initializer {
-        nEvents = 800;
+        nEvents = 0;
         OwnableUpgradeable.__Ownable_init();
         ChainlinkClientUpgradable.__ChainlinkClient_init();
     }
 
-    function setOracle(address _token, address _oracle) public onlyOwner {
+    function setOracle(
+        address _token,
+        address _oracle,
+        bytes32 _jobId
+    ) public onlyOwner {
         setChainlinkToken(_token);
         setChainlinkOracle(_oracle);
+        jobId = _jobId;
     }
 
     /* ========== RESTRICTED FUNCTIONS ========== */
@@ -109,11 +124,7 @@ contract Event is EventStorage, OwnableUpgradeable, ChainlinkClientUpgradable, K
     }
 
     function performUpkeep(bytes calldata performData) public override {
-        Chainlink.Request memory req = buildChainlinkRequest(
-            "be4e83014253469fa22494b0e50e05d6",
-            address(this),
-            this.fulfill.selector
-        );
+        Chainlink.Request memory req = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
         req.add("get", string(performData));
         req.add("path", "data");
         sendChainlinkRequest(req, 0);

@@ -74,6 +74,8 @@ export type { Event } from "./contracts/Event.sol/Event";
 export { Event__factory } from "./factories/contracts/Event.sol/Event__factory";
 export type { EventStorage } from "./contracts/Event.sol/EventStorage";
 export { EventStorage__factory } from "./factories/contracts/Event.sol/EventStorage__factory";
+export type { EventStorageV2 } from "./contracts/Event.sol/EventStorageV2";
+export { EventStorageV2__factory } from "./factories/contracts/Event.sol/EventStorageV2__factory";
 export type { IEvent } from "./contracts/IEvent";
 export { IEvent__factory } from "./factories/contracts/IEvent__factory";
 export type { IHelper } from "./contracts/IHelper";

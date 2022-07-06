@@ -1,7 +1,7 @@
 import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 
-import type { Event__factory } from "../../src/types/factories/contracts/Event__factory";
+import type { Event__factory } from "../../src/types/factories/contracts/Event.sol/Event__factory";
 import type { Prediction__factory } from "../../src/types/factories/contracts/Prediction__factory";
 
 task("deploy:Prediction").setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {

@@ -3,3 +3,4 @@
 /* eslint-disable */
 export type { Event } from "./Event";
 export type { EventStorage } from "./EventStorage";
+export type { EventStorageV2 } from "./EventStorageV2";

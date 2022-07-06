@@ -487,7 +487,7 @@ export interface EventCreatedEventObject {
   creator: string;
   odds: BigNumber[];
   datas: string;
-  _pro: BigNumber;
+  pro: BigNumber;
 }
 export type EventCreatedEvent = TypedEvent<
   [
@@ -1347,7 +1347,7 @@ export interface Prediction extends BaseContract {
       creator?: null,
       odds?: null,
       datas?: null,
-      _pro?: null
+      pro?: null
     ): EventCreatedEventFilter;
     EventCreated(
       idx?: null,
@@ -1358,7 +1358,7 @@ export interface Prediction extends BaseContract {
       creator?: null,
       odds?: null,
       datas?: null,
-      _pro?: null
+      pro?: null
     ): EventCreatedEventFilter;
 
     "Initialized(uint8)"(version?: null): InitializedEventFilter;

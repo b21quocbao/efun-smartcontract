@@ -73,11 +73,12 @@ export interface EventInterface extends utils.Interface {
     "fulfill(bytes32,string)": FunctionFragment;
     "info(uint256)": FunctionFragment;
     "initialize()": FunctionFragment;
+    "jobId()": FunctionFragment;
     "nEvents()": FunctionFragment;
     "owner()": FunctionFragment;
     "performUpkeep(bytes)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "setOracle(address,address)": FunctionFragment;
+    "setOracle(address,address,bytes32)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "updateEventResult(uint256,uint256)": FunctionFragment;
     "withdrawLink()": FunctionFragment;
@@ -91,6 +92,7 @@ export interface EventInterface extends utils.Interface {
       | "fulfill"
       | "info"
       | "initialize"
+      | "jobId"
       | "nEvents"
       | "owner"
       | "performUpkeep"
@@ -131,6 +133,7 @@ export interface EventInterface extends utils.Interface {
     functionFragment: "initialize",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "jobId", values?: undefined): string;
   encodeFunctionData(functionFragment: "nEvents", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -143,7 +146,7 @@ export interface EventInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "setOracle",
-    values: [string, string]
+    values: [string, string, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
@@ -170,6 +173,7 @@ export interface EventInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "fulfill", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "info", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "jobId", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "nEvents", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
@@ -396,6 +400,8 @@ export interface Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    jobId(overrides?: CallOverrides): Promise<[string]>;
+
     nEvents(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
@@ -412,6 +418,7 @@ export interface Event extends BaseContract {
     setOracle(
       _token: string,
       _oracle: string,
+      _jobId: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -492,6 +499,8 @@ export interface Event extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  jobId(overrides?: CallOverrides): Promise<string>;
+
   nEvents(overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
@@ -508,6 +517,7 @@ export interface Event extends BaseContract {
   setOracle(
     _token: string,
     _oracle: string,
+    _jobId: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -586,6 +596,8 @@ export interface Event extends BaseContract {
 
     initialize(overrides?: CallOverrides): Promise<void>;
 
+    jobId(overrides?: CallOverrides): Promise<string>;
+
     nEvents(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
@@ -600,6 +612,7 @@ export interface Event extends BaseContract {
     setOracle(
       _token: string,
       _oracle: string,
+      _jobId: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -709,6 +722,8 @@ export interface Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    jobId(overrides?: CallOverrides): Promise<BigNumber>;
+
     nEvents(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
@@ -725,6 +740,7 @@ export interface Event extends BaseContract {
     setOracle(
       _token: string,
       _oracle: string,
+      _jobId: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -782,6 +798,8 @@ export interface Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    jobId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     nEvents(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -798,6 +816,7 @@ export interface Event extends BaseContract {
     setOracle(
       _token: string,
       _oracle: string,
+      _jobId: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

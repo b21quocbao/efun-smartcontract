@@ -691,7 +691,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         address creator,
         uint256[] odds,
         string datas,
-        uint256 _pro
+        uint256 pro
     );
     event LPDeposited(uint256 eventId, address token, uint256 amount);
     event LPClaimed(uint256 eventId, address token, uint256 amount);
