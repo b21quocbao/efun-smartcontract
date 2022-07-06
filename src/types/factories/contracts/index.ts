@@ -2,9 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as erc20TokenSol from "./Erc20Token.sol";
+export * as eventSol from "./Event.sol";
 export * as custom from "./custom";
 export { APIConsumer__factory } from "./APIConsumer__factory";
-export { Event__factory } from "./Event__factory";
+export { ChainlinkClientUpgradable__factory } from "./ChainlinkClientUpgradable__factory";
 export { IEvent__factory } from "./IEvent__factory";
 export { IHelper__factory } from "./IHelper__factory";
 export { Prediction__factory } from "./Prediction__factory";

@@ -15,6 +15,7 @@ interface IEvent {
         address _helperAddress,
         uint256[] calldata _odds,
         string memory _datas,
-        address _creator
+        address _creator,
+        uint256 _pro
     ) external returns (uint256 _idx);
 }

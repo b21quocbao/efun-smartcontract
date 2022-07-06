@@ -3,10 +3,12 @@
 /* eslint-disable */
 import type * as erc20TokenSol from "./Erc20Token.sol";
 export type { erc20TokenSol };
+import type * as eventSol from "./Event.sol";
+export type { eventSol };
 import type * as custom from "./custom";
 export type { custom };
 export type { APIConsumer } from "./APIConsumer";
-export type { Event } from "./Event";
+export type { ChainlinkClientUpgradable } from "./ChainlinkClientUpgradable";
 export type { IEvent } from "./IEvent";
 export type { IHelper } from "./IHelper";
 export type { Prediction } from "./Prediction";

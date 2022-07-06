@@ -33,6 +33,7 @@ export declare namespace EDataTypes {
     creator: string;
     odds: BigNumberish[];
     _datas: string;
+    pro: BigNumberish;
   };
 
   export type EventStructOutput = [
@@ -44,7 +45,8 @@ export declare namespace EDataTypes {
     string,
     string,
     BigNumber[],
-    string
+    string,
+    BigNumber
   ] & {
     startTime: BigNumber;
     deadlineTime: BigNumber;
@@ -55,12 +57,13 @@ export declare namespace EDataTypes {
     creator: string;
     odds: BigNumber[];
     _datas: string;
+    pro: BigNumber;
   };
 }
 
 export interface IEventInterface extends utils.Interface {
   functions: {
-    "createSingleEvent(uint256,uint256,uint256,address,uint256[],string,address)": FunctionFragment;
+    "createSingleEvent(uint256,uint256,uint256,address,uint256[],string,address,uint256)": FunctionFragment;
     "info(uint256)": FunctionFragment;
   };
 
@@ -77,7 +80,8 @@ export interface IEventInterface extends utils.Interface {
       string,
       BigNumberish[],
       string,
-      string
+      string,
+      BigNumberish
     ]
   ): string;
   encodeFunctionData(functionFragment: "info", values: [BigNumberish]): string;
@@ -126,6 +130,7 @@ export interface IEvent extends BaseContract {
       _odds: BigNumberish[],
       _datas: string,
       _creator: string,
+      _pro: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -145,6 +150,7 @@ export interface IEvent extends BaseContract {
     _odds: BigNumberish[],
     _datas: string,
     _creator: string,
+    _pro: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -162,6 +168,7 @@ export interface IEvent extends BaseContract {
       _odds: BigNumberish[],
       _datas: string,
       _creator: string,
+      _pro: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -182,6 +189,7 @@ export interface IEvent extends BaseContract {
       _odds: BigNumberish[],
       _datas: string,
       _creator: string,
+      _pro: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -197,6 +205,7 @@ export interface IEvent extends BaseContract {
       _odds: BigNumberish[],
       _datas: string,
       _creator: string,
+      _pro: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

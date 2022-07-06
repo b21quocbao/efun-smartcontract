@@ -44,6 +44,11 @@ const _abi = [
         name: "_creator",
         type: "address",
       },
+      {
+        internalType: "uint256",
+        name: "_pro",
+        type: "uint256",
+      },
     ],
     name: "createSingleEvent",
     outputs: [
@@ -112,6 +117,11 @@ const _abi = [
             internalType: "string",
             name: "_datas",
             type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "pro",
+            type: "uint256",
           },
         ],
         internalType: "struct EDataTypes.Event",

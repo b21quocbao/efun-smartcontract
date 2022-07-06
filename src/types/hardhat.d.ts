@@ -109,6 +109,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.APIConsumer__factory>;
     getContractFactory(
+      name: "ChainlinkClientUpgradable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ChainlinkClientUpgradable__factory>;
+    getContractFactory(
       name: "GroupPredict",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.GroupPredict__factory>;
@@ -136,6 +140,10 @@ declare module "hardhat/types/runtime" {
       name: "Event",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Event__factory>;
+    getContractFactory(
+      name: "EventStorage",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.EventStorage__factory>;
     getContractFactory(
       name: "IEvent",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -270,6 +278,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.APIConsumer>;
     getContractAt(
+      name: "ChainlinkClientUpgradable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ChainlinkClientUpgradable>;
+    getContractAt(
       name: "GroupPredict",
       address: string,
       signer?: ethers.Signer
@@ -304,6 +317,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Event>;
+    getContractAt(
+      name: "EventStorage",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.EventStorage>;
     getContractAt(
       name: "IEvent",
       address: string,

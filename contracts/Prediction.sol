@@ -46,28 +46,13 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         oneHundredPrecent = _oneHundredPrecent;
     }
 
-    function createSingleEvent(
-        uint256 _startTime,
-        uint256 _deadlineTime,
-        uint256 _endTime,
-        address _helperAddress,
-        uint256[] calldata _odds,
-        string memory _datas,
+    function _deposit(
+        uint256 _totalAmount,
+        uint256 _idx,
         address[] calldata _tokens,
-        uint256[] calldata _amounts
-    ) external payable returns (uint256 _idx) {
-        _idx = eventData.createSingleEvent(
-            _startTime,
-            _deadlineTime,
-            _endTime,
-            _helperAddress,
-            _odds,
-            _datas,
-            msg.sender
-        );
-        EDataTypes.Event memory _event = eventData.info(_idx);
-        uint256 _totalAmount = msg.value;
-
+        uint256[] calldata _amounts,
+        uint256 _len
+    ) internal {
         for (uint256 i = 0; i < _tokens.length; ++i) {
             address _token = _tokens[i];
             uint256 _amount = _amounts[i];
@@ -80,12 +65,53 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 _totalAmount -= _amount;
             }
             if (predictOptionStats[_token][_idx].length == 0) {
-                predictOptionStats[_token][_idx] = new uint256[](_event.odds.length);
+                predictOptionStats[_token][_idx] = new uint256[](_len);
             }
 
             emit LPDeposited(_idx, _token, liquidityPoolEvent[_idx][_token]);
         }
-        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, msg.sender, _event.odds, _datas);
+    }
+
+    function _createEvent(
+        uint256 _startTime,
+        uint256 _deadlineTime,
+        uint256 _endTime,
+        address _helperAddress,
+        address _creator,
+        uint256[] calldata _odds,
+        string memory _datas,
+        uint256 _pro
+    ) internal returns (uint256 _idx) {
+        _idx = eventData.createSingleEvent(
+            _startTime,
+            _deadlineTime,
+            _endTime,
+            _helperAddress,
+            _odds,
+            _datas,
+            _creator,
+            _pro
+        );
+
+        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, _creator, _odds, _datas, _pro);
+    }
+
+    function createSingleEvent(
+        uint256 _startTime,
+        uint256 _deadlineTime,
+        uint256 _endTime,
+        address _helperAddress,
+        uint256[] calldata _odds,
+        string memory _datas,
+        address[] calldata _tokens,
+        uint256[] calldata _amounts,
+        uint256 _pro
+    ) external payable returns (uint256 _idx) {
+        uint256 len = _odds.length;
+
+        _idx = _createEvent(_startTime, _deadlineTime, _endTime, _helperAddress, msg.sender, _odds, _datas, _pro);
+        EDataTypes.Event memory _event = eventData.info(_idx);
+        _deposit(msg.value, _idx, _tokens, _amounts, len);
     }
 
     /**
@@ -664,7 +690,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         address helperAddress,
         address creator,
         uint256[] odds,
-        string datas
+        string datas,
+        uint256 _pro
     );
     event LPDeposited(uint256 eventId, address token, uint256 amount);
     event LPClaimed(uint256 eventId, address token, uint256 amount);

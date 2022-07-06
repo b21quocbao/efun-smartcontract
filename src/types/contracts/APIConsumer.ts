@@ -4,7 +4,6 @@
 import type {
   BaseContract,
   BigNumber,
-  BigNumberish,
   BytesLike,
   CallOverrides,
   ContractTransaction,
@@ -29,11 +28,11 @@ import type {
 export interface APIConsumerInterface extends utils.Interface {
   functions: {
     "acceptOwnership()": FunctionFragment;
-    "fulfill(bytes32,uint256)": FunctionFragment;
+    "fulfill(bytes32,string)": FunctionFragment;
+    "id()": FunctionFragment;
     "owner()": FunctionFragment;
-    "requestVolumeData()": FunctionFragment;
+    "requestFirstId()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "volume()": FunctionFragment;
     "withdrawLink()": FunctionFragment;
   };
 
@@ -41,10 +40,10 @@ export interface APIConsumerInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "acceptOwnership"
       | "fulfill"
+      | "id"
       | "owner"
-      | "requestVolumeData"
+      | "requestFirstId"
       | "transferOwnership"
-      | "volume"
       | "withdrawLink"
   ): FunctionFragment;
 
@@ -54,18 +53,18 @@ export interface APIConsumerInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "fulfill",
-    values: [BytesLike, BigNumberish]
+    values: [BytesLike, string]
   ): string;
+  encodeFunctionData(functionFragment: "id", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "requestVolumeData",
+    functionFragment: "requestFirstId",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
-  encodeFunctionData(functionFragment: "volume", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "withdrawLink",
     values?: undefined
@@ -76,16 +75,16 @@ export interface APIConsumerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "fulfill", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "id", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "requestVolumeData",
+    functionFragment: "requestFirstId",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "volume", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "withdrawLink",
     data: BytesLike
@@ -97,7 +96,7 @@ export interface APIConsumerInterface extends utils.Interface {
     "ChainlinkRequested(bytes32)": EventFragment;
     "OwnershipTransferRequested(address,address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "RequestVolume(bytes32,uint256)": EventFragment;
+    "RequestFirstId(bytes32,string)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "ChainlinkCancelled"): EventFragment;
@@ -105,7 +104,7 @@ export interface APIConsumerInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "ChainlinkRequested"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferRequested"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RequestVolume"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RequestFirstId"): EventFragment;
 }
 
 export interface ChainlinkCancelledEventObject {
@@ -165,16 +164,16 @@ export type OwnershipTransferredEvent = TypedEvent<
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
-export interface RequestVolumeEventObject {
+export interface RequestFirstIdEventObject {
   requestId: string;
-  volume: BigNumber;
+  id: string;
 }
-export type RequestVolumeEvent = TypedEvent<
-  [string, BigNumber],
-  RequestVolumeEventObject
+export type RequestFirstIdEvent = TypedEvent<
+  [string, string],
+  RequestFirstIdEventObject
 >;
 
-export type RequestVolumeEventFilter = TypedEventFilter<RequestVolumeEvent>;
+export type RequestFirstIdEventFilter = TypedEventFilter<RequestFirstIdEvent>;
 
 export interface APIConsumer extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -209,13 +208,15 @@ export interface APIConsumer extends BaseContract {
 
     fulfill(
       _requestId: BytesLike,
-      _volume: BigNumberish,
+      _id: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    id(overrides?: CallOverrides): Promise<[string]>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
 
-    requestVolumeData(
+    requestFirstId(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -223,8 +224,6 @@ export interface APIConsumer extends BaseContract {
       to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    volume(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     withdrawLink(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -237,13 +236,15 @@ export interface APIConsumer extends BaseContract {
 
   fulfill(
     _requestId: BytesLike,
-    _volume: BigNumberish,
+    _id: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  id(overrides?: CallOverrides): Promise<string>;
+
   owner(overrides?: CallOverrides): Promise<string>;
 
-  requestVolumeData(
+  requestFirstId(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -251,8 +252,6 @@ export interface APIConsumer extends BaseContract {
     to: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  volume(overrides?: CallOverrides): Promise<BigNumber>;
 
   withdrawLink(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -263,17 +262,17 @@ export interface APIConsumer extends BaseContract {
 
     fulfill(
       _requestId: BytesLike,
-      _volume: BigNumberish,
+      _id: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
+    id(overrides?: CallOverrides): Promise<string>;
+
     owner(overrides?: CallOverrides): Promise<string>;
 
-    requestVolumeData(overrides?: CallOverrides): Promise<string>;
+    requestFirstId(overrides?: CallOverrides): Promise<string>;
 
     transferOwnership(to: string, overrides?: CallOverrides): Promise<void>;
-
-    volume(overrides?: CallOverrides): Promise<BigNumber>;
 
     withdrawLink(overrides?: CallOverrides): Promise<void>;
   };
@@ -312,14 +311,14 @@ export interface APIConsumer extends BaseContract {
       to?: string | null
     ): OwnershipTransferredEventFilter;
 
-    "RequestVolume(bytes32,uint256)"(
+    "RequestFirstId(bytes32,string)"(
       requestId?: BytesLike | null,
-      volume?: null
-    ): RequestVolumeEventFilter;
-    RequestVolume(
+      id?: null
+    ): RequestFirstIdEventFilter;
+    RequestFirstId(
       requestId?: BytesLike | null,
-      volume?: null
-    ): RequestVolumeEventFilter;
+      id?: null
+    ): RequestFirstIdEventFilter;
   };
 
   estimateGas: {
@@ -329,13 +328,15 @@ export interface APIConsumer extends BaseContract {
 
     fulfill(
       _requestId: BytesLike,
-      _volume: BigNumberish,
+      _id: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    id(overrides?: CallOverrides): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
-    requestVolumeData(
+    requestFirstId(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -343,8 +344,6 @@ export interface APIConsumer extends BaseContract {
       to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    volume(overrides?: CallOverrides): Promise<BigNumber>;
 
     withdrawLink(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -358,13 +357,15 @@ export interface APIConsumer extends BaseContract {
 
     fulfill(
       _requestId: BytesLike,
-      _volume: BigNumberish,
+      _id: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    id(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    requestVolumeData(
+    requestFirstId(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -372,8 +373,6 @@ export interface APIConsumer extends BaseContract {
       to: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    volume(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     withdrawLink(
       overrides?: Overrides & { from?: string | Promise<string> }
