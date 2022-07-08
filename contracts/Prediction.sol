@@ -124,7 +124,9 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 _eventId,
                 _token
             );
-            if (_event.endTime + 172800 <= block.timestamp && _event.status != EDataTypes.EventStatus.FINISH) {
+            if (_event.endTime + 172800 < block.timestamp && _event.status != EDataTypes.EventStatus.FINISH) {
+                _results[i] = _liquidityPool;
+            } else if (_event.isBlock) {
                 _results[i] = _liquidityPool;
             } else {
                 _results[i] = _helper.calculateRemainLP(
@@ -384,6 +386,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
         require(_event.status == EDataTypes.EventStatus.FINISH, "event-not-finish");
         require(predictions[_token][msg.sender][_eventId][_predictNum].claimed == false, "claimed");
+        require(_event.finalTime + 86400 < block.timestamp, "final_time + 1 day < timestamp");
+        require(!_event.isBlock, "event blocked");
 
         uint256 _index = predictions[_token][msg.sender][_eventId][_predictNum].predictOptions;
         uint256 _reward;
@@ -474,7 +478,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         IHelper _helper = IHelper(_event.helperAddress);
 
         require(
-            _event.status == EDataTypes.EventStatus.FINISH || _event.endTime + 172800 <= block.timestamp,
+            (_event.status == EDataTypes.EventStatus.FINISH && _event.finalTime + 86400 < block.timestamp) ||
+                (_event.status != EDataTypes.EventStatus.FINISH && _event.endTime + 172800 < block.timestamp),
             "event-not-finish"
         );
         require(_event.creator == msg.sender, "unauthorized");
@@ -564,8 +569,13 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     ) external {
         EDataTypes.Event memory _event = eventData.info(_eventId);
 
-        require(_event.status != EDataTypes.EventStatus.FINISH, "event-finish");
-        require(_event.endTime + 172800 < block.timestamp, "event-not-end");
+        require(
+            (_event.status == EDataTypes.EventStatus.FINISH &&
+                _event.finalTime + 86400 < block.timestamp &&
+                _event.isBlock) ||
+                (_event.status != EDataTypes.EventStatus.FINISH && _event.endTime + 172800 < block.timestamp),
+            "event-not-finish"
+        );
         require(predictions[_token][msg.sender][_eventId][_predictNum].claimed == false, "claimed");
 
         transferMoney(_token, msg.sender, predictions[_token][msg.sender][_eventId][_predictNum].predictionAmount);

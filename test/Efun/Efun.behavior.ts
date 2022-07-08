@@ -45,6 +45,7 @@ export function shouldBehaveLikeEvent(): void {
     console.log("----------------------------------------------------------------------------------");
 
     await this.event.connect(this.signers.admin).updateEventResult(0, 0);
+    await increase(duration.days(1));
 
     await this.prediction.connect(this.signers.user2).claimReward(0, "0x0000000000000000000000000000000000000000", 0);
 
@@ -131,6 +132,7 @@ export function shouldBehaveLikeEvent(): void {
     console.log("----------------------------------------------------------------------------------");
 
     await this.event.connect(this.signers.admin).updateEventResult(1, 0);
+    await increase(duration.days(1));
     await expect(
       this.prediction.connect(this.signers.user1).claimRemainingLP(1, ["0x0000000000000000000000000000000000000000"]),
     ).to.be.revertedWith("unauthorized");
@@ -225,6 +227,7 @@ export function shouldBehaveLikeEvent(): void {
     console.log("----------------------------------------------------------------------------------");
 
     await this.event.connect(this.signers.admin).updateEventResult(2, 0);
+    await increase(duration.days(1));
 
     await this.prediction.connect(this.signers.user2).claimReward(2, "0x0000000000000000000000000000000000000000", 0);
 
@@ -278,6 +281,7 @@ export function shouldBehaveLikeEvent(): void {
     console.log("----------------------------------------------------------------------------------");
 
     await this.event.connect(this.signers.admin).updateEventResult(3, [5]);
+    await increase(duration.days(1));
 
     await this.prediction.connect(this.signers.user2).claimReward(3, "0x0000000000000000000000000000000000000000", 0);
 
@@ -305,6 +309,7 @@ export function shouldBehaveLikeEvent(): void {
     ).to.be.revertedWith("cannot-find-index");
 
     await expect(this.event.connect(this.signers.admin).updateEventResult(0, 0), "cannot-find-index");
+    await increase(duration.days(1));
   });
 
   it("one user can predict multiple times", async function () {
@@ -323,6 +328,7 @@ export function shouldBehaveLikeEvent(): void {
       });
 
     await expect(this.event.connect(this.signers.admin).updateEventResult(0, 5), "cannot-find-index");
+    await increase(duration.days(1));
   });
 
   it("test false vent", async function () {
@@ -455,7 +461,7 @@ export function shouldBehaveLikeEvent(): void {
 
     await expect(
       this.prediction.connect(this.signers.user1).claimCashBack(0, "0x0000000000000000000000000000000000000000", 0),
-    ).to.be.revertedWith("event-not-end");
+    ).to.be.revertedWith("event-not-finish");
 
     await increase(duration.days(10));
 
@@ -514,6 +520,7 @@ export function shouldBehaveLikeEvent(): void {
     console.log("----------------------------------------------------------------------------------");
 
     await this.event.connect(this.signers.admin).updateEventResult(0, 0);
+    await increase(duration.days(1));
 
     await this.prediction
       .connect(this.signers.admin)
@@ -567,6 +574,7 @@ export function shouldBehaveLikeEvent(): void {
     console.log("----------------------------------------------------------------------------------");
 
     await this.event.connect(this.signers.admin).updateEventResult(4, 1);
+    await increase(duration.days(1));
 
     await this.prediction.connect(this.signers.user2).claimReward(4, "0x0000000000000000000000000000000000000000", 0);
 

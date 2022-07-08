@@ -172,6 +172,8 @@ contract Event is
      * Block event withdraw
      */
     function blockEvent(uint256 _eventId) public {
+        require(events[_eventId].finalTime <= block.timestamp, "final_time <= timestamp");
+        require(events[_eventId].finalTime + 86400 >= block.timestamp, "final_time + 1 days >= timestamp");
         events[_eventId].isBlock = true;
     }
 
@@ -179,6 +181,8 @@ contract Event is
      * Block event withdraw
      */
     function unblockEvent(uint256 _eventId) public {
+        require(events[_eventId].finalTime <= block.timestamp, "final_time <= timestamp");
+        require(events[_eventId].finalTime + 86400 >= block.timestamp, "final_time + 1 days >= timestamp");
         events[_eventId].isBlock = false;
     }
 
