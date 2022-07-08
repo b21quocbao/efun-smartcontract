@@ -110,43 +110,6 @@ task("update:event:data").setAction(async function (_taskArgs, hre) {
   console.log("\x1b[36m%s\x1b[0m", "tx", tx);
 });
 
-task("calculate:reward").setAction(async function (_taskArgs, hre) {
-  const { ethers } = hre;
-  const [deployer] = await ethers.getSigners();
-
-  const groupPredict = await GroupPredict__factory.connect("0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208", deployer);
-  const event = await Event__factory.connect("0xD023E170E5Be8fa0167cb6a2EAFb9B0365bAe398", deployer);
-  console.log(await event.info(503));
-  console.log(
-    await groupPredict.calculatePotentialReward(
-      "0xD023E170E5Be8fa0167cb6a2EAFb9B0365bAe398",
-      503,
-      "11000000000000000",
-      [5000000000000000, 6000000000000000, 0, 0],
-      6000000000000000,
-      10000,
-      10000,
-      1,
-      0,
-    ),
-  );
-
-  const tx = await groupPredict.calculateReward(
-    "0xD023E170E5Be8fa0167cb6a2EAFb9B0365bAe398",
-    503,
-    "11000000000000000",
-    [5000000000000000, 6000000000000000, 0, 0],
-    { predictionAmount: 6000000000000000, predictOptions: 1, claimed: false },
-    10000,
-    10000,
-    1,
-    0,
-    false,
-  );
-
-  console.log("\x1b[36m%s\x1b[0m", "tx", tx);
-});
-
 task("calculate:potential:reward").setAction(async function (_taskArgs, hre) {
   const { ethers } = hre;
   const [deployer] = await ethers.getSigners();

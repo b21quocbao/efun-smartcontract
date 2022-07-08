@@ -48,13 +48,13 @@ contract GroupPredict is Initializable {
         uint256 _predictStats,
         uint256[] calldata _predictOptionStats,
         EDataTypes.Prediction calldata _predictions,
-        uint256 _odd,
         uint256 _oneHundredPrecent,
-        uint256 _index,
         uint256 _liquidityPool,
         bool _validate
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
+        uint256 _index = _predictions.predictOptions;
+        uint256 _odd = _event.odds[_index];
 
         if (_predictOptionStats[_event.resultIndex] == 0) {
             return _predictions.predictionAmount;
@@ -76,12 +76,12 @@ contract GroupPredict is Initializable {
         uint256 _predictStats,
         uint256[] calldata _predictOptionStats,
         EDataTypes.Prediction calldata _predictions,
-        uint256 _odd,
         uint256 _oneHundredPrecent,
-        uint256 _index,
         uint256 _liquidityPool
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
+        uint256 _index = _predictions.predictOptions;
+        uint256 _odd = _event.odds[_index];
 
         _reward = (_liquidityPool * _predictions.predictionAmount) / _predictOptionStats[_index];
     }
@@ -135,8 +135,7 @@ contract GroupPredict is Initializable {
         uint256 _liquidityPool
     ) public view returns (uint256 _remainLP) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-        bool cont0 = (_event.endTime + 172800 <= block.timestamp && _event.status != EDataTypes.EventStatus.FINISH);
-        if (_predictOptionStats[_event.resultIndex] == 0 || cont0) {
+        if (_predictOptionStats[_event.resultIndex] == 0) {
             _remainLP = _liquidityPool;
         } else {
             _remainLP = 0;

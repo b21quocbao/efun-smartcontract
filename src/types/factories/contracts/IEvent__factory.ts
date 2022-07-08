@@ -123,6 +123,16 @@ const _abi = [
             name: "pro",
             type: "uint256",
           },
+          {
+            internalType: "bool",
+            name: "isBlock",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "finalTime",
+            type: "uint256",
+          },
         ],
         internalType: "struct EDataTypes.Event",
         name: "_event",

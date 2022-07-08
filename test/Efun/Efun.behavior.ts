@@ -204,7 +204,7 @@ export function shouldBehaveLikeEvent(): void {
     console.log(
       await this.prediction
         .connect(this.signers.user1)
-        .estimateReward(2, this.signers.user1.address, "0x0000000000000000000000000000000000000000", 3),
+        .estimateReward(2, this.signers.user1.address, "0x0000000000000000000000000000000000000000", 3, false),
       "estimetaoxicvu",
     );
 

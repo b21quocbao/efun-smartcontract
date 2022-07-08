@@ -80,6 +80,8 @@ export interface EventStorage extends BaseContract {
         string,
         string,
         string,
+        BigNumber,
+        boolean,
         BigNumber
       ] & {
         startTime: BigNumber;
@@ -91,6 +93,8 @@ export interface EventStorage extends BaseContract {
         creator: string;
         _datas: string;
         pro: BigNumber;
+        isBlock: boolean;
+        finalTime: BigNumber;
       }
     >;
 
@@ -110,6 +114,8 @@ export interface EventStorage extends BaseContract {
       string,
       string,
       string,
+      BigNumber,
+      boolean,
       BigNumber
     ] & {
       startTime: BigNumber;
@@ -121,6 +127,8 @@ export interface EventStorage extends BaseContract {
       creator: string;
       _datas: string;
       pro: BigNumber;
+      isBlock: boolean;
+      finalTime: BigNumber;
     }
   >;
 
@@ -140,6 +148,8 @@ export interface EventStorage extends BaseContract {
         string,
         string,
         string,
+        BigNumber,
+        boolean,
         BigNumber
       ] & {
         startTime: BigNumber;
@@ -151,6 +161,8 @@ export interface EventStorage extends BaseContract {
         creator: string;
         _datas: string;
         pro: BigNumber;
+        isBlock: boolean;
+        finalTime: BigNumber;
       }
     >;
 

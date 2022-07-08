@@ -161,17 +161,7 @@ const _abi = [
       },
       {
         internalType: "uint256",
-        name: "_odd",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
         name: "_oneHundredPrecent",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_index",
         type: "uint256",
       },
       {
@@ -242,17 +232,7 @@ const _abi = [
       },
       {
         internalType: "uint256",
-        name: "_odd",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
         name: "_oneHundredPrecent",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_index",
         type: "uint256",
       },
       {

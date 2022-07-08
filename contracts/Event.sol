@@ -54,11 +54,13 @@ contract Event is
         require(_event.endTime <= block.timestamp, "end_time <= timestamp");
         require(_event.endTime + 172800 >= block.timestamp, "end_time + 2 days >= timestamp");
         require(_event.pro == 0, "not pro event");
+        require(_event.status != EDataTypes.EventStatus.FINISH, "event already finish");
 
+        _event.finalTime = block.timestamp;
         _event.resultIndex = _index;
         _event.status = EDataTypes.EventStatus.FINISH;
 
-        emit EventResultUpdated(msg.sender, _eventId, _index);
+        emit EventResultUpdated(msg.sender, _eventId, _index, _event.finalTime);
     }
 
     /* ========== PUBLIC FUNCTIONS ========== */
@@ -91,7 +93,9 @@ contract Event is
             _creator,
             _odds,
             _datas,
-            _pro
+            _pro,
+            false,
+            0
         );
         emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, _creator, _odds, _datas, _pro);
         nEvents++;
@@ -164,9 +168,23 @@ contract Event is
         require(link.transfer(msg.sender, link.balanceOf(address(this))), "Unable to transfer");
     }
 
+    /**
+     * Block event withdraw
+     */
+    function blockEvent(uint256 _eventId) public {
+        events[_eventId].isBlock = true;
+    }
+
+    /**
+     * Block event withdraw
+     */
+    function unblockEvent(uint256 _eventId) public {
+        events[_eventId].isBlock = false;
+    }
+
     /* =============== EVENTS ==================== */
 
-    event EventResultUpdated(address caller, uint256 eventId, uint256 index);
+    event EventResultUpdated(address caller, uint256 eventId, uint256 index, uint256 finalTime);
     event EventCreated(
         uint256 idx,
         uint256 startTime,

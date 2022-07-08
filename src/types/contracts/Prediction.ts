@@ -51,7 +51,7 @@ export interface PredictionInterface extends utils.Interface {
     "createSingleEvent(uint256,uint256,uint256,address,uint256[],string,address[],uint256[],uint256)": FunctionFragment;
     "depositLP(uint256,address[],uint256[])": FunctionFragment;
     "emergencyWithdraw(address,uint256)": FunctionFragment;
-    "estimateReward(uint256,address,address,uint256)": FunctionFragment;
+    "estimateReward(uint256,address,address,uint256,bool)": FunctionFragment;
     "estimateRewardSponsor(uint256,address,address,uint256)": FunctionFragment;
     "eventData()": FunctionFragment;
     "eventDataAddress()": FunctionFragment;
@@ -86,7 +86,6 @@ export interface PredictionInterface extends utils.Interface {
     "setLotCollector(address)": FunctionFragment;
     "setRewardToken(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "validateEstimateReward(uint256,address,address,uint256)": FunctionFragment;
   };
 
   getFunction(
@@ -134,7 +133,6 @@ export interface PredictionInterface extends utils.Interface {
       | "setLotCollector"
       | "setRewardToken"
       | "transferOwnership"
-      | "validateEstimateReward"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "bnbRate", values?: undefined): string;
@@ -178,7 +176,7 @@ export interface PredictionInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "estimateReward",
-    values: [BigNumberish, string, string, BigNumberish]
+    values: [BigNumberish, string, string, BigNumberish, boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "estimateRewardSponsor",
@@ -300,10 +298,6 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "validateEstimateReward",
-    values: [BigNumberish, string, string, BigNumberish]
   ): string;
 
   decodeFunctionResult(functionFragment: "bnbRate", data: BytesLike): Result;
@@ -437,10 +431,6 @@ export interface PredictionInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "validateEstimateReward",
     data: BytesLike
   ): Result;
 
@@ -667,6 +657,7 @@ export interface Prediction extends BaseContract {
       _user: string,
       _token: string,
       _predictNum: BigNumberish,
+      _validate: boolean,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -840,14 +831,6 @@ export interface Prediction extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    validateEstimateReward(
-      _eventId: BigNumberish,
-      _user: string,
-      _token: string,
-      _predictNum: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
   };
 
   bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
@@ -911,6 +894,7 @@ export interface Prediction extends BaseContract {
     _user: string,
     _token: string,
     _predictNum: BigNumberish,
+    _validate: boolean,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -1082,14 +1066,6 @@ export interface Prediction extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  validateEstimateReward(
-    _eventId: BigNumberish,
-    _user: string,
-    _token: string,
-    _predictNum: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   callStatic: {
     bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1152,6 +1128,7 @@ export interface Prediction extends BaseContract {
       _user: string,
       _token: string,
       _predictNum: BigNumberish,
+      _validate: boolean,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1314,14 +1291,6 @@ export interface Prediction extends BaseContract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    validateEstimateReward(
-      _eventId: BigNumberish,
-      _user: string,
-      _token: string,
-      _predictNum: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
   };
 
   filters: {
@@ -1490,6 +1459,7 @@ export interface Prediction extends BaseContract {
       _user: string,
       _token: string,
       _predictNum: BigNumberish,
+      _validate: boolean,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1657,14 +1627,6 @@ export interface Prediction extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    validateEstimateReward(
-      _eventId: BigNumberish,
-      _user: string,
-      _token: string,
-      _predictNum: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -1729,6 +1691,7 @@ export interface Prediction extends BaseContract {
       _user: string,
       _token: string,
       _predictNum: BigNumberish,
+      _validate: boolean,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1895,14 +1858,6 @@ export interface Prediction extends BaseContract {
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    validateEstimateReward(
-      _eventId: BigNumberish,
-      _user: string,
-      _token: string,
-      _predictNum: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

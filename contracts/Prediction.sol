@@ -46,56 +46,6 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         oneHundredPrecent = _oneHundredPrecent;
     }
 
-    function _deposit(
-        uint256 _totalAmount,
-        uint256 _idx,
-        address[] calldata _tokens,
-        uint256[] calldata _amounts,
-        uint256 _len
-    ) internal {
-        for (uint256 i = 0; i < _tokens.length; ++i) {
-            address _token = _tokens[i];
-            uint256 _amount = _amounts[i];
-
-            liquidityPoolEvent[_idx][_token] += _amount;
-            if (_token != address(0)) {
-                IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
-            } else {
-                require(_totalAmount >= _amount, "total-amount-not-same");
-                _totalAmount -= _amount;
-            }
-            if (predictOptionStats[_token][_idx].length == 0) {
-                predictOptionStats[_token][_idx] = new uint256[](_len);
-            }
-
-            emit LPDeposited(_idx, _token, liquidityPoolEvent[_idx][_token]);
-        }
-    }
-
-    function _createEvent(
-        uint256 _startTime,
-        uint256 _deadlineTime,
-        uint256 _endTime,
-        address _helperAddress,
-        address _creator,
-        uint256[] calldata _odds,
-        string memory _datas,
-        uint256 _pro
-    ) internal returns (uint256 _idx) {
-        _idx = eventData.createSingleEvent(
-            _startTime,
-            _deadlineTime,
-            _endTime,
-            _helperAddress,
-            _odds,
-            _datas,
-            _creator,
-            _pro
-        );
-
-        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, _creator, _odds, _datas, _pro);
-    }
-
     function createSingleEvent(
         uint256 _startTime,
         uint256 _deadlineTime,
@@ -165,21 +115,28 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
      */
     function getRemainingLP(uint256 _eventId, address[] calldata _tokens) public view returns (uint256[] memory) {
         EDataTypes.Event memory _event = eventData.info(_eventId);
-        uint256 _localEventId = _eventId;
         IHelper _helper = IHelper(_event.helperAddress);
         uint256[] memory _results = new uint256[](_tokens.length);
+
         for (uint256 i = 0; i < _tokens.length; ++i) {
             address _token = _tokens[i];
-            uint256 _liquidityPool = liquidityPoolEvent[_eventId][_token];
-            _results[i] = _helper.calculateRemainLP(
-                eventDataAddress,
-                _localEventId,
-                predictStats[_token][_localEventId],
-                predictOptionStats[_token][_localEventId],
-                _event.odds,
-                oneHundredPrecent,
-                _liquidityPool
+            (uint256 _predictStat, uint256[] memory _predictOptionStat, uint256 _liquidityPool) = _getEventStat(
+                _eventId,
+                _token
             );
+            if (_event.endTime + 172800 <= block.timestamp && _event.status != EDataTypes.EventStatus.FINISH) {
+                _results[i] = _liquidityPool;
+            } else {
+                _results[i] = _helper.calculateRemainLP(
+                    eventDataAddress,
+                    _eventId,
+                    _predictStat,
+                    _predictOptionStat,
+                    _event.odds,
+                    oneHundredPrecent,
+                    _liquidityPool
+                );
+            }
         }
         return _results;
     }
@@ -434,18 +391,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
         IHelper _helper = IHelper(_event.helperAddress);
 
-        (_reward) = _helper.calculateReward(
-            eventDataAddress,
-            _eventId,
-            predictStats[_token][_eventId],
-            predictOptionStats[_token][_eventId],
-            predictions[_token][msg.sender][_eventId][_predictNum],
-            _event.odds[_index],
-            oneHundredPrecent,
-            _index,
-            _liquidityPool,
-            true
-        );
+        _reward = estimateReward(_eventId, msg.sender, _token, _predictNum, true);
 
         if (_reward > 0) {
             transferMoney(_token, msg.sender, _reward);
@@ -462,66 +408,29 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256 _eventId,
         address _user,
         address _token,
-        uint256 _predictNum
+        uint256 _predictNum,
+        bool _validate
     ) public view returns (uint256) {
-        uint256 _localEventId = _eventId;
-        address _localToken = _token;
-        uint256 _localPredictNum = _predictNum;
-        address _localUser = _user;
-        EDataTypes.Event memory _event = eventData.info(_localEventId);
+        (
+            uint256 _predictStat,
+            uint256[] memory _predictOptionStat,
+            EDataTypes.Prediction memory _prediction,
+            uint256 _liquidityPool,
+            bool _val
+        ) = _getStat(_eventId, _user, _token, _predictNum, _validate);
 
-        uint256 _index = predictions[_localToken][_localUser][_localEventId][_localPredictNum].predictOptions;
-        uint256 _liquidityPool = liquidityPoolEvent[_localEventId][_localToken];
-
+        EDataTypes.Event memory _event = eventData.info(_eventId);
         IHelper _helper = IHelper(_event.helperAddress);
-
         return
             _helper.calculateReward(
                 eventDataAddress,
-                _localEventId,
-                predictStats[_localToken][_localEventId],
-                predictOptionStats[_localToken][_localEventId],
-                predictions[_localToken][_localUser][_localEventId][_localPredictNum],
-                _event.odds[_index],
+                _eventId,
+                _predictStat,
+                _predictOptionStat,
+                _prediction,
                 oneHundredPrecent,
-                _index,
                 _liquidityPool,
-                false
-            );
-    }
-
-    /**
-     * @dev Estimate reward Sponsor
-     */
-    function validateEstimateReward(
-        uint256 _eventId,
-        address _user,
-        address _token,
-        uint256 _predictNum
-    ) public view returns (uint256) {
-        uint256 _localEventId = _eventId;
-        address _localToken = _token;
-        uint256 _localPredictNum = _predictNum;
-        address _localUser = _user;
-        EDataTypes.Event memory _event = eventData.info(_localEventId);
-
-        uint256 _index = predictions[_localToken][_localUser][_localEventId][_localPredictNum].predictOptions;
-        uint256 _liquidityPool = liquidityPoolEvent[_localEventId][_localToken];
-
-        IHelper _helper = IHelper(_event.helperAddress);
-
-        return
-            _helper.calculateReward(
-                eventDataAddress,
-                _localEventId,
-                predictStats[_localToken][_localEventId],
-                predictOptionStats[_localToken][_localEventId],
-                predictions[_localToken][_localUser][_localEventId][_localPredictNum],
-                _event.odds[_index],
-                oneHundredPrecent,
-                _index,
-                _liquidityPool,
-                true
+                _val
             );
     }
 
@@ -534,27 +443,25 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         address _token,
         uint256 _predictNum
     ) public view returns (uint256) {
-        uint256 _localEventId = _eventId;
-        address _localToken = _token;
-        uint256 _localPredictNum = _predictNum;
-        address _localUser = _user;
-        EDataTypes.Event memory _event = eventData.info(_localEventId);
+        (
+            uint256 _predictStat,
+            uint256[] memory _predictOptionStat,
+            EDataTypes.Prediction memory _prediction,
+            uint256 _liquidityPool,
+            bool _val
+        ) = _getStat(_eventId, _user, _token, _predictNum, true);
 
-        uint256 _index = predictions[_localToken][_localUser][_localEventId][_localPredictNum].predictOptions;
-        uint256 _liquidityPool = liquidityPoolEvent[_localEventId][_localToken];
-
+        EDataTypes.Event memory _event = eventData.info(_eventId);
         IHelper _helper = IHelper(_event.helperAddress);
 
         return
             _helper.calculateRewardSponsor(
                 eventDataAddress,
-                _localEventId,
-                predictStats[_localToken][_localEventId],
-                predictOptionStats[_localToken][_localEventId],
-                predictions[_localToken][_localUser][_localEventId][_localPredictNum],
-                _event.odds[_index],
+                _eventId,
+                _predictStat,
+                _predictOptionStat,
+                _prediction,
                 oneHundredPrecent,
-                _index,
                 _liquidityPool
             );
     }
@@ -571,6 +478,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             "event-not-finish"
         );
         require(_event.creator == msg.sender, "unauthorized");
+        uint256[] memory _amounts = getRemainingLP(_eventId, _tokens);
 
         for (uint256 i = 0; i < _tokens.length; ++i) {
             address _token = _tokens[i];
@@ -578,15 +486,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             require(claimedLiquidityPool[_eventId][_token] == false, "claimed");
             claimedLiquidityPool[_eventId][_token] = true;
 
-            uint256 _amount = _helper.calculateRemainLP(
-                eventDataAddress,
-                _eventId,
-                predictStats[_token][_eventId],
-                predictOptionStats[_token][_eventId],
-                _event.odds,
-                oneHundredPrecent,
-                _liquidityPool
-            );
+            uint256 _amount = _amounts[i];
             if (_token == address(0)) {
                 payable(msg.sender).transfer(_amount);
             } else {
@@ -680,6 +580,100 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         } else {
             IERC20Upgradeable(payable(_token)).safeTransfer(msg.sender, amount);
         }
+    }
+
+    /* =============== INTERNAL FUNCTION ==================== */
+
+    function _createEvent(
+        uint256 _startTime,
+        uint256 _deadlineTime,
+        uint256 _endTime,
+        address _helperAddress,
+        address _creator,
+        uint256[] calldata _odds,
+        string memory _datas,
+        uint256 _pro
+    ) internal returns (uint256 _idx) {
+        _idx = eventData.createSingleEvent(
+            _startTime,
+            _deadlineTime,
+            _endTime,
+            _helperAddress,
+            _odds,
+            _datas,
+            _creator,
+            _pro
+        );
+
+        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, _creator, _odds, _datas, _pro);
+    }
+
+    function _deposit(
+        uint256 _totalAmount,
+        uint256 _idx,
+        address[] calldata _tokens,
+        uint256[] calldata _amounts,
+        uint256 _len
+    ) internal {
+        for (uint256 i = 0; i < _tokens.length; ++i) {
+            address _token = _tokens[i];
+            uint256 _amount = _amounts[i];
+
+            liquidityPoolEvent[_idx][_token] += _amount;
+            if (_token != address(0)) {
+                IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
+            } else {
+                require(_totalAmount >= _amount, "total-amount-not-same");
+                _totalAmount -= _amount;
+            }
+            if (predictOptionStats[_token][_idx].length == 0) {
+                predictOptionStats[_token][_idx] = new uint256[](_len);
+            }
+
+            emit LPDeposited(_idx, _token, liquidityPoolEvent[_idx][_token]);
+        }
+    }
+
+    function _getEventStat(uint256 _eventId, address _token)
+        internal
+        view
+        returns (
+            uint256 _predictStat,
+            uint256[] memory _predictOptionStat,
+            uint256 _liquidityPool
+        )
+    {
+        return (
+            predictStats[_token][_eventId],
+            predictOptionStats[_token][_eventId],
+            liquidityPoolEvent[_eventId][_token]
+        );
+    }
+
+    function _getStat(
+        uint256 _eventId,
+        address _user,
+        address _token,
+        uint256 _predictNum,
+        bool _validate
+    )
+        internal
+        view
+        returns (
+            uint256 _predictStat,
+            uint256[] memory _predictOptionStat,
+            EDataTypes.Prediction memory _prediction,
+            uint256 _liquidityPool,
+            bool _val
+        )
+    {
+        return (
+            predictStats[_token][_eventId],
+            predictOptionStats[_token][_eventId],
+            predictions[_token][_user][_eventId][_predictNum],
+            liquidityPoolEvent[_eventId][_token],
+            _validate
+        );
     }
 
     event EventCreated(

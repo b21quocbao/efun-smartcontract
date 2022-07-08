@@ -48,14 +48,13 @@ contract HandicapGroupPredict is Initializable {
         uint256 _predictStats,
         uint256[] calldata _predictOptionStats,
         EDataTypes.Prediction calldata _predictions,
-        uint256 _odd,
         uint256 _oneHundredPrecent,
-        uint256 _index,
         uint256 _liquidityPool,
         bool _validate
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-        uint256 _indexOption = _predictions.predictOptions;
+        uint256 _index = _predictions.predictOptions;
+        uint256 _odd = _event.odds[_index];
 
         if (_event.resultIndex == 4 || _event.resultIndex == 3) {
             if (_predictOptionStats[4] == 0) {
@@ -70,26 +69,23 @@ contract HandicapGroupPredict is Initializable {
         }
 
         if (_validate) {
-            require(
-                (_indexOption == 0 && _event.resultIndex != 4) || (_indexOption == 4 && _event.resultIndex != 0),
-                "no-reward"
-            );
+            require((_index == 0 && _event.resultIndex != 4) || (_index == 4 && _event.resultIndex != 0), "no-reward");
         } else {
             return ((_predictStats + _liquidityPool) * _predictions.predictionAmount) / _predictOptionStats[_index];
         }
 
-        if ((_indexOption == 0 && _event.resultIndex == 0) || (_indexOption == 4 && _event.resultIndex == 4)) {
+        if ((_index == 0 && _event.resultIndex == 0) || (_index == 4 && _event.resultIndex == 4)) {
             _reward = ((_predictStats + _liquidityPool) * _predictions.predictionAmount) / _predictOptionStats[_index];
         }
-        if ((_indexOption == 0 && _event.resultIndex == 1) || (_indexOption == 4 && _event.resultIndex == 3)) {
+        if ((_index == 0 && _event.resultIndex == 1) || (_index == 4 && _event.resultIndex == 3)) {
             _reward =
                 (((_predictOptionStats[_index] + _predictStats) / 2 + _liquidityPool) * _predictions.predictionAmount) /
                 _predictOptionStats[_index];
         }
-        if ((_indexOption == 0 && _event.resultIndex == 2) || (_indexOption == 4 && _event.resultIndex == 2)) {
+        if ((_index == 0 && _event.resultIndex == 2) || (_index == 4 && _event.resultIndex == 2)) {
             _reward = _predictions.predictionAmount;
         }
-        if ((_indexOption == 0 && _event.resultIndex == 3) || (_indexOption == 4 && _event.resultIndex == 1)) {
+        if ((_index == 0 && _event.resultIndex == 3) || (_index == 4 && _event.resultIndex == 1)) {
             _reward = _predictions.predictionAmount / 2;
         }
     }
@@ -103,12 +99,12 @@ contract HandicapGroupPredict is Initializable {
         uint256 _predictStats,
         uint256[] calldata _predictOptionStats,
         EDataTypes.Prediction calldata _predictions,
-        uint256 _odd,
         uint256 _oneHundredPrecent,
-        uint256 _index,
         uint256 _liquidityPool
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
+        uint256 _index = _predictions.predictOptions;
+        uint256 _odd = _event.odds[_index];
 
         _reward = (_liquidityPool * _predictions.predictionAmount) / _predictOptionStats[_index];
     }
@@ -162,12 +158,11 @@ contract HandicapGroupPredict is Initializable {
         uint256 _liquidityPool
     ) public view returns (uint256 _remainLP) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-        bool cont0 = (_event.endTime + 172800 <= block.timestamp && _event.status != EDataTypes.EventStatus.FINISH);
         bool cont1 = (_event.resultIndex == 0 || _event.resultIndex == 1) && _predictOptionStats[0] == 0;
         bool cont2 = (_event.resultIndex == 4 || _event.resultIndex == 3) && _predictOptionStats[4] == 0;
         bool cont3 = _event.resultIndex == 2;
 
-        if (cont1 || cont2 || cont3 || cont0) {
+        if (cont1 || cont2 || cont3) {
             _remainLP = _liquidityPool;
         } else {
             _remainLP = 0;

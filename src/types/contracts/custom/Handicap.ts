@@ -42,7 +42,7 @@ export interface HandicapInterface extends utils.Interface {
   functions: {
     "calculatePotentialReward(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
     "calculateRemainLP(address,uint256,uint256,uint256[],uint256[],uint256,uint256)": FunctionFragment;
-    "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256,uint256,bool)": FunctionFragment;
+    "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,bool)": FunctionFragment;
     "maxPayout(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256)": FunctionFragment;
     "validatePrediction(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
@@ -90,8 +90,6 @@ export interface HandicapInterface extends utils.Interface {
       BigNumberish,
       BigNumberish[],
       EDataTypes.PredictionStruct,
-      BigNumberish,
-      BigNumberish,
       BigNumberish,
       BigNumberish,
       boolean
@@ -214,9 +212,7 @@ export interface Handicap extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
-      _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
-      _index: BigNumberish,
       _liquidityPool: BigNumberish,
       _validate: boolean,
       overrides?: CallOverrides
@@ -278,9 +274,7 @@ export interface Handicap extends BaseContract {
     _predictStats: BigNumberish,
     _predictOptionStats: BigNumberish[],
     _predictions: EDataTypes.PredictionStruct,
-    _odd: BigNumberish,
     _oneHundredPrecent: BigNumberish,
-    _index: BigNumberish,
     _liquidityPool: BigNumberish,
     _validate: boolean,
     overrides?: CallOverrides
@@ -342,9 +336,7 @@ export interface Handicap extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
-      _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
-      _index: BigNumberish,
       _liquidityPool: BigNumberish,
       _validate: boolean,
       overrides?: CallOverrides
@@ -412,9 +404,7 @@ export interface Handicap extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
-      _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
-      _index: BigNumberish,
       _liquidityPool: BigNumberish,
       _validate: boolean,
       overrides?: CallOverrides
@@ -477,9 +467,7 @@ export interface Handicap extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
-      _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
-      _index: BigNumberish,
       _liquidityPool: BigNumberish,
       _validate: boolean,
       overrides?: CallOverrides

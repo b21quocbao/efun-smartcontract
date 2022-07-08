@@ -19,6 +19,8 @@ library EDataTypes {
         uint256[] odds;
         string _datas;
         uint256 pro;
+        bool isBlock;
+        uint256 finalTime;
     }
 
     struct Prediction {

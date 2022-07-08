@@ -36,9 +36,7 @@ interface IHelper {
         uint256 _predictStats,
         uint256[] calldata _predictOptionStats,
         EDataTypes.Prediction calldata _predictions,
-        uint256 _odd,
         uint256 _oneHundredPrecent,
-        uint256 _index,
         uint256 _liquidityPool,
         bool _validate
     ) external view returns (uint256 _reward);
@@ -49,9 +47,7 @@ interface IHelper {
         uint256 _predictStats,
         uint256[] calldata _predictOptionStats,
         EDataTypes.Prediction calldata _predictions,
-        uint256 _odd,
         uint256 _oneHundredPrecent,
-        uint256 _index,
         uint256 _liquidityPool
     ) external view returns (uint256 _reward);
 

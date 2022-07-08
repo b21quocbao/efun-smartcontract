@@ -42,8 +42,8 @@ export interface HandicapGroupPredictInterface extends utils.Interface {
   functions: {
     "calculatePotentialReward(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
     "calculateRemainLP(address,uint256,uint256,uint256[],uint256[],uint256,uint256)": FunctionFragment;
-    "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256,uint256,bool)": FunctionFragment;
-    "calculateRewardSponsor(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,uint256,uint256)": FunctionFragment;
+    "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,bool)": FunctionFragment;
+    "calculateRewardSponsor(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256)": FunctionFragment;
     "calculateSponsor(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
     "maxPayout(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256)": FunctionFragment;
     "validatePrediction(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
@@ -96,8 +96,6 @@ export interface HandicapGroupPredictInterface extends utils.Interface {
       EDataTypes.PredictionStruct,
       BigNumberish,
       BigNumberish,
-      BigNumberish,
-      BigNumberish,
       boolean
     ]
   ): string;
@@ -109,8 +107,6 @@ export interface HandicapGroupPredictInterface extends utils.Interface {
       BigNumberish,
       BigNumberish[],
       EDataTypes.PredictionStruct,
-      BigNumberish,
-      BigNumberish,
       BigNumberish,
       BigNumberish
     ]
@@ -254,9 +250,7 @@ export interface HandicapGroupPredict extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
-      _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
-      _index: BigNumberish,
       _liquidityPool: BigNumberish,
       _validate: boolean,
       overrides?: CallOverrides
@@ -268,9 +262,7 @@ export interface HandicapGroupPredict extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
-      _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
-      _index: BigNumberish,
       _liquidityPool: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { _reward: BigNumber }>;
@@ -344,9 +336,7 @@ export interface HandicapGroupPredict extends BaseContract {
     _predictStats: BigNumberish,
     _predictOptionStats: BigNumberish[],
     _predictions: EDataTypes.PredictionStruct,
-    _odd: BigNumberish,
     _oneHundredPrecent: BigNumberish,
-    _index: BigNumberish,
     _liquidityPool: BigNumberish,
     _validate: boolean,
     overrides?: CallOverrides
@@ -358,9 +348,7 @@ export interface HandicapGroupPredict extends BaseContract {
     _predictStats: BigNumberish,
     _predictOptionStats: BigNumberish[],
     _predictions: EDataTypes.PredictionStruct,
-    _odd: BigNumberish,
     _oneHundredPrecent: BigNumberish,
-    _index: BigNumberish,
     _liquidityPool: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
@@ -434,9 +422,7 @@ export interface HandicapGroupPredict extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
-      _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
-      _index: BigNumberish,
       _liquidityPool: BigNumberish,
       _validate: boolean,
       overrides?: CallOverrides
@@ -448,9 +434,7 @@ export interface HandicapGroupPredict extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
-      _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
-      _index: BigNumberish,
       _liquidityPool: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -530,9 +514,7 @@ export interface HandicapGroupPredict extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
-      _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
-      _index: BigNumberish,
       _liquidityPool: BigNumberish,
       _validate: boolean,
       overrides?: CallOverrides
@@ -544,9 +526,7 @@ export interface HandicapGroupPredict extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
-      _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
-      _index: BigNumberish,
       _liquidityPool: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -621,9 +601,7 @@ export interface HandicapGroupPredict extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
-      _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
-      _index: BigNumberish,
       _liquidityPool: BigNumberish,
       _validate: boolean,
       overrides?: CallOverrides
@@ -635,9 +613,7 @@ export interface HandicapGroupPredict extends BaseContract {
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictions: EDataTypes.PredictionStruct,
-      _odd: BigNumberish,
       _oneHundredPrecent: BigNumberish,
-      _index: BigNumberish,
       _liquidityPool: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

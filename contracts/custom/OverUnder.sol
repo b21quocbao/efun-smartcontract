@@ -70,13 +70,13 @@ contract OverUnder is Initializable {
         uint256 _predictStats,
         uint256[] calldata _predictOptionStats,
         EDataTypes.Prediction calldata _predictions,
-        uint256 _odd,
         uint256 _oneHundredPrecent,
-        uint256 _index,
         uint256 _liquidityPool,
         bool _validate
     ) public view returns (uint256 _reward) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
+        uint256 _index = _predictions.predictOptions;
+        uint256 _odd = _event.odds[_index];
 
         bool validate1 = _predictions.predictOptions % 2 == 0 && _predictions.predictOptions >= _event.resultIndex;
         bool validate2 = _predictions.predictOptions % 2 == 1 && _predictions.predictOptions <= _event.resultIndex;
@@ -120,11 +120,7 @@ contract OverUnder is Initializable {
         uint256 _liquidityPool
     ) public view returns (uint256 _remainLP) {
         EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
-        bool cont0 = (_event.endTime + 172800 <= block.timestamp && _event.status != EDataTypes.EventStatus.FINISH);
         _remainLP = _liquidityPool;
-        if (cont0) {
-            return _remainLP;
-        }
 
         for (uint256 idx = 0; idx < _predictOptionStats.length; ++idx) {
             bool validate1 = idx % 2 == 0 && idx >= _event.resultIndex;

@@ -38,6 +38,8 @@ export declare namespace EDataTypes {
     odds: BigNumberish[];
     _datas: string;
     pro: BigNumberish;
+    isBlock: boolean;
+    finalTime: BigNumberish;
   };
 
   export type EventStructOutput = [
@@ -50,6 +52,8 @@ export declare namespace EDataTypes {
     string,
     BigNumber[],
     string,
+    BigNumber,
+    boolean,
     BigNumber
   ] & {
     startTime: BigNumber;
@@ -62,11 +66,14 @@ export declare namespace EDataTypes {
     odds: BigNumber[];
     _datas: string;
     pro: BigNumber;
+    isBlock: boolean;
+    finalTime: BigNumber;
   };
 }
 
 export interface EventInterface extends utils.Interface {
   functions: {
+    "blockEvent(uint256)": FunctionFragment;
     "checkUpkeep(bytes)": FunctionFragment;
     "createSingleEvent(uint256,uint256,uint256,address,uint256[],string,address,uint256)": FunctionFragment;
     "events(uint256)": FunctionFragment;
@@ -80,12 +87,14 @@ export interface EventInterface extends utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "setOracle(address,address,bytes32)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "unblockEvent(uint256)": FunctionFragment;
     "updateEventResult(uint256,uint256)": FunctionFragment;
     "withdrawLink()": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "blockEvent"
       | "checkUpkeep"
       | "createSingleEvent"
       | "events"
@@ -99,10 +108,15 @@ export interface EventInterface extends utils.Interface {
       | "renounceOwnership"
       | "setOracle"
       | "transferOwnership"
+      | "unblockEvent"
       | "updateEventResult"
       | "withdrawLink"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "blockEvent",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "checkUpkeep",
     values: [BytesLike]
@@ -153,6 +167,10 @@ export interface EventInterface extends utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
+    functionFragment: "unblockEvent",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "updateEventResult",
     values: [BigNumberish, BigNumberish]
   ): string;
@@ -161,6 +179,7 @@ export interface EventInterface extends utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "blockEvent", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "checkUpkeep",
     data: BytesLike
@@ -190,6 +209,10 @@ export interface EventInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "unblockEvent",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "updateEventResult",
     data: BytesLike
   ): Result;
@@ -203,7 +226,7 @@ export interface EventInterface extends utils.Interface {
     "ChainlinkFulfilled(bytes32)": EventFragment;
     "ChainlinkRequested(bytes32)": EventFragment;
     "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256)": EventFragment;
-    "EventResultUpdated(address,uint256,uint256)": EventFragment;
+    "EventResultUpdated(address,uint256,uint256,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
@@ -282,9 +305,10 @@ export interface EventResultUpdatedEventObject {
   caller: string;
   eventId: BigNumber;
   index: BigNumber;
+  finalTime: BigNumber;
 }
 export type EventResultUpdatedEvent = TypedEvent<
-  [string, BigNumber, BigNumber],
+  [string, BigNumber, BigNumber, BigNumber],
   EventResultUpdatedEventObject
 >;
 
@@ -337,6 +361,11 @@ export interface Event extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    blockEvent(
+      _eventId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     checkUpkeep(
       arg0: BytesLike,
       overrides?: CallOverrides
@@ -369,6 +398,8 @@ export interface Event extends BaseContract {
         string,
         string,
         string,
+        BigNumber,
+        boolean,
         BigNumber
       ] & {
         startTime: BigNumber;
@@ -380,6 +411,8 @@ export interface Event extends BaseContract {
         creator: string;
         _datas: string;
         pro: BigNumber;
+        isBlock: boolean;
+        finalTime: BigNumber;
       }
     >;
 
@@ -427,6 +460,11 @@ export interface Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    unblockEvent(
+      _eventId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     updateEventResult(
       _eventId: BigNumberish,
       _index: BigNumberish,
@@ -437,6 +475,11 @@ export interface Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  blockEvent(
+    _eventId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   checkUpkeep(
     arg0: BytesLike,
@@ -470,6 +513,8 @@ export interface Event extends BaseContract {
       string,
       string,
       string,
+      BigNumber,
+      boolean,
       BigNumber
     ] & {
       startTime: BigNumber;
@@ -481,6 +526,8 @@ export interface Event extends BaseContract {
       creator: string;
       _datas: string;
       pro: BigNumber;
+      isBlock: boolean;
+      finalTime: BigNumber;
     }
   >;
 
@@ -526,6 +573,11 @@ export interface Event extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  unblockEvent(
+    _eventId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   updateEventResult(
     _eventId: BigNumberish,
     _index: BigNumberish,
@@ -537,6 +589,11 @@ export interface Event extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    blockEvent(
+      _eventId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     checkUpkeep(
       arg0: BytesLike,
       overrides?: CallOverrides
@@ -569,6 +626,8 @@ export interface Event extends BaseContract {
         string,
         string,
         string,
+        BigNumber,
+        boolean,
         BigNumber
       ] & {
         startTime: BigNumber;
@@ -580,6 +639,8 @@ export interface Event extends BaseContract {
         creator: string;
         _datas: string;
         pro: BigNumber;
+        isBlock: boolean;
+        finalTime: BigNumber;
       }
     >;
 
@@ -618,6 +679,11 @@ export interface Event extends BaseContract {
 
     transferOwnership(
       newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    unblockEvent(
+      _eventId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -669,15 +735,17 @@ export interface Event extends BaseContract {
       pro?: null
     ): EventCreatedEventFilter;
 
-    "EventResultUpdated(address,uint256,uint256)"(
+    "EventResultUpdated(address,uint256,uint256,uint256)"(
       caller?: null,
       eventId?: null,
-      index?: null
+      index?: null,
+      finalTime?: null
     ): EventResultUpdatedEventFilter;
     EventResultUpdated(
       caller?: null,
       eventId?: null,
-      index?: null
+      index?: null,
+      finalTime?: null
     ): EventResultUpdatedEventFilter;
 
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
@@ -694,6 +762,11 @@ export interface Event extends BaseContract {
   };
 
   estimateGas: {
+    blockEvent(
+      _eventId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     checkUpkeep(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     createSingleEvent(
@@ -749,6 +822,11 @@ export interface Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    unblockEvent(
+      _eventId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     updateEventResult(
       _eventId: BigNumberish,
       _index: BigNumberish,
@@ -761,6 +839,11 @@ export interface Event extends BaseContract {
   };
 
   populateTransaction: {
+    blockEvent(
+      _eventId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     checkUpkeep(
       arg0: BytesLike,
       overrides?: CallOverrides
@@ -822,6 +905,11 @@ export interface Event extends BaseContract {
 
     transferOwnership(
       newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    unblockEvent(
+      _eventId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
