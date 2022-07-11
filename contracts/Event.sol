@@ -121,7 +121,9 @@ contract Event is
                 events[i].status == EDataTypes.EventStatus.AVAILABLE
             ) {
                 upkeepNeeded = true;
-                performString = string(bytes.concat(bytes(performString), bytes(Strings.toString(i)), " "));
+                performString = string(
+                    bytes.concat(bytes(performString), "eventIds=", bytes(Strings.toString(i)), "&")
+                );
             }
         }
         performData = bytes(performString);
@@ -152,7 +154,11 @@ contract Event is
                     eventId = i;
                     pos = true;
                 } else {
+                    events[eventId].finalTime = block.timestamp;
                     events[eventId].resultIndex = number;
+                    events[eventId].status = EDataTypes.EventStatus.FINISH;
+
+                    emit EventResultUpdated(msg.sender, eventId, number, events[eventId].finalTime);
                     pos = false;
                 }
                 number = 0;
