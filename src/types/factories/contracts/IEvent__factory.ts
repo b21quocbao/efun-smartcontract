@@ -133,6 +133,11 @@ const _abi = [
             name: "finalTime",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "claimTime",
+            type: "uint256",
+          },
         ],
         internalType: "struct EDataTypes.Event",
         name: "_event",

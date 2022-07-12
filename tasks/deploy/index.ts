@@ -5,5 +5,6 @@ import "./group-predict";
 import "./handicap";
 import "./handicap-group-predict";
 import "./multiple-choices";
+import "./operator";
 import "./over-under";
 import "./verify";

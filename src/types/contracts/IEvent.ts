@@ -36,6 +36,7 @@ export declare namespace EDataTypes {
     pro: BigNumberish;
     isBlock: boolean;
     finalTime: BigNumberish;
+    claimTime: BigNumberish;
   };
 
   export type EventStructOutput = [
@@ -50,6 +51,7 @@ export declare namespace EDataTypes {
     string,
     BigNumber,
     boolean,
+    BigNumber,
     BigNumber
   ] & {
     startTime: BigNumber;
@@ -64,6 +66,7 @@ export declare namespace EDataTypes {
     pro: BigNumber;
     isBlock: boolean;
     finalTime: BigNumber;
+    claimTime: BigNumber;
   };
 }
 

@@ -21,6 +21,7 @@ library EDataTypes {
         uint256 pro;
         bool isBlock;
         uint256 finalTime;
+        uint256 claimTime;
     }
 
     struct Prediction {

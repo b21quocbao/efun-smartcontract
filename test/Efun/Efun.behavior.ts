@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import web3 from "web3";
 
-import { duration, increase } from "../utils/time";
+import { currentBlockTime, duration, increase } from "../utils/time";
 
 const { toWei, fromWei } = web3.utils;
 
@@ -585,5 +585,38 @@ export function shouldBehaveLikeEvent(): void {
     console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
     console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
     console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
+  });
+
+  it("pro event", async function () {
+    const timestamp = await currentBlockTime();
+    await this.event
+      .connect(this.signers.admin)
+      .createSingleEvent(
+        timestamp,
+        timestamp + 7 * 24 * 3600,
+        timestamp + 10 * 24 * 3600,
+        "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+        [10000, 10000],
+        "",
+        this.signers.user1.address,
+        1,
+      );
+    await this.event
+      .connect(this.signers.admin)
+      .createSingleEvent(
+        timestamp,
+        timestamp + 7 * 24 * 3600,
+        timestamp + 10 * 24 * 3600,
+        "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+        [10000, 10000],
+        "",
+        this.signers.user1.address,
+        2,
+      );
+    await increase(duration.days(10));
+    const { performData } = await this.event.checkUpkeep("0x");
+    console.log(performData, "Line #618 Efun.behavior.ts");
+
+    console.log(Buffer.from(performData.substring(2), "hex").toString(), "xocvu");
   });
 }

@@ -57,10 +57,11 @@ contract Event is
         require(_event.status != EDataTypes.EventStatus.FINISH, "event already finish");
 
         _event.finalTime = block.timestamp;
+        _event.claimTime = block.timestamp + 86400;
         _event.resultIndex = _index;
         _event.status = EDataTypes.EventStatus.FINISH;
 
-        emit EventResultUpdated(msg.sender, _eventId, _index, _event.finalTime);
+        emit EventResultUpdated(msg.sender, _eventId, _index, _event.finalTime, _event.claimTime);
     }
 
     /* ========== PUBLIC FUNCTIONS ========== */
@@ -95,6 +96,7 @@ contract Event is
             _datas,
             _pro,
             false,
+            0,
             0
         );
         emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, _creator, _odds, _datas, _pro);
@@ -121,9 +123,7 @@ contract Event is
                 events[i].status == EDataTypes.EventStatus.AVAILABLE
             ) {
                 upkeepNeeded = true;
-                performString = string(
-                    bytes.concat(bytes(performString), "eventIds=", bytes(Strings.toString(i)), "&")
-                );
+                performString = string(bytes.concat(bytes(performString), bytes(Strings.toString(i)), ","));
             }
         }
         performData = bytes(performString);
@@ -155,10 +155,21 @@ contract Event is
                     pos = true;
                 } else {
                     events[eventId].finalTime = block.timestamp;
-                    events[eventId].resultIndex = number;
+                    events[eventId].claimTime = block.timestamp;
+                    if (number == 0) {
+                        events[eventId].isBlock = true;
+                    } else {
+                        events[eventId].resultIndex = number - 1;
+                    }
                     events[eventId].status = EDataTypes.EventStatus.FINISH;
 
-                    emit EventResultUpdated(msg.sender, eventId, number, events[eventId].finalTime);
+                    emit EventResultUpdated(
+                        msg.sender,
+                        eventId,
+                        number,
+                        events[eventId].finalTime,
+                        events[eventId].claimTime
+                    );
                     pos = false;
                 }
                 number = 0;
@@ -179,7 +190,7 @@ contract Event is
      */
     function blockEvent(uint256 _eventId) public {
         require(events[_eventId].finalTime <= block.timestamp, "final_time <= timestamp");
-        require(events[_eventId].finalTime + 86400 >= block.timestamp, "final_time + 1 days >= timestamp");
+        require(events[_eventId].claimTime >= block.timestamp, "claim_time >= timestamp");
         events[_eventId].isBlock = true;
     }
 
@@ -188,13 +199,13 @@ contract Event is
      */
     function unblockEvent(uint256 _eventId) public {
         require(events[_eventId].finalTime <= block.timestamp, "final_time <= timestamp");
-        require(events[_eventId].finalTime + 86400 >= block.timestamp, "final_time + 1 days >= timestamp");
+        require(events[_eventId].claimTime >= block.timestamp, "claim_time >= timestamp");
         events[_eventId].isBlock = false;
     }
 
     /* =============== EVENTS ==================== */
 
-    event EventResultUpdated(address caller, uint256 eventId, uint256 index, uint256 finalTime);
+    event EventResultUpdated(address caller, uint256 eventId, uint256 index, uint256 finalTime, uint256 claimTime);
     event EventCreated(
         uint256 idx,
         uint256 startTime,

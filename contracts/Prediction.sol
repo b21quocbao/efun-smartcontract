@@ -386,7 +386,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
         require(_event.status == EDataTypes.EventStatus.FINISH, "event-not-finish");
         require(predictions[_token][msg.sender][_eventId][_predictNum].claimed == false, "claimed");
-        require(_event.finalTime + 86400 < block.timestamp, "final_time + 1 day < timestamp");
+        require(_event.claimTime < block.timestamp, "claim_time < timestamp");
         require(!_event.isBlock, "event blocked");
 
         uint256 _index = predictions[_token][msg.sender][_eventId][_predictNum].predictOptions;
@@ -478,7 +478,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         IHelper _helper = IHelper(_event.helperAddress);
 
         require(
-            (_event.status == EDataTypes.EventStatus.FINISH && _event.finalTime + 86400 < block.timestamp) ||
+            (_event.status == EDataTypes.EventStatus.FINISH && _event.claimTime < block.timestamp) ||
                 (_event.status != EDataTypes.EventStatus.FINISH && _event.endTime + 172800 < block.timestamp),
             "event-not-finish"
         );
@@ -570,9 +570,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         EDataTypes.Event memory _event = eventData.info(_eventId);
 
         require(
-            (_event.status == EDataTypes.EventStatus.FINISH &&
-                _event.finalTime + 86400 < block.timestamp &&
-                _event.isBlock) ||
+            (_event.status == EDataTypes.EventStatus.FINISH && _event.claimTime < block.timestamp && _event.isBlock) ||
                 (_event.status != EDataTypes.EventStatus.FINISH && _event.endTime + 172800 < block.timestamp),
             "event-not-finish"
         );

@@ -40,6 +40,7 @@ export declare namespace EDataTypes {
     pro: BigNumberish;
     isBlock: boolean;
     finalTime: BigNumberish;
+    claimTime: BigNumberish;
   };
 
   export type EventStructOutput = [
@@ -54,6 +55,7 @@ export declare namespace EDataTypes {
     string,
     BigNumber,
     boolean,
+    BigNumber,
     BigNumber
   ] & {
     startTime: BigNumber;
@@ -68,6 +70,7 @@ export declare namespace EDataTypes {
     pro: BigNumber;
     isBlock: boolean;
     finalTime: BigNumber;
+    claimTime: BigNumber;
   };
 }
 
@@ -226,7 +229,7 @@ export interface EventInterface extends utils.Interface {
     "ChainlinkFulfilled(bytes32)": EventFragment;
     "ChainlinkRequested(bytes32)": EventFragment;
     "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256)": EventFragment;
-    "EventResultUpdated(address,uint256,uint256,uint256)": EventFragment;
+    "EventResultUpdated(address,uint256,uint256,uint256,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
@@ -306,9 +309,10 @@ export interface EventResultUpdatedEventObject {
   eventId: BigNumber;
   index: BigNumber;
   finalTime: BigNumber;
+  claimTime: BigNumber;
 }
 export type EventResultUpdatedEvent = TypedEvent<
-  [string, BigNumber, BigNumber, BigNumber],
+  [string, BigNumber, BigNumber, BigNumber, BigNumber],
   EventResultUpdatedEventObject
 >;
 
@@ -400,6 +404,7 @@ export interface Event extends BaseContract {
         string,
         BigNumber,
         boolean,
+        BigNumber,
         BigNumber
       ] & {
         startTime: BigNumber;
@@ -413,6 +418,7 @@ export interface Event extends BaseContract {
         pro: BigNumber;
         isBlock: boolean;
         finalTime: BigNumber;
+        claimTime: BigNumber;
       }
     >;
 
@@ -515,6 +521,7 @@ export interface Event extends BaseContract {
       string,
       BigNumber,
       boolean,
+      BigNumber,
       BigNumber
     ] & {
       startTime: BigNumber;
@@ -528,6 +535,7 @@ export interface Event extends BaseContract {
       pro: BigNumber;
       isBlock: boolean;
       finalTime: BigNumber;
+      claimTime: BigNumber;
     }
   >;
 
@@ -628,6 +636,7 @@ export interface Event extends BaseContract {
         string,
         BigNumber,
         boolean,
+        BigNumber,
         BigNumber
       ] & {
         startTime: BigNumber;
@@ -641,6 +650,7 @@ export interface Event extends BaseContract {
         pro: BigNumber;
         isBlock: boolean;
         finalTime: BigNumber;
+        claimTime: BigNumber;
       }
     >;
 
@@ -735,17 +745,19 @@ export interface Event extends BaseContract {
       pro?: null
     ): EventCreatedEventFilter;
 
-    "EventResultUpdated(address,uint256,uint256,uint256)"(
+    "EventResultUpdated(address,uint256,uint256,uint256,uint256)"(
       caller?: null,
       eventId?: null,
       index?: null,
-      finalTime?: null
+      finalTime?: null,
+      claimTime?: null
     ): EventResultUpdatedEventFilter;
     EventResultUpdated(
       caller?: null,
       eventId?: null,
       index?: null,
-      finalTime?: null
+      finalTime?: null,
+      claimTime?: null
     ): EventResultUpdatedEventFilter;
 
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
