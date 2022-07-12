@@ -10,19 +10,9 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "_startTime",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_deadlineTime",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_endTime",
-        type: "uint256",
+        internalType: "uint256[3]",
+        name: "_times",
+        type: "uint256[3]",
       },
       {
         internalType: "address",
@@ -48,6 +38,11 @@ const _abi = [
         internalType: "uint256",
         name: "_pro",
         type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "_affiliate",
+        type: "bool",
       },
     ],
     name: "createSingleEvent",
@@ -137,6 +132,11 @@ const _abi = [
             internalType: "uint256",
             name: "claimTime",
             type: "uint256",
+          },
+          {
+            internalType: "bool",
+            name: "affiliate",
+            type: "bool",
           },
         ],
         internalType: "struct EDataTypes.Event",

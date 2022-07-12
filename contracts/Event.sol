@@ -71,23 +71,22 @@ contract Event is
     }
 
     function createSingleEvent(
-        uint256 _startTime,
-        uint256 _deadlineTime,
-        uint256 _endTime,
+        uint256[3] memory _times,
         address _helperAddress,
         uint256[] calldata _odds,
         string memory _datas,
         address _creator,
-        uint256 _pro
+        uint256 _pro,
+        bool _affiliate
     ) external returns (uint256 _idx) {
-        require(_startTime < _deadlineTime, "deadline_time > start_time");
-        require(_deadlineTime < _endTime, "end_time > deadline_time");
+        require(_times[0] < _times[1], "deadline_time > start_time");
+        require(_times[1] < _times[2], "end_time > deadline_time");
         _idx = nEvents;
 
         events[_idx] = EDataTypes.Event(
-            _startTime,
-            _deadlineTime,
-            _endTime,
+            _times[0],
+            _times[1],
+            _times[2],
             0,
             EDataTypes.EventStatus.AVAILABLE,
             _helperAddress,
@@ -97,9 +96,9 @@ contract Event is
             _pro,
             false,
             0,
-            0
+            0,
+            _affiliate
         );
-        emit EventCreated(_idx, _startTime, _deadlineTime, _endTime, _helperAddress, _creator, _odds, _datas, _pro);
         nEvents++;
     }
 
@@ -206,15 +205,4 @@ contract Event is
     /* =============== EVENTS ==================== */
 
     event EventResultUpdated(address caller, uint256 eventId, uint256 index, uint256 finalTime, uint256 claimTime);
-    event EventCreated(
-        uint256 idx,
-        uint256 startTime,
-        uint256 deadlineTime,
-        uint256 endTime,
-        address helperAddress,
-        address creator,
-        uint256[] odds,
-        string datas,
-        uint256 pro
-    );
 }

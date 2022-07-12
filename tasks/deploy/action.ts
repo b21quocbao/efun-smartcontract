@@ -16,15 +16,14 @@ task("create:Event").setAction(async function (_taskArgs, hre) {
   const { timestamp } = await ethers.provider.getBlock("latest");
 
   const tx = await prediction.createSingleEvent(
-    timestamp + 60,
-    timestamp + 7 * 24 * 3600,
-    timestamp + 10 * 24 * 3600,
+    [timestamp + 60, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600],
     "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
     [10000, 10000],
     "",
     ["0x0000000000000000000000000000000000000000"],
     [toWei("0.0001")],
     0,
+    false,
     {
       value: toWei("0.0001"),
     },

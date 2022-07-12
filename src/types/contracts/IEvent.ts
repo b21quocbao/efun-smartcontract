@@ -37,6 +37,7 @@ export declare namespace EDataTypes {
     isBlock: boolean;
     finalTime: BigNumberish;
     claimTime: BigNumberish;
+    affiliate: boolean;
   };
 
   export type EventStructOutput = [
@@ -52,7 +53,8 @@ export declare namespace EDataTypes {
     BigNumber,
     boolean,
     BigNumber,
-    BigNumber
+    BigNumber,
+    boolean
   ] & {
     startTime: BigNumber;
     deadlineTime: BigNumber;
@@ -67,12 +69,13 @@ export declare namespace EDataTypes {
     isBlock: boolean;
     finalTime: BigNumber;
     claimTime: BigNumber;
+    affiliate: boolean;
   };
 }
 
 export interface IEventInterface extends utils.Interface {
   functions: {
-    "createSingleEvent(uint256,uint256,uint256,address,uint256[],string,address,uint256)": FunctionFragment;
+    "createSingleEvent(uint256[3],address,uint256[],string,address,uint256,bool)": FunctionFragment;
     "info(uint256)": FunctionFragment;
   };
 
@@ -83,14 +86,13 @@ export interface IEventInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "createSingleEvent",
     values: [
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
+      [BigNumberish, BigNumberish, BigNumberish],
       string,
       BigNumberish[],
       string,
       string,
-      BigNumberish
+      BigNumberish,
+      boolean
     ]
   ): string;
   encodeFunctionData(functionFragment: "info", values: [BigNumberish]): string;
@@ -132,14 +134,13 @@ export interface IEvent extends BaseContract {
 
   functions: {
     createSingleEvent(
-      _startTime: BigNumberish,
-      _deadlineTime: BigNumberish,
-      _endTime: BigNumberish,
+      _times: [BigNumberish, BigNumberish, BigNumberish],
       _helperAddress: string,
       _odds: BigNumberish[],
       _datas: string,
       _creator: string,
       _pro: BigNumberish,
+      _affiliate: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -152,14 +153,13 @@ export interface IEvent extends BaseContract {
   };
 
   createSingleEvent(
-    _startTime: BigNumberish,
-    _deadlineTime: BigNumberish,
-    _endTime: BigNumberish,
+    _times: [BigNumberish, BigNumberish, BigNumberish],
     _helperAddress: string,
     _odds: BigNumberish[],
     _datas: string,
     _creator: string,
     _pro: BigNumberish,
+    _affiliate: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -170,14 +170,13 @@ export interface IEvent extends BaseContract {
 
   callStatic: {
     createSingleEvent(
-      _startTime: BigNumberish,
-      _deadlineTime: BigNumberish,
-      _endTime: BigNumberish,
+      _times: [BigNumberish, BigNumberish, BigNumberish],
       _helperAddress: string,
       _odds: BigNumberish[],
       _datas: string,
       _creator: string,
       _pro: BigNumberish,
+      _affiliate: boolean,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -191,14 +190,13 @@ export interface IEvent extends BaseContract {
 
   estimateGas: {
     createSingleEvent(
-      _startTime: BigNumberish,
-      _deadlineTime: BigNumberish,
-      _endTime: BigNumberish,
+      _times: [BigNumberish, BigNumberish, BigNumberish],
       _helperAddress: string,
       _odds: BigNumberish[],
       _datas: string,
       _creator: string,
       _pro: BigNumberish,
+      _affiliate: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -207,14 +205,13 @@ export interface IEvent extends BaseContract {
 
   populateTransaction: {
     createSingleEvent(
-      _startTime: BigNumberish,
-      _deadlineTime: BigNumberish,
-      _endTime: BigNumberish,
+      _times: [BigNumberish, BigNumberish, BigNumberish],
       _helperAddress: string,
       _odds: BigNumberish[],
       _datas: string,
       _creator: string,
       _pro: BigNumberish,
+      _affiliate: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -41,6 +41,7 @@ export declare namespace EDataTypes {
     isBlock: boolean;
     finalTime: BigNumberish;
     claimTime: BigNumberish;
+    affiliate: boolean;
   };
 
   export type EventStructOutput = [
@@ -56,7 +57,8 @@ export declare namespace EDataTypes {
     BigNumber,
     boolean,
     BigNumber,
-    BigNumber
+    BigNumber,
+    boolean
   ] & {
     startTime: BigNumber;
     deadlineTime: BigNumber;
@@ -71,6 +73,7 @@ export declare namespace EDataTypes {
     isBlock: boolean;
     finalTime: BigNumber;
     claimTime: BigNumber;
+    affiliate: boolean;
   };
 }
 
@@ -78,7 +81,7 @@ export interface EventInterface extends utils.Interface {
   functions: {
     "blockEvent(uint256)": FunctionFragment;
     "checkUpkeep(bytes)": FunctionFragment;
-    "createSingleEvent(uint256,uint256,uint256,address,uint256[],string,address,uint256)": FunctionFragment;
+    "createSingleEvent(uint256[3],address,uint256[],string,address,uint256,bool)": FunctionFragment;
     "events(uint256)": FunctionFragment;
     "fulfill(bytes32,string)": FunctionFragment;
     "info(uint256)": FunctionFragment;
@@ -127,14 +130,13 @@ export interface EventInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "createSingleEvent",
     values: [
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
+      [BigNumberish, BigNumberish, BigNumberish],
       string,
       BigNumberish[],
       string,
       string,
-      BigNumberish
+      BigNumberish,
+      boolean
     ]
   ): string;
   encodeFunctionData(
@@ -228,7 +230,6 @@ export interface EventInterface extends utils.Interface {
     "ChainlinkCancelled(bytes32)": EventFragment;
     "ChainlinkFulfilled(bytes32)": EventFragment;
     "ChainlinkRequested(bytes32)": EventFragment;
-    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256)": EventFragment;
     "EventResultUpdated(address,uint256,uint256,uint256,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
@@ -237,7 +238,6 @@ export interface EventInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "ChainlinkCancelled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ChainlinkFulfilled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ChainlinkRequested"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "EventCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "EventResultUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
@@ -275,34 +275,6 @@ export type ChainlinkRequestedEvent = TypedEvent<
 
 export type ChainlinkRequestedEventFilter =
   TypedEventFilter<ChainlinkRequestedEvent>;
-
-export interface EventCreatedEventObject {
-  idx: BigNumber;
-  startTime: BigNumber;
-  deadlineTime: BigNumber;
-  endTime: BigNumber;
-  helperAddress: string;
-  creator: string;
-  odds: BigNumber[];
-  datas: string;
-  pro: BigNumber;
-}
-export type EventCreatedEvent = TypedEvent<
-  [
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    string,
-    string,
-    BigNumber[],
-    string,
-    BigNumber
-  ],
-  EventCreatedEventObject
->;
-
-export type EventCreatedEventFilter = TypedEventFilter<EventCreatedEvent>;
 
 export interface EventResultUpdatedEventObject {
   caller: string;
@@ -378,14 +350,13 @@ export interface Event extends BaseContract {
     >;
 
     createSingleEvent(
-      _startTime: BigNumberish,
-      _deadlineTime: BigNumberish,
-      _endTime: BigNumberish,
+      _times: [BigNumberish, BigNumberish, BigNumberish],
       _helperAddress: string,
       _odds: BigNumberish[],
       _datas: string,
       _creator: string,
       _pro: BigNumberish,
+      _affiliate: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -405,7 +376,8 @@ export interface Event extends BaseContract {
         BigNumber,
         boolean,
         BigNumber,
-        BigNumber
+        BigNumber,
+        boolean
       ] & {
         startTime: BigNumber;
         deadlineTime: BigNumber;
@@ -419,6 +391,7 @@ export interface Event extends BaseContract {
         isBlock: boolean;
         finalTime: BigNumber;
         claimTime: BigNumber;
+        affiliate: boolean;
       }
     >;
 
@@ -495,14 +468,13 @@ export interface Event extends BaseContract {
   >;
 
   createSingleEvent(
-    _startTime: BigNumberish,
-    _deadlineTime: BigNumberish,
-    _endTime: BigNumberish,
+    _times: [BigNumberish, BigNumberish, BigNumberish],
     _helperAddress: string,
     _odds: BigNumberish[],
     _datas: string,
     _creator: string,
     _pro: BigNumberish,
+    _affiliate: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -522,7 +494,8 @@ export interface Event extends BaseContract {
       BigNumber,
       boolean,
       BigNumber,
-      BigNumber
+      BigNumber,
+      boolean
     ] & {
       startTime: BigNumber;
       deadlineTime: BigNumber;
@@ -536,6 +509,7 @@ export interface Event extends BaseContract {
       isBlock: boolean;
       finalTime: BigNumber;
       claimTime: BigNumber;
+      affiliate: boolean;
     }
   >;
 
@@ -610,14 +584,13 @@ export interface Event extends BaseContract {
     >;
 
     createSingleEvent(
-      _startTime: BigNumberish,
-      _deadlineTime: BigNumberish,
-      _endTime: BigNumberish,
+      _times: [BigNumberish, BigNumberish, BigNumberish],
       _helperAddress: string,
       _odds: BigNumberish[],
       _datas: string,
       _creator: string,
       _pro: BigNumberish,
+      _affiliate: boolean,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -637,7 +610,8 @@ export interface Event extends BaseContract {
         BigNumber,
         boolean,
         BigNumber,
-        BigNumber
+        BigNumber,
+        boolean
       ] & {
         startTime: BigNumber;
         deadlineTime: BigNumber;
@@ -651,6 +625,7 @@ export interface Event extends BaseContract {
         isBlock: boolean;
         finalTime: BigNumber;
         claimTime: BigNumber;
+        affiliate: boolean;
       }
     >;
 
@@ -722,29 +697,6 @@ export interface Event extends BaseContract {
     ): ChainlinkRequestedEventFilter;
     ChainlinkRequested(id?: BytesLike | null): ChainlinkRequestedEventFilter;
 
-    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256)"(
-      idx?: null,
-      startTime?: null,
-      deadlineTime?: null,
-      endTime?: null,
-      helperAddress?: null,
-      creator?: null,
-      odds?: null,
-      datas?: null,
-      pro?: null
-    ): EventCreatedEventFilter;
-    EventCreated(
-      idx?: null,
-      startTime?: null,
-      deadlineTime?: null,
-      endTime?: null,
-      helperAddress?: null,
-      creator?: null,
-      odds?: null,
-      datas?: null,
-      pro?: null
-    ): EventCreatedEventFilter;
-
     "EventResultUpdated(address,uint256,uint256,uint256,uint256)"(
       caller?: null,
       eventId?: null,
@@ -782,14 +734,13 @@ export interface Event extends BaseContract {
     checkUpkeep(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     createSingleEvent(
-      _startTime: BigNumberish,
-      _deadlineTime: BigNumberish,
-      _endTime: BigNumberish,
+      _times: [BigNumberish, BigNumberish, BigNumberish],
       _helperAddress: string,
       _odds: BigNumberish[],
       _datas: string,
       _creator: string,
       _pro: BigNumberish,
+      _affiliate: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -862,14 +813,13 @@ export interface Event extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     createSingleEvent(
-      _startTime: BigNumberish,
-      _deadlineTime: BigNumberish,
-      _endTime: BigNumberish,
+      _times: [BigNumberish, BigNumberish, BigNumberish],
       _helperAddress: string,
       _odds: BigNumberish[],
       _datas: string,
       _creator: string,
       _pro: BigNumberish,
+      _affiliate: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
