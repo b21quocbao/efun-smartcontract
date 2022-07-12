@@ -139,7 +139,7 @@ contract Event is
     /**
      * Receive the response in the form of string
      */
-    function fulfill(bytes32 _requestId, string memory _data) public recordChainlinkFulfillment(_requestId) {
+    function fulfill(bytes32 _requestId, string memory _data) public {
         bool pos = false;
         uint256 eventId = 0;
         uint256 number = 0;
@@ -151,7 +151,7 @@ contract Event is
                 number = number * 10 + c - 48;
             } else {
                 if (!pos) {
-                    eventId = i;
+                    eventId = number;
                     pos = true;
                 } else {
                     events[eventId].finalTime = block.timestamp;

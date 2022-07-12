@@ -3,8 +3,10 @@ import { artifacts, ethers, waffle } from "hardhat";
 import type { Artifact } from "hardhat/types";
 import web3 from "web3";
 
+import type { Operator } from "../../src/types/@chainlink/contracts/src/v0.7/Operator";
 import type { ERC20Token } from "../../src/types/contracts/Erc20Token.sol/ERC20Token";
-import type { Event } from "../../src/types/contracts/Event";
+import type { Event } from "../../src/types/contracts/Event.sol/Event";
+import type { LinkToken } from "../../src/types/contracts/LinkToken.sol/LinkToken";
 import type { Prediction } from "../../src/types/contracts/Prediction";
 import type { GroupPredict } from "../../src/types/contracts/custom/GroupPredict";
 import type { Handicap } from "../../src/types/contracts/custom/Handicap";
@@ -37,6 +39,8 @@ describe("Unit tests", function () {
       const handicapArtifact: Artifact = await artifacts.readArtifact("Handicap");
       const overUnderArtifact: Artifact = await artifacts.readArtifact("OverUnder");
       const erc20TokenArtifact: Artifact = await artifacts.readArtifact("ERC20Token");
+      const linkTokenArtifact: Artifact = await artifacts.readArtifact("LinkToken");
+      const operatorArtifact: Artifact = await artifacts.readArtifact("Operator");
 
       this.event = <Event>await waffle.deployContract(this.signers.admin, eventArtifact, []);
       this.prediction = <Prediction>await waffle.deployContract(this.signers.admin, predictionArtifact, []);
@@ -52,8 +56,20 @@ describe("Unit tests", function () {
       this.erc20Token = <ERC20Token>(
         await waffle.deployContract(this.signers.admin, erc20TokenArtifact, ["EFUN", "EFUN", toWei("100000")])
       );
+      this.linkToken = <LinkToken>await waffle.deployContract(this.signers.admin, linkTokenArtifact, []);
+      this.operator = <Operator>(
+        await waffle.deployContract(this.signers.admin, operatorArtifact, [
+          this.linkToken.address,
+          this.signers.admin.address,
+        ])
+      );
 
       await this.event.initialize();
+      await this.event.setOracle(
+        this.linkToken.address,
+        this.operator.address,
+        "0xe4c45e0420104e1ca472a14ce6a445af00000000000000000000000000000000",
+      );
       await this.prediction.initialize(100, 10000);
       await this.prediction.connect(this.signers.admin).setEventData(this.event.address);
 

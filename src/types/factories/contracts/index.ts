@@ -3,6 +3,7 @@
 /* eslint-disable */
 export * as erc20TokenSol from "./Erc20Token.sol";
 export * as eventSol from "./Event.sol";
+export * as linkTokenSol from "./LinkToken.sol";
 export * as custom from "./custom";
 export { APIConsumer__factory } from "./APIConsumer__factory";
 export { ChainlinkClientUpgradable__factory } from "./ChainlinkClientUpgradable__factory";
