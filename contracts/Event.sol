@@ -191,6 +191,7 @@ contract Event is
         require(events[_eventId].finalTime <= block.timestamp, "final_time <= timestamp");
         require(events[_eventId].claimTime >= block.timestamp, "claim_time >= timestamp");
         events[_eventId].isBlock = true;
+        events[_eventId].claimTime = block.timestamp;
     }
 
     /**
@@ -200,6 +201,7 @@ contract Event is
         require(events[_eventId].finalTime <= block.timestamp, "final_time <= timestamp");
         require(events[_eventId].claimTime >= block.timestamp, "claim_time >= timestamp");
         events[_eventId].isBlock = false;
+        events[_eventId].claimTime = block.timestamp;
     }
 
     /* =============== EVENTS ==================== */
