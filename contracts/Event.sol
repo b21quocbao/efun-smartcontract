@@ -57,7 +57,7 @@ contract Event is
         require(_event.status != EDataTypes.EventStatus.FINISH, "event already finish");
 
         _event.finalTime = block.timestamp;
-        _event.claimTime = block.timestamp + 86400;
+        _event.claimTime = block.timestamp + 172800;
         _event.resultIndex = _index;
         _event.status = EDataTypes.EventStatus.FINISH;
 
