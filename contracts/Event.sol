@@ -52,7 +52,7 @@ contract Event is
         require(_index < _event.odds.length, "cannot-find-index");
         require(_event.creator == msg.sender, "unauthorized");
         require(_event.endTime <= block.timestamp, "end_time <= timestamp");
-        require(_event.endTime + 172800 >= block.timestamp, "end_time + 2 days >= timestamp");
+        require(_event.endTime == 0 || _event.endTime + 172800 >= block.timestamp, "end_time + 2 days >= timestamp");
         require(_event.pro == 0, "not pro event");
         require(_event.status != EDataTypes.EventStatus.FINISH, "event already finish");
 
@@ -118,6 +118,7 @@ contract Event is
         for (uint256 i = 0; i < nEvents; ++i) {
             if (
                 events[i].pro > 0 &&
+                events[i].endTime != 0 &&
                 events[i].endTime <= block.timestamp &&
                 events[i].status == EDataTypes.EventStatus.AVAILABLE
             ) {

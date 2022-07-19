@@ -106,6 +106,10 @@ contract HandicapGroupPredict is Initializable {
         uint256 _index = _predictions.predictOptions;
         uint256 _odd = _event.odds[_index];
 
+        if (_predictOptionStats[_event.resultIndex] == 0) {
+            return 0;
+        }
+
         _reward = (_liquidityPool * _predictions.predictionAmount) / _predictOptionStats[_index];
     }
 

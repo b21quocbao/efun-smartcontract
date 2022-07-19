@@ -129,7 +129,11 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 uint256 _predictStat
             ) = _getPRInfo(_eventId, _token);
 
-            if (_event.endTime + 172800 < block.timestamp && _event.status != EDataTypes.EventStatus.FINISH) {
+            if (
+                _event.endTime != 0 &&
+                _event.endTime + 172800 < block.timestamp &&
+                _event.status != EDataTypes.EventStatus.FINISH
+            ) {
                 _results[i] = _liquidityPool;
             } else if (_event.isBlock) {
                 _results[i] = _liquidityPool;
@@ -430,7 +434,9 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         EDataTypes.Event memory _event = eventData.info(_eventId);
         require(
             (_event.status == EDataTypes.EventStatus.FINISH && _event.claimTime < block.timestamp) ||
-                (_event.status != EDataTypes.EventStatus.FINISH && _event.endTime + 172800 < block.timestamp),
+                (_event.status != EDataTypes.EventStatus.FINISH &&
+                    _event.endTime != 0 &&
+                    _event.endTime + 172800 < block.timestamp),
             "event-not-finish"
         );
         require(_event.creator == msg.sender, "unauthorized");
@@ -463,7 +469,9 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
         require(
             (_event.status == EDataTypes.EventStatus.FINISH && _event.claimTime < block.timestamp && _event.isBlock) ||
-                (_event.status != EDataTypes.EventStatus.FINISH && _event.endTime + 172800 < block.timestamp),
+                (_event.status != EDataTypes.EventStatus.FINISH &&
+                    _event.endTime != 0 &&
+                    _event.endTime + 172800 < block.timestamp),
             "event-not-finish"
         );
         require(predictions[_token][msg.sender][_eventId][_predictNum].claimed == false, "claimed");
