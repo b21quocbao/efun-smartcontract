@@ -42,6 +42,7 @@ export declare namespace EDataTypes {
     finalTime: BigNumberish;
     claimTime: BigNumberish;
     affiliate: boolean;
+    hostFee: BigNumberish;
   };
 
   export type EventStructOutput = [
@@ -58,7 +59,8 @@ export declare namespace EDataTypes {
     boolean,
     BigNumber,
     BigNumber,
-    boolean
+    boolean,
+    BigNumber
   ] & {
     startTime: BigNumber;
     deadlineTime: BigNumber;
@@ -74,6 +76,7 @@ export declare namespace EDataTypes {
     finalTime: BigNumber;
     claimTime: BigNumber;
     affiliate: boolean;
+    hostFee: BigNumber;
   };
 }
 
@@ -81,7 +84,7 @@ export interface EventInterface extends utils.Interface {
   functions: {
     "blockEvent(uint256)": FunctionFragment;
     "checkUpkeep(bytes)": FunctionFragment;
-    "createSingleEvent(uint256[3],address,uint256[],string,address,uint256,bool)": FunctionFragment;
+    "createSingleEvent(uint256[3],address,uint256[],string,address,uint256,bool,uint256)": FunctionFragment;
     "events(uint256)": FunctionFragment;
     "fulfill(bytes32,string)": FunctionFragment;
     "info(uint256)": FunctionFragment;
@@ -136,7 +139,8 @@ export interface EventInterface extends utils.Interface {
       string,
       string,
       BigNumberish,
-      boolean
+      boolean,
+      BigNumberish
     ]
   ): string;
   encodeFunctionData(
@@ -357,6 +361,7 @@ export interface Event extends BaseContract {
       _creator: string,
       _pro: BigNumberish,
       _affiliate: boolean,
+      _hostFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -377,7 +382,8 @@ export interface Event extends BaseContract {
         boolean,
         BigNumber,
         BigNumber,
-        boolean
+        boolean,
+        BigNumber
       ] & {
         startTime: BigNumber;
         deadlineTime: BigNumber;
@@ -392,6 +398,7 @@ export interface Event extends BaseContract {
         finalTime: BigNumber;
         claimTime: BigNumber;
         affiliate: boolean;
+        hostFee: BigNumber;
       }
     >;
 
@@ -475,6 +482,7 @@ export interface Event extends BaseContract {
     _creator: string,
     _pro: BigNumberish,
     _affiliate: boolean,
+    _hostFee: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -495,7 +503,8 @@ export interface Event extends BaseContract {
       boolean,
       BigNumber,
       BigNumber,
-      boolean
+      boolean,
+      BigNumber
     ] & {
       startTime: BigNumber;
       deadlineTime: BigNumber;
@@ -510,6 +519,7 @@ export interface Event extends BaseContract {
       finalTime: BigNumber;
       claimTime: BigNumber;
       affiliate: boolean;
+      hostFee: BigNumber;
     }
   >;
 
@@ -591,6 +601,7 @@ export interface Event extends BaseContract {
       _creator: string,
       _pro: BigNumberish,
       _affiliate: boolean,
+      _hostFee: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -611,7 +622,8 @@ export interface Event extends BaseContract {
         boolean,
         BigNumber,
         BigNumber,
-        boolean
+        boolean,
+        BigNumber
       ] & {
         startTime: BigNumber;
         deadlineTime: BigNumber;
@@ -626,6 +638,7 @@ export interface Event extends BaseContract {
         finalTime: BigNumber;
         claimTime: BigNumber;
         affiliate: boolean;
+        hostFee: BigNumber;
       }
     >;
 
@@ -741,6 +754,7 @@ export interface Event extends BaseContract {
       _creator: string,
       _pro: BigNumberish,
       _affiliate: boolean,
+      _hostFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -820,6 +834,7 @@ export interface Event extends BaseContract {
       _creator: string,
       _pro: BigNumberish,
       _affiliate: boolean,
+      _hostFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

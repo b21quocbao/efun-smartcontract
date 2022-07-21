@@ -15,6 +15,7 @@ interface IEvent {
         string memory _datas,
         address _creator,
         uint256 _pro,
-        bool _affiliate
+        bool _affiliate,
+        uint256 _hostFee
     ) external returns (uint256 _idx);
 }

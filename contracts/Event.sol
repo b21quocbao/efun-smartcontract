@@ -77,7 +77,8 @@ contract Event is
         string memory _datas,
         address _creator,
         uint256 _pro,
-        bool _affiliate
+        bool _affiliate,
+        uint256 _hostFee
     ) external returns (uint256 _idx) {
         require(_times[0] < _times[1], "deadline_time > start_time");
         require(_times[1] < _times[2], "end_time > deadline_time");
@@ -97,7 +98,8 @@ contract Event is
             false,
             0,
             0,
-            _affiliate
+            _affiliate,
+            _hostFee
         );
         nEvents++;
     }

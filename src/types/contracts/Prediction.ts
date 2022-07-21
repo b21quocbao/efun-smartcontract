@@ -48,7 +48,7 @@ export interface PredictionInterface extends utils.Interface {
     "claimCashBack(uint256,address,uint256)": FunctionFragment;
     "claimRemainingLP(uint256,address[])": FunctionFragment;
     "claimReward(uint256,address,uint256)": FunctionFragment;
-    "createSingleEvent(uint256[3],address,uint256[],string,address[],uint256[],uint256,bool)": FunctionFragment;
+    "createSingleEvent(uint256[3],address,uint256[],string,address[],uint256[],uint256,bool,uint256)": FunctionFragment;
     "depositLP(uint256,address[],uint256[])": FunctionFragment;
     "emergencyWithdraw(address,uint256)": FunctionFragment;
     "estimateReward(uint256,address,address,uint256,bool)": FunctionFragment;
@@ -162,7 +162,8 @@ export interface PredictionInterface extends utils.Interface {
       string[],
       BigNumberish[],
       BigNumberish,
-      boolean
+      boolean,
+      BigNumberish
     ]
   ): string;
   encodeFunctionData(
@@ -435,7 +436,7 @@ export interface PredictionInterface extends utils.Interface {
 
   events: {
     "CashBackClaimed(uint256,uint256,address,address)": EventFragment;
-    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256,bool)": EventFragment;
+    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256,bool,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "LPClaimed(uint256,address,uint256)": EventFragment;
     "LPDeposited(uint256,address,uint256)": EventFragment;
@@ -478,6 +479,7 @@ export interface EventCreatedEventObject {
   datas: string;
   pro: BigNumber;
   affiliate: boolean;
+  _hostFee: BigNumber;
 }
 export type EventCreatedEvent = TypedEvent<
   [
@@ -490,7 +492,8 @@ export type EventCreatedEvent = TypedEvent<
     BigNumber[],
     string,
     BigNumber,
-    boolean
+    boolean,
+    BigNumber
   ],
   EventCreatedEventObject
 >;
@@ -636,6 +639,7 @@ export interface Prediction extends BaseContract {
       _amounts: BigNumberish[],
       _pro: BigNumberish,
       _affiliate: boolean,
+      _hostFee: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -872,6 +876,7 @@ export interface Prediction extends BaseContract {
     _amounts: BigNumberish[],
     _pro: BigNumberish,
     _affiliate: boolean,
+    _hostFee: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1105,6 +1110,7 @@ export interface Prediction extends BaseContract {
       _amounts: BigNumberish[],
       _pro: BigNumberish,
       _affiliate: boolean,
+      _hostFee: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1305,7 +1311,7 @@ export interface Prediction extends BaseContract {
       token?: null
     ): CashBackClaimedEventFilter;
 
-    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256,bool)"(
+    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256,bool,uint256)"(
       idx?: null,
       startTime?: null,
       deadlineTime?: null,
@@ -1315,7 +1321,8 @@ export interface Prediction extends BaseContract {
       odds?: null,
       datas?: null,
       pro?: null,
-      affiliate?: null
+      affiliate?: null,
+      _hostFee?: null
     ): EventCreatedEventFilter;
     EventCreated(
       idx?: null,
@@ -1327,7 +1334,8 @@ export interface Prediction extends BaseContract {
       odds?: null,
       datas?: null,
       pro?: null,
-      affiliate?: null
+      affiliate?: null,
+      _hostFee?: null
     ): EventCreatedEventFilter;
 
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
@@ -1437,6 +1445,7 @@ export interface Prediction extends BaseContract {
       _amounts: BigNumberish[],
       _pro: BigNumberish,
       _affiliate: boolean,
+      _hostFee: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1668,6 +1677,7 @@ export interface Prediction extends BaseContract {
       _amounts: BigNumberish[],
       _pro: BigNumberish,
       _affiliate: boolean,
+      _hostFee: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

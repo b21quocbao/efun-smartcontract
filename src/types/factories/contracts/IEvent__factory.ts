@@ -44,6 +44,11 @@ const _abi = [
         name: "_affiliate",
         type: "bool",
       },
+      {
+        internalType: "uint256",
+        name: "_hostFee",
+        type: "uint256",
+      },
     ],
     name: "createSingleEvent",
     outputs: [
@@ -137,6 +142,11 @@ const _abi = [
             internalType: "bool",
             name: "affiliate",
             type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "hostFee",
+            type: "uint256",
           },
         ],
         internalType: "struct EDataTypes.Event",

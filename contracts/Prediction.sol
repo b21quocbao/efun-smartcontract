@@ -54,11 +54,12 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         address[] calldata _tokens,
         uint256[] calldata _amounts,
         uint256 _pro,
-        bool _affiliate
+        bool _affiliate,
+        uint256 _hostFee
     ) external payable returns (uint256 _idx) {
         uint256 len = _odds.length;
 
-        _idx = _createEvent(_times, _helperAddress, msg.sender, _odds, _datas, _pro, _affiliate);
+        _idx = _createEvent(_times, _helperAddress, msg.sender, _odds, _datas, _pro, _affiliate, _hostFee);
         EDataTypes.Event memory _event = eventData.info(_idx);
         _deposit(msg.value, _idx, _tokens, _amounts, len);
     }
@@ -499,9 +500,10 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256[] calldata _odds,
         string memory _datas,
         uint256 _pro,
-        bool _affiliate
+        bool _affiliate,
+        uint256 _hostFee
     ) internal returns (uint256 _idx) {
-        _idx = eventData.createSingleEvent(_times, _helperAddress, _odds, _datas, _creator, _pro, _affiliate);
+        _idx = eventData.createSingleEvent(_times, _helperAddress, _odds, _datas, _creator, _pro, _affiliate, _hostFee);
 
         emit EventCreated(
             _idx,
@@ -513,7 +515,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             _odds,
             _datas,
             _pro,
-            _affiliate
+            _affiliate,
+            _hostFee
         );
     }
 
@@ -660,7 +663,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256[] odds,
         string datas,
         uint256 pro,
-        bool affiliate
+        bool affiliate,
+        uint256 _hostFee
     );
     event LPDeposited(uint256 eventId, address token, uint256 amount);
     event LPClaimed(uint256 eventId, address token, uint256 amount);

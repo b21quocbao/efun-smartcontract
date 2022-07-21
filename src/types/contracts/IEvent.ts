@@ -38,6 +38,7 @@ export declare namespace EDataTypes {
     finalTime: BigNumberish;
     claimTime: BigNumberish;
     affiliate: boolean;
+    hostFee: BigNumberish;
   };
 
   export type EventStructOutput = [
@@ -54,7 +55,8 @@ export declare namespace EDataTypes {
     boolean,
     BigNumber,
     BigNumber,
-    boolean
+    boolean,
+    BigNumber
   ] & {
     startTime: BigNumber;
     deadlineTime: BigNumber;
@@ -70,12 +72,13 @@ export declare namespace EDataTypes {
     finalTime: BigNumber;
     claimTime: BigNumber;
     affiliate: boolean;
+    hostFee: BigNumber;
   };
 }
 
 export interface IEventInterface extends utils.Interface {
   functions: {
-    "createSingleEvent(uint256[3],address,uint256[],string,address,uint256,bool)": FunctionFragment;
+    "createSingleEvent(uint256[3],address,uint256[],string,address,uint256,bool,uint256)": FunctionFragment;
     "info(uint256)": FunctionFragment;
   };
 
@@ -92,7 +95,8 @@ export interface IEventInterface extends utils.Interface {
       string,
       string,
       BigNumberish,
-      boolean
+      boolean,
+      BigNumberish
     ]
   ): string;
   encodeFunctionData(functionFragment: "info", values: [BigNumberish]): string;
@@ -141,6 +145,7 @@ export interface IEvent extends BaseContract {
       _creator: string,
       _pro: BigNumberish,
       _affiliate: boolean,
+      _hostFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -160,6 +165,7 @@ export interface IEvent extends BaseContract {
     _creator: string,
     _pro: BigNumberish,
     _affiliate: boolean,
+    _hostFee: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -177,6 +183,7 @@ export interface IEvent extends BaseContract {
       _creator: string,
       _pro: BigNumberish,
       _affiliate: boolean,
+      _hostFee: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -197,6 +204,7 @@ export interface IEvent extends BaseContract {
       _creator: string,
       _pro: BigNumberish,
       _affiliate: boolean,
+      _hostFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -212,6 +220,7 @@ export interface IEvent extends BaseContract {
       _creator: string,
       _pro: BigNumberish,
       _affiliate: boolean,
+      _hostFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

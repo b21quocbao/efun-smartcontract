@@ -23,6 +23,7 @@ library EDataTypes {
         uint256 finalTime;
         uint256 claimTime;
         bool affiliate;
+        uint256 hostFee;
     }
 
     struct Prediction {

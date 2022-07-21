@@ -84,7 +84,8 @@ export interface EventStorage extends BaseContract {
         boolean,
         BigNumber,
         BigNumber,
-        boolean
+        boolean,
+        BigNumber
       ] & {
         startTime: BigNumber;
         deadlineTime: BigNumber;
@@ -99,6 +100,7 @@ export interface EventStorage extends BaseContract {
         finalTime: BigNumber;
         claimTime: BigNumber;
         affiliate: boolean;
+        hostFee: BigNumber;
       }
     >;
 
@@ -122,7 +124,8 @@ export interface EventStorage extends BaseContract {
       boolean,
       BigNumber,
       BigNumber,
-      boolean
+      boolean,
+      BigNumber
     ] & {
       startTime: BigNumber;
       deadlineTime: BigNumber;
@@ -137,6 +140,7 @@ export interface EventStorage extends BaseContract {
       finalTime: BigNumber;
       claimTime: BigNumber;
       affiliate: boolean;
+      hostFee: BigNumber;
     }
   >;
 
@@ -160,7 +164,8 @@ export interface EventStorage extends BaseContract {
         boolean,
         BigNumber,
         BigNumber,
-        boolean
+        boolean,
+        BigNumber
       ] & {
         startTime: BigNumber;
         deadlineTime: BigNumber;
@@ -175,6 +180,7 @@ export interface EventStorage extends BaseContract {
         finalTime: BigNumber;
         claimTime: BigNumber;
         affiliate: boolean;
+        hostFee: BigNumber;
       }
     >;
 
