@@ -24,6 +24,7 @@ task("create:Event").setAction(async function (_taskArgs, hre) {
     [toWei("0.0001")],
     0,
     false,
+    0,
     {
       value: toWei("0.0001"),
     },

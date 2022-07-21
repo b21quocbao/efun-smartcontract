@@ -124,46 +124,13 @@ export interface LinkTokenInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
 
   events: {
-    "Transfer(address,address,uint256,bytes)": EventFragment;
-    "Transfer(address,address,uint256)": EventFragment;
     "Approval(address,address,uint256)": EventFragment;
+    "Transfer(address,address,uint256)": EventFragment;
   };
 
-  getEvent(
-    nameOrSignatureOrTopic: "Transfer(address,address,uint256,bytes)"
-  ): EventFragment;
-  getEvent(
-    nameOrSignatureOrTopic: "Transfer(address,address,uint256)"
-  ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
-
-export interface Transfer_address_address_uint256_bytes_EventObject {
-  from: string;
-  to: string;
-  value: BigNumber;
-  data: string;
-}
-export type Transfer_address_address_uint256_bytes_Event = TypedEvent<
-  [string, string, BigNumber, string],
-  Transfer_address_address_uint256_bytes_EventObject
->;
-
-export type Transfer_address_address_uint256_bytes_EventFilter =
-  TypedEventFilter<Transfer_address_address_uint256_bytes_Event>;
-
-export interface Transfer_address_address_uint256_EventObject {
-  from: string;
-  to: string;
-  value: BigNumber;
-}
-export type Transfer_address_address_uint256_Event = TypedEvent<
-  [string, string, BigNumber],
-  Transfer_address_address_uint256_EventObject
->;
-
-export type Transfer_address_address_uint256_EventFilter =
-  TypedEventFilter<Transfer_address_address_uint256_Event>;
 
 export interface ApprovalEventObject {
   owner: string;
@@ -176,6 +143,18 @@ export type ApprovalEvent = TypedEvent<
 >;
 
 export type ApprovalEventFilter = TypedEventFilter<ApprovalEvent>;
+
+export interface TransferEventObject {
+  from: string;
+  to: string;
+  value: BigNumber;
+}
+export type TransferEvent = TypedEvent<
+  [string, string, BigNumber],
+  TransferEventObject
+>;
+
+export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
 export interface LinkToken extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -373,18 +352,6 @@ export interface LinkToken extends BaseContract {
   };
 
   filters: {
-    "Transfer(address,address,uint256,bytes)"(
-      from?: string | null,
-      to?: string | null,
-      value?: null,
-      data?: null
-    ): Transfer_address_address_uint256_bytes_EventFilter;
-    "Transfer(address,address,uint256)"(
-      from?: string | null,
-      to?: string | null,
-      value?: null
-    ): Transfer_address_address_uint256_EventFilter;
-
     "Approval(address,address,uint256)"(
       owner?: string | null,
       spender?: string | null,
@@ -395,6 +362,17 @@ export interface LinkToken extends BaseContract {
       spender?: string | null,
       value?: null
     ): ApprovalEventFilter;
+
+    "Transfer(address,address,uint256)"(
+      from?: string | null,
+      to?: string | null,
+      value?: null
+    ): TransferEventFilter;
+    Transfer(
+      from?: string | null,
+      to?: string | null,
+      value?: null
+    ): TransferEventFilter;
   };
 
   estimateGas: {

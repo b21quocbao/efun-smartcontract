@@ -171,33 +171,6 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        name: "to",
-        type: "address",
-      },
-      {
-        indexed: false,
-        name: "value",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        name: "data",
-        type: "bytes",
-      },
-    ],
-    name: "Transfer",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
         name: "owner",
         type: "address",
       },

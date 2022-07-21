@@ -7,6 +7,10 @@ import "./EDataTypes.sol";
 pragma experimental ABIEncoderV2;
 
 interface IHelper {
+    function hostFee(address _eventDataAddress, uint256 _eventId) external view returns (uint256);
+
+    function platformFee() external view returns (uint256);
+
     function maxPayout(
         address _eventDataAddress,
         uint256 _eventId,

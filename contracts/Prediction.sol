@@ -25,13 +25,13 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
     uint256 private oneHundredPrecent;
     address payable public feeCollector;
-    address payable public rewardToken;
-    address payable public lotCollector;
-    uint256 public feeBNB; //440
-    uint256 public feeEFUN; //140
-    uint256 public lotRate; //10
-    uint256 public bnbRate; //$0.000003 ~ 1800000000000
-    uint256 public participateRate;
+    address payable public rewardToken; // remove in future
+    address payable public lotCollector; // remove in future
+    uint256 public feeBNB; // remove in future
+    uint256 public feeEFUN; // remove in future
+    uint256 public lotRate; // remove in future
+    uint256 public bnbRate; // remove in future
+    uint256 public participateRate; // remove in future
 
     IEvent public eventData;
     address public eventDataAddress;
@@ -42,7 +42,6 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     function initialize(uint256 _participateRate, uint256 _oneHundredPrecent) public initializer {
         OwnableUpgradeable.__Ownable_init();
         ReentrancyGuardUpgradeable.__ReentrancyGuard_init();
-        participateRate = _participateRate;
         oneHundredPrecent = _oneHundredPrecent;
     }
 
@@ -64,41 +63,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         _deposit(msg.value, _idx, _tokens, _amounts, len);
     }
 
-    /**
-     * @dev Updates commission information
-     */
-    function setFeeBNB(uint256 _feeBNB) external onlyOwner {
-        feeBNB = _feeBNB;
-    }
-
-    /**
-     * @dev Updates commission information
-     */
-    function setFeeEFUN(uint256 _feeEFUN) external onlyOwner {
-        feeEFUN = _feeEFUN;
-    }
-
-    /**
-     * @dev Updates lotery commission information
-     */
-    function setFeeLot(uint256 _lotRate) external onlyOwner {
-        lotRate = _lotRate;
-    }
-
-    function setBnbRate(uint256 _bnbRate) public onlyOwner {
-        bnbRate = _bnbRate;
-    }
-
     function setFeeCollector(address _feeCollector) public onlyOwner {
         feeCollector = payable(_feeCollector);
-    }
-
-    function setLotCollector(address _lotCollector) external onlyOwner {
-        lotCollector = payable(_lotCollector);
-    }
-
-    function setRewardToken(address _rewardToken) public onlyOwner {
-        rewardToken = payable(_rewardToken);
     }
 
     function setEventData(address _eventData) external onlyOwner {
@@ -356,7 +322,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         _reward = estimateReward(_eventId, msg.sender, _token, _predictNum, true);
 
         if (_reward > 0) {
-            transferMoney(_token, msg.sender, _reward);
+            (uint256 hostFee, uint256 platformFee) = getFee(_eventId);
+            transferMoney(_token, msg.sender, _reward, hostFee, platformFee, _event.creator);
             predictions[_token][msg.sender][_eventId][_predictNum].claimed = true;
         }
 
@@ -394,6 +361,20 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 _liquidityPool,
                 _val
             );
+    }
+
+    /**
+     * @dev Estimate reward Sponsor
+     */
+    function getFee(uint256 _eventId) public view returns (uint256 hostFee, uint256 platformFee) {
+        EDataTypes.Event memory _event = eventData.info(_eventId);
+        IHelper _helper = IHelper(_event.helperAddress);
+        uint256 hostFee = _helper.hostFee(eventDataAddress, _eventId);
+        uint256 platformFee = _helper.platformFee();
+        if (_event.affiliate) {
+            hostFee = 0;
+            platformFee = 0;
+        }
     }
 
     /**
@@ -477,7 +458,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         );
         require(predictions[_token][msg.sender][_eventId][_predictNum].claimed == false, "claimed");
 
-        transferMoney(_token, msg.sender, predictions[_token][msg.sender][_eventId][_predictNum].predictionAmount);
+        transferMoneyNoFee(_token, msg.sender, predictions[_token][msg.sender][_eventId][_predictNum].predictionAmount);
         predictions[_token][msg.sender][_eventId][_predictNum].claimed = true;
 
         emit CashBackClaimed(_eventId, _predictNum, msg.sender, _token);
@@ -596,58 +577,43 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     function transferMoney(
         address _token,
         address _toAddress,
-        uint256 _amount
+        uint256 _amount,
+        uint256 _hostFee,
+        uint256 _platformFee,
+        address _creator
     ) internal {
-        uint256 _fee = 0;
-        uint256 _lot = (_amount * lotRate) / oneHundredPrecent;
+        uint256 _platformAmount = (_amount * _platformFee) / oneHundredPrecent;
+        uint256 _hostAmount = (_amount * _hostFee) / oneHundredPrecent;
 
         // need to check balance of contract, if balance < amount, send balance
         if (_token == address(0)) {
-            if (feeBNB > 0) {
-                _fee = (_amount * feeBNB) / oneHundredPrecent;
+            if (_platformAmount > 0) {
+                payable(feeCollector).transfer(_platformAmount);
             }
-            if (_fee > 0) {
-                payable(feeCollector).transfer(_fee);
+            if (_hostAmount > 0) {
+                payable(_creator).transfer(_hostAmount);
             }
-            payable(_toAddress).transfer(_amount - _fee - _lot);
-            if (_lot > 0) {
-                payable(lotCollector).transfer(_lot);
-            }
+            payable(_toAddress).transfer(_amount - _platformAmount - _hostAmount);
         } else {
-            if (feeEFUN > 0) {
-                _fee = (_amount * feeEFUN) / oneHundredPrecent;
+            if (_platformAmount > 0) {
+                IERC20Upgradeable(_token).safeTransfer(feeCollector, _platformAmount);
             }
-            if (_fee > 0) {
-                IERC20Upgradeable(_token).safeTransfer(feeCollector, _fee);
+            if (_hostAmount > 0) {
+                IERC20Upgradeable(_token).safeTransfer(_creator, _hostAmount);
             }
-            IERC20Upgradeable(_token).safeTransfer(_toAddress, _amount - _fee - _lot);
-            if (_lot > 0) {
-                IERC20Upgradeable(_token).safeTransfer(lotCollector, _lot);
-            }
+            IERC20Upgradeable(_token).safeTransfer(_toAddress, _amount - _platformAmount - _hostAmount);
         }
     }
 
-    function transferToken(
+    function transferMoneyNoFee(
         address _token,
         address _toAddress,
         uint256 _amount
     ) internal {
-        uint256 _participate = 0;
-        uint256 _partAmount = 0;
-
-        if (rewardToken != address(0)) {
-            if (bnbRate > 0) {
-                _participate = (_amount * participateRate) / oneHundredPrecent;
-                _partAmount = _participate;
-                // if predict = BNB
-                if (_token == address(0)) {
-                    _partAmount = (_participate * 10**18) / bnbRate;
-                }
-            }
-
-            if (_participate > 0) {
-                IERC20Upgradeable(rewardToken).safeTransfer(_toAddress, _partAmount);
-            }
+        if (_token == address(0)) {
+            payable(_toAddress).transfer(_amount);
+        } else {
+            IERC20Upgradeable(_token).safeTransfer(_toAddress, _amount);
         }
     }
 

@@ -190,7 +190,8 @@ contract Event is
     /**
      * Block event withdraw
      */
-    function blockEvent(uint256 _eventId) public {
+    function blockEvent(uint256 _eventId) public /** onlyOwner */
+    {
         require(events[_eventId].finalTime <= block.timestamp, "final_time <= timestamp");
         require(events[_eventId].claimTime >= block.timestamp, "claim_time >= timestamp");
         events[_eventId].isBlock = true;
@@ -200,7 +201,8 @@ contract Event is
     /**
      * Block event withdraw
      */
-    function unblockEvent(uint256 _eventId) public {
+    function unblockEvent(uint256 _eventId) public /** onlyOwner */
+    {
         require(events[_eventId].finalTime <= block.timestamp, "final_time <= timestamp");
         require(events[_eventId].claimTime >= block.timestamp, "claim_time >= timestamp");
         events[_eventId].isBlock = false;

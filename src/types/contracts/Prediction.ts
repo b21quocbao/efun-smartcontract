@@ -59,6 +59,7 @@ export interface PredictionInterface extends utils.Interface {
     "feeCollector()": FunctionFragment;
     "feeEFUN()": FunctionFragment;
     "getEventInfo(uint256,address)": FunctionFragment;
+    "getFee(uint256)": FunctionFragment;
     "getLiquidityPool(uint256,address)": FunctionFragment;
     "getMaxPayout(uint256,address,uint256)": FunctionFragment;
     "getPotentialReward(uint256,address,uint256,uint256)": FunctionFragment;
@@ -77,14 +78,8 @@ export interface PredictionInterface extends utils.Interface {
     "predictions(address,address,uint256,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "rewardToken()": FunctionFragment;
-    "setBnbRate(uint256)": FunctionFragment;
     "setEventData(address)": FunctionFragment;
-    "setFeeBNB(uint256)": FunctionFragment;
     "setFeeCollector(address)": FunctionFragment;
-    "setFeeEFUN(uint256)": FunctionFragment;
-    "setFeeLot(uint256)": FunctionFragment;
-    "setLotCollector(address)": FunctionFragment;
-    "setRewardToken(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
 
@@ -106,6 +101,7 @@ export interface PredictionInterface extends utils.Interface {
       | "feeCollector"
       | "feeEFUN"
       | "getEventInfo"
+      | "getFee"
       | "getLiquidityPool"
       | "getMaxPayout"
       | "getPotentialReward"
@@ -124,14 +120,8 @@ export interface PredictionInterface extends utils.Interface {
       | "predictions"
       | "renounceOwnership"
       | "rewardToken"
-      | "setBnbRate"
       | "setEventData"
-      | "setFeeBNB"
       | "setFeeCollector"
-      | "setFeeEFUN"
-      | "setFeeLot"
-      | "setLotCollector"
-      | "setRewardToken"
       | "transferOwnership"
   ): FunctionFragment;
 
@@ -196,6 +186,10 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getEventInfo",
     values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getFee",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getLiquidityPool",
@@ -264,35 +258,11 @@ export interface PredictionInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "setBnbRate",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "setEventData",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "setFeeBNB",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "setFeeCollector",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setFeeEFUN",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setFeeLot",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setLotCollector",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setRewardToken",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -349,6 +319,7 @@ export interface PredictionInterface extends utils.Interface {
     functionFragment: "getEventInfo",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getFee", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getLiquidityPool",
     data: BytesLike
@@ -409,24 +380,12 @@ export interface PredictionInterface extends utils.Interface {
     functionFragment: "rewardToken",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setBnbRate", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setEventData",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setFeeBNB", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setFeeCollector",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "setFeeEFUN", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setFeeLot", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "setLotCollector",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setRewardToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -689,6 +648,13 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    getFee(
+      _eventId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & { hostFee: BigNumber; platformFee: BigNumber }
+    >;
+
     getLiquidityPool(
       _eventId: BigNumberish,
       _token: string,
@@ -791,43 +757,13 @@ export interface Prediction extends BaseContract {
 
     rewardToken(overrides?: CallOverrides): Promise<[string]>;
 
-    setBnbRate(
-      _bnbRate: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     setEventData(
       _eventData: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setFeeBNB(
-      _feeBNB: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     setFeeCollector(
       _feeCollector: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    setFeeEFUN(
-      _feeEFUN: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    setFeeLot(
-      _lotRate: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    setLotCollector(
-      _lotCollector: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    setRewardToken(
-      _rewardToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -925,6 +861,13 @@ export interface Prediction extends BaseContract {
     token: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  getFee(
+    _eventId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber] & { hostFee: BigNumber; platformFee: BigNumber }
+  >;
 
   getLiquidityPool(
     _eventId: BigNumberish,
@@ -1025,43 +968,13 @@ export interface Prediction extends BaseContract {
 
   rewardToken(overrides?: CallOverrides): Promise<string>;
 
-  setBnbRate(
-    _bnbRate: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   setEventData(
     _eventData: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setFeeBNB(
-    _feeBNB: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   setFeeCollector(
     _feeCollector: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  setFeeEFUN(
-    _feeEFUN: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  setFeeLot(
-    _lotRate: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  setLotCollector(
-    _lotCollector: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  setRewardToken(
-    _rewardToken: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1159,6 +1072,13 @@ export interface Prediction extends BaseContract {
       token: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getFee(
+      _eventId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber] & { hostFee: BigNumber; platformFee: BigNumber }
+    >;
 
     getLiquidityPool(
       _eventId: BigNumberish,
@@ -1260,34 +1180,10 @@ export interface Prediction extends BaseContract {
 
     rewardToken(overrides?: CallOverrides): Promise<string>;
 
-    setBnbRate(
-      _bnbRate: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     setEventData(_eventData: string, overrides?: CallOverrides): Promise<void>;
-
-    setFeeBNB(_feeBNB: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     setFeeCollector(
       _feeCollector: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setFeeEFUN(
-      _feeEFUN: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setFeeLot(_lotRate: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    setLotCollector(
-      _lotCollector: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setRewardToken(
-      _rewardToken: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1495,6 +1391,11 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getFee(
+      _eventId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getLiquidityPool(
       _eventId: BigNumberish,
       _token: string,
@@ -1591,43 +1492,13 @@ export interface Prediction extends BaseContract {
 
     rewardToken(overrides?: CallOverrides): Promise<BigNumber>;
 
-    setBnbRate(
-      _bnbRate: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     setEventData(
       _eventData: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setFeeBNB(
-      _feeBNB: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     setFeeCollector(
       _feeCollector: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    setFeeEFUN(
-      _feeEFUN: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    setFeeLot(
-      _lotRate: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    setLotCollector(
-      _lotCollector: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    setRewardToken(
-      _rewardToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1727,6 +1598,11 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getFee(
+      _eventId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getLiquidityPool(
       _eventId: BigNumberish,
       _token: string,
@@ -1823,43 +1699,13 @@ export interface Prediction extends BaseContract {
 
     rewardToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    setBnbRate(
-      _bnbRate: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     setEventData(
       _eventData: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setFeeBNB(
-      _feeBNB: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     setFeeCollector(
       _feeCollector: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setFeeEFUN(
-      _feeEFUN: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setFeeLot(
-      _lotRate: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setLotCollector(
-      _lotCollector: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setRewardToken(
-      _rewardToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

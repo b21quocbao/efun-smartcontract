@@ -224,7 +224,7 @@ contract ERC677 is ERC20 {
         bytes data
     ) returns (bool success);
 
-    event Transfer(address indexed from, address indexed to, uint256 value, bytes data);
+    // event Transfer(address indexed from, address indexed to, uint256 value, bytes data);
 }
 
 // File: https://github.com/smartcontractkit/chainlink/blob/develop/evm-contracts/src/v0.4/ERC677Token.sol
@@ -242,7 +242,7 @@ contract ERC677Token is ERC677 {
         bytes _data
     ) public returns (bool success) {
         super.transfer(_to, _value);
-        Transfer(msg.sender, _to, _value, _data);
+        Transfer(msg.sender, _to, _value);
         if (isContract(_to)) {
             contractFallback(_to, _value, _data);
         }

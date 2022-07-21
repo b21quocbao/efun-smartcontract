@@ -323,6 +323,30 @@ const _abi = [
         name: "_eventId",
         type: "uint256",
       },
+    ],
+    name: "hostFee",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_eventDataAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_eventId",
+        type: "uint256",
+      },
       {
         internalType: "uint256",
         name: "_predictStats",
@@ -355,6 +379,19 @@ const _abi = [
       },
     ],
     name: "maxPayout",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "platformFee",
     outputs: [
       {
         internalType: "uint256",

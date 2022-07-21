@@ -8,6 +8,15 @@ import "../IEvent.sol";
 // import "hardhat/console.sol";
 
 contract HandicapGroupPredict is Initializable {
+    function hostFee(address _eventDataAddress, uint256 _eventId) external view returns (uint256) {
+        EDataTypes.Event memory _event = IEvent(_eventDataAddress).info(_eventId);
+        return _event.hostFee;
+    }
+
+    function platformFee() external view returns (uint256) {
+        return 100;
+    }
+
     function compareStrings(string memory a, string memory b) internal pure returns (bool) {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }

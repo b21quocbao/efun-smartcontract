@@ -8,6 +8,14 @@ import "../IEvent.sol";
 // import "hardhat/console.sol";
 
 contract MultipleChoices is Initializable {
+    function hostFee(address _eventDataAddress, uint256 _eventId) external view returns (uint256) {
+        return 0;
+    }
+
+    function platformFee() external view returns (uint256) {
+        return 50;
+    }
+
     function compareStrings(string memory a, string memory b) internal pure returns (bool) {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }

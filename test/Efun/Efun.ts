@@ -85,6 +85,7 @@ describe("Unit tests", function () {
           this.signers.admin.address,
           0,
           false,
+          0,
         );
 
       await this.event
@@ -97,6 +98,7 @@ describe("Unit tests", function () {
           this.signers.admin.address,
           0,
           false,
+          0,
         );
 
       await this.event
@@ -109,6 +111,7 @@ describe("Unit tests", function () {
           this.signers.admin.address,
           0,
           false,
+          0,
         );
 
       await this.event
@@ -121,6 +124,7 @@ describe("Unit tests", function () {
           this.signers.admin.address,
           0,
           false,
+          0,
         );
 
       await this.event
@@ -133,6 +137,7 @@ describe("Unit tests", function () {
           this.signers.admin.address,
           0,
           false,
+          0,
         );
     });
 
