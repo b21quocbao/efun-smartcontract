@@ -164,21 +164,6 @@ export function shouldBehaveLikeEvent(): void {
     console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
   });
 
-  it("cant predict when not allow", async function () {
-    await increase(duration.seconds(50));
-
-    await expect(
-      this.prediction
-        .connect(this.signers.admin)
-        .depositLP(
-          1,
-          ["0x0000000000000000000000000000000000000000", this.erc20Token.address],
-          [toWei("100"), toWei("200")],
-          { value: toWei("100") },
-        ),
-    ).to.be.revertedWith("ERC20: insufficient allowance");
-  });
-
   it("can predict handicap event", async function () {
     await increase(duration.seconds(50));
 

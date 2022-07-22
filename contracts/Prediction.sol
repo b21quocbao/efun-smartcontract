@@ -38,6 +38,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     mapping(address => mapping(address => uint256)) private liquidityPool;
     mapping(uint256 => mapping(address => uint256)) private liquidityPoolEvent;
     mapping(uint256 => mapping(address => bool)) private claimedLiquidityPool;
+    address payable public efunToken;
 
     function initialize(uint256 _participateRate, uint256 _oneHundredPrecent) public initializer {
         OwnableUpgradeable.__Ownable_init();
@@ -70,6 +71,10 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     function setEventData(address _eventData) external onlyOwner {
         eventData = IEvent(_eventData);
         eventDataAddress = _eventData;
+    }
+
+    function setEfunToken(address _efunToken) public onlyOwner {
+        efunToken = payable(_efunToken);
     }
 
     function getLiquidityPool(uint256 _eventId, address _token) public view returns (uint256) {
@@ -484,6 +489,9 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         bool _affiliate,
         uint256 _hostFee
     ) internal returns (uint256 _idx) {
+        if (!_affiliate) {
+            IERC20Upgradeable(efunToken).safeTransferFrom(msg.sender, address(this), 10000 * 10**9);
+        }
         _idx = eventData.createSingleEvent(_times, _helperAddress, _odds, _datas, _creator, _pro, _affiliate, _hostFee);
 
         emit EventCreated(

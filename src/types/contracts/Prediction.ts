@@ -50,6 +50,7 @@ export interface PredictionInterface extends utils.Interface {
     "claimReward(uint256,address,uint256)": FunctionFragment;
     "createSingleEvent(uint256[3],address,uint256[],string,address[],uint256[],uint256,bool,uint256)": FunctionFragment;
     "depositLP(uint256,address[],uint256[])": FunctionFragment;
+    "efunToken()": FunctionFragment;
     "emergencyWithdraw(address,uint256)": FunctionFragment;
     "estimateReward(uint256,address,address,uint256,bool)": FunctionFragment;
     "estimateRewardSponsor(uint256,address,address,uint256)": FunctionFragment;
@@ -78,6 +79,7 @@ export interface PredictionInterface extends utils.Interface {
     "predictions(address,address,uint256,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "rewardToken()": FunctionFragment;
+    "setEfunToken(address)": FunctionFragment;
     "setEventData(address)": FunctionFragment;
     "setFeeCollector(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
@@ -92,6 +94,7 @@ export interface PredictionInterface extends utils.Interface {
       | "claimReward"
       | "createSingleEvent"
       | "depositLP"
+      | "efunToken"
       | "emergencyWithdraw"
       | "estimateReward"
       | "estimateRewardSponsor"
@@ -120,6 +123,7 @@ export interface PredictionInterface extends utils.Interface {
       | "predictions"
       | "renounceOwnership"
       | "rewardToken"
+      | "setEfunToken"
       | "setEventData"
       | "setFeeCollector"
       | "transferOwnership"
@@ -160,6 +164,7 @@ export interface PredictionInterface extends utils.Interface {
     functionFragment: "depositLP",
     values: [BigNumberish, string[], BigNumberish[]]
   ): string;
+  encodeFunctionData(functionFragment: "efunToken", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "emergencyWithdraw",
     values: [string, BigNumberish]
@@ -258,6 +263,10 @@ export interface PredictionInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "setEfunToken",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setEventData",
     values: [string]
   ): string;
@@ -292,6 +301,7 @@ export interface PredictionInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "depositLP", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "efunToken", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "emergencyWithdraw",
     data: BytesLike
@@ -378,6 +388,10 @@ export interface PredictionInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "rewardToken",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setEfunToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -609,6 +623,8 @@ export interface Prediction extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    efunToken(overrides?: CallOverrides): Promise<[string]>;
+
     emergencyWithdraw(
       _token: string,
       amount: BigNumberish,
@@ -757,6 +773,11 @@ export interface Prediction extends BaseContract {
 
     rewardToken(overrides?: CallOverrides): Promise<[string]>;
 
+    setEfunToken(
+      _efunToken: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setEventData(
       _eventData: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -822,6 +843,8 @@ export interface Prediction extends BaseContract {
     _amounts: BigNumberish[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  efunToken(overrides?: CallOverrides): Promise<string>;
 
   emergencyWithdraw(
     _token: string,
@@ -968,6 +991,11 @@ export interface Prediction extends BaseContract {
 
   rewardToken(overrides?: CallOverrides): Promise<string>;
 
+  setEfunToken(
+    _efunToken: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setEventData(
     _eventData: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -1033,6 +1061,8 @@ export interface Prediction extends BaseContract {
       _amounts: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
+
+    efunToken(overrides?: CallOverrides): Promise<string>;
 
     emergencyWithdraw(
       _token: string,
@@ -1179,6 +1209,8 @@ export interface Prediction extends BaseContract {
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     rewardToken(overrides?: CallOverrides): Promise<string>;
+
+    setEfunToken(_efunToken: string, overrides?: CallOverrides): Promise<void>;
 
     setEventData(_eventData: string, overrides?: CallOverrides): Promise<void>;
 
@@ -1352,6 +1384,8 @@ export interface Prediction extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    efunToken(overrides?: CallOverrides): Promise<BigNumber>;
+
     emergencyWithdraw(
       _token: string,
       amount: BigNumberish,
@@ -1492,6 +1526,11 @@ export interface Prediction extends BaseContract {
 
     rewardToken(overrides?: CallOverrides): Promise<BigNumber>;
 
+    setEfunToken(
+      _efunToken: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setEventData(
       _eventData: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1558,6 +1597,8 @@ export interface Prediction extends BaseContract {
       _amounts: BigNumberish[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    efunToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     emergencyWithdraw(
       _token: string,
@@ -1698,6 +1739,11 @@ export interface Prediction extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     rewardToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    setEfunToken(
+      _efunToken: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     setEventData(
       _eventData: string,

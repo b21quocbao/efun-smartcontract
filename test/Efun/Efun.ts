@@ -54,7 +54,7 @@ describe("Unit tests", function () {
       this.handicap = <Handicap>await waffle.deployContract(this.signers.admin, handicapArtifact, []);
       this.overUnder = <OverUnder>await waffle.deployContract(this.signers.admin, overUnderArtifact, []);
       this.erc20Token = <ERC20Token>(
-        await waffle.deployContract(this.signers.admin, erc20TokenArtifact, ["EFUN", "EFUN", toWei("100000")])
+        await waffle.deployContract(this.signers.admin, erc20TokenArtifact, ["EFUN", "EFUN", toWei("1000000")])
       );
       this.linkToken = <LinkToken>await waffle.deployContract(this.signers.admin, linkTokenArtifact, []);
       this.operator = <Operator>(
@@ -72,6 +72,8 @@ describe("Unit tests", function () {
       );
       await this.prediction.initialize(100, 10000);
       await this.prediction.connect(this.signers.admin).setEventData(this.event.address);
+      await this.prediction.connect(this.signers.admin).setEfunToken(this.erc20Token.address);
+      await this.erc20Token.connect(this.signers.admin).approve(this.prediction.address, toWei("1000000"));
 
       const { timestamp } = await ethers.provider.getBlock("latest");
 

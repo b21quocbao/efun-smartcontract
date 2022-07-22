@@ -5,6 +5,7 @@ pragma solidity =0.8.4;
 library EDataTypes {
     enum EventStatus {
         AVAILABLE,
+        PROGRESS,
         FINISH
     }
 

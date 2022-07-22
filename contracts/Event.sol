@@ -136,6 +136,17 @@ contract Event is
         req.add("get", string(performData));
         req.add("path", "data");
         sendChainlinkRequest(req, 0);
+
+        uint256 number = 0;
+        for (uint256 i = 0; i < performData.length; i++) {
+            uint8 c = uint8(performData[i]);
+            if (c >= 48 && c < 58) {
+                number = number * 10 + c - 48;
+            } else {
+                events[number].status = EDataTypes.EventStatus.PROGRESS;
+                number = 0;
+            }
+        }
     }
 
     /**
@@ -190,8 +201,8 @@ contract Event is
     /**
      * Block event withdraw
      */
-    function blockEvent(uint256 _eventId) public /** onlyOwner */
-    {
+    // TODO: Add onlyOwner
+    function blockEvent(uint256 _eventId) public {
         require(events[_eventId].finalTime <= block.timestamp, "final_time <= timestamp");
         require(events[_eventId].claimTime >= block.timestamp, "claim_time >= timestamp");
         events[_eventId].isBlock = true;
@@ -201,8 +212,8 @@ contract Event is
     /**
      * Block event withdraw
      */
-    function unblockEvent(uint256 _eventId) public /** onlyOwner */
-    {
+    // TODO: Add onlyOwner
+    function unblockEvent(uint256 _eventId) public {
         require(events[_eventId].finalTime <= block.timestamp, "final_time <= timestamp");
         require(events[_eventId].claimTime >= block.timestamp, "claim_time >= timestamp");
         events[_eventId].isBlock = false;
