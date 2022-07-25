@@ -59,6 +59,7 @@ export interface PredictionInterface extends utils.Interface {
     "feeBNB()": FunctionFragment;
     "feeCollector()": FunctionFragment;
     "feeEFUN()": FunctionFragment;
+    "getAmountHasFee(uint256,uint256,uint256)": FunctionFragment;
     "getEventInfo(uint256,address)": FunctionFragment;
     "getFee(uint256)": FunctionFragment;
     "getLiquidityPool(uint256,address)": FunctionFragment;
@@ -103,6 +104,7 @@ export interface PredictionInterface extends utils.Interface {
       | "feeBNB"
       | "feeCollector"
       | "feeEFUN"
+      | "getAmountHasFee"
       | "getEventInfo"
       | "getFee"
       | "getLiquidityPool"
@@ -188,6 +190,10 @@ export interface PredictionInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "feeEFUN", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getAmountHasFee",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "getEventInfo",
     values: [BigNumberish, string]
@@ -325,6 +331,10 @@ export interface PredictionInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "feeEFUN", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getAmountHasFee",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getEventInfo",
     data: BytesLike
@@ -658,6 +668,13 @@ export interface Prediction extends BaseContract {
 
     feeEFUN(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    getAmountHasFee(
+      _eventId: BigNumberish,
+      _amount: BigNumberish,
+      _reward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { amountHasFee: BigNumber }>;
+
     getEventInfo(
       eventId: BigNumberish,
       token: string,
@@ -879,6 +896,13 @@ export interface Prediction extends BaseContract {
 
   feeEFUN(overrides?: CallOverrides): Promise<BigNumber>;
 
+  getAmountHasFee(
+    _eventId: BigNumberish,
+    _amount: BigNumberish,
+    _reward: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getEventInfo(
     eventId: BigNumberish,
     token: string,
@@ -1096,6 +1120,13 @@ export interface Prediction extends BaseContract {
     feeCollector(overrides?: CallOverrides): Promise<string>;
 
     feeEFUN(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getAmountHasFee(
+      _eventId: BigNumberish,
+      _amount: BigNumberish,
+      _reward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getEventInfo(
       eventId: BigNumberish,
@@ -1419,6 +1450,13 @@ export interface Prediction extends BaseContract {
 
     feeEFUN(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getAmountHasFee(
+      _eventId: BigNumberish,
+      _amount: BigNumberish,
+      _reward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getEventInfo(
       eventId: BigNumberish,
       token: string,
@@ -1632,6 +1670,13 @@ export interface Prediction extends BaseContract {
     feeCollector(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     feeEFUN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getAmountHasFee(
+      _eventId: BigNumberish,
+      _amount: BigNumberish,
+      _reward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getEventInfo(
       eventId: BigNumberish,

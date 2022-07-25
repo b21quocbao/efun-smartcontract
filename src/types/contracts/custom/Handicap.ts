@@ -43,6 +43,7 @@ export interface HandicapInterface extends utils.Interface {
     "calculatePotentialReward(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
     "calculateRemainLP(address,uint256,uint256,uint256[],uint256[],uint256,uint256)": FunctionFragment;
     "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,bool)": FunctionFragment;
+    "getAmountHasFee(uint256,uint256)": FunctionFragment;
     "hostFee(address,uint256)": FunctionFragment;
     "maxPayout(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256)": FunctionFragment;
     "platformFee()": FunctionFragment;
@@ -54,6 +55,7 @@ export interface HandicapInterface extends utils.Interface {
       | "calculatePotentialReward"
       | "calculateRemainLP"
       | "calculateReward"
+      | "getAmountHasFee"
       | "hostFee"
       | "maxPayout"
       | "platformFee"
@@ -98,6 +100,10 @@ export interface HandicapInterface extends utils.Interface {
       BigNumberish,
       boolean
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAmountHasFee",
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "hostFee",
@@ -145,6 +151,10 @@ export interface HandicapInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "calculateReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getAmountHasFee",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "hostFee", data: BytesLike): Result;
@@ -235,6 +245,12 @@ export interface Handicap extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { _reward: BigNumber }>;
 
+    getAmountHasFee(
+      _amount: BigNumberish,
+      _reward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     hostFee(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -305,6 +321,12 @@ export interface Handicap extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  getAmountHasFee(
+    _amount: BigNumberish,
+    _reward: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   hostFee(
     _eventDataAddress: string,
     _eventId: BigNumberish,
@@ -372,6 +394,12 @@ export interface Handicap extends BaseContract {
       _oneHundredPrecent: BigNumberish,
       _liquidityPool: BigNumberish,
       _validate: boolean,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getAmountHasFee(
+      _amount: BigNumberish,
+      _reward: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -451,6 +479,12 @@ export interface Handicap extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getAmountHasFee(
+      _amount: BigNumberish,
+      _reward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     hostFee(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -519,6 +553,12 @@ export interface Handicap extends BaseContract {
       _oneHundredPrecent: BigNumberish,
       _liquidityPool: BigNumberish,
       _validate: boolean,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getAmountHasFee(
+      _amount: BigNumberish,
+      _reward: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

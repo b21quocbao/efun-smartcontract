@@ -32,7 +32,7 @@ task("deploy:ERC20")
     const erc20: ERC20Token = <ERC20Token>(
       await erc20Factory
         .connect(signers[0])
-        .deploy(taskArguments.name, taskArguments.symbol, toWei(Number(taskArguments.supply).toString()))
+        .deploy(taskArguments.name, taskArguments.symbol, taskArguments.supply + "000000000000000000")
     );
     await erc20.deployed();
     console.log("ERC20 deployed to: ", erc20.address);

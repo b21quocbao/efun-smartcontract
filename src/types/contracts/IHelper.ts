@@ -41,6 +41,7 @@ export interface IHelperInterface extends utils.Interface {
     "calculateReward(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256,bool)": FunctionFragment;
     "calculateRewardSponsor(address,uint256,uint256,uint256[],(uint256,uint256,bool),uint256,uint256)": FunctionFragment;
     "calculateSponsor(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "getAmountHasFee(uint256,uint256)": FunctionFragment;
     "hostFee(address,uint256)": FunctionFragment;
     "maxPayout(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256)": FunctionFragment;
     "platformFee()": FunctionFragment;
@@ -54,6 +55,7 @@ export interface IHelperInterface extends utils.Interface {
       | "calculateReward"
       | "calculateRewardSponsor"
       | "calculateSponsor"
+      | "getAmountHasFee"
       | "hostFee"
       | "maxPayout"
       | "platformFee"
@@ -126,6 +128,10 @@ export interface IHelperInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "getAmountHasFee",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "hostFee",
     values: [string, BigNumberish]
   ): string;
@@ -179,6 +185,10 @@ export interface IHelperInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "calculateSponsor",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getAmountHasFee",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "hostFee", data: BytesLike): Result;
@@ -282,6 +292,12 @@ export interface IHelper extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { _reward: BigNumber }>;
 
+    getAmountHasFee(
+      _amount: BigNumberish,
+      _reward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     hostFee(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -376,6 +392,12 @@ export interface IHelper extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  getAmountHasFee(
+    _amount: BigNumberish,
+    _reward: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   hostFee(
     _eventDataAddress: string,
     _eventId: BigNumberish,
@@ -467,6 +489,12 @@ export interface IHelper extends BaseContract {
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,
       _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getAmountHasFee(
+      _amount: BigNumberish,
+      _reward: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -567,6 +595,12 @@ export interface IHelper extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getAmountHasFee(
+      _amount: BigNumberish,
+      _reward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     hostFee(
       _eventDataAddress: string,
       _eventId: BigNumberish,
@@ -659,6 +693,12 @@ export interface IHelper extends BaseContract {
       _oneHundredPrecent: BigNumberish,
       _index: BigNumberish,
       _liquidityPool: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getAmountHasFee(
+      _amount: BigNumberish,
+      _reward: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

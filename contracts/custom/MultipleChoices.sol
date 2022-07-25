@@ -16,6 +16,10 @@ contract MultipleChoices is Initializable {
         return 50;
     }
 
+    function getAmountHasFee(uint256 _amount, uint256 _reward) external view returns (uint256) {
+        return _amount;
+    }
+
     function compareStrings(string memory a, string memory b) internal pure returns (bool) {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
