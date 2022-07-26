@@ -513,7 +513,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256 _hostFee
     ) internal returns (uint256 _idx) {
         if (!_affiliate) {
-            IERC20Upgradeable(efunToken).safeTransferFrom(msg.sender, address(this), 10000 * 10**18);
+            IERC20Upgradeable(efunToken).safeTransferFrom(msg.sender, feeCollector, 10000 * 10**18);
         }
         _idx = eventData.createSingleEvent(_times, _helperAddress, _odds, _datas, _creator, _pro, _affiliate, _hostFee);
 
