@@ -46,6 +46,7 @@ export interface MultipleChoicesInterface extends utils.Interface {
     "getAmountHasFee(uint256,uint256)": FunctionFragment;
     "hostFee(address,uint256)": FunctionFragment;
     "maxPayout(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256)": FunctionFragment;
+    "platFormfeeBefore()": FunctionFragment;
     "platformFee()": FunctionFragment;
     "validatePrediction(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
@@ -58,6 +59,7 @@ export interface MultipleChoicesInterface extends utils.Interface {
       | "getAmountHasFee"
       | "hostFee"
       | "maxPayout"
+      | "platFormfeeBefore"
       | "platformFee"
       | "validatePrediction"
   ): FunctionFragment;
@@ -123,6 +125,10 @@ export interface MultipleChoicesInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "platFormfeeBefore",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "platformFee",
     values?: undefined
   ): string;
@@ -159,6 +165,10 @@ export interface MultipleChoicesInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "hostFee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "maxPayout", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "platFormfeeBefore",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "platformFee",
     data: BytesLike
@@ -269,6 +279,8 @@ export interface MultipleChoices extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    platFormfeeBefore(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     platformFee(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     validatePrediction(
@@ -345,6 +357,8 @@ export interface MultipleChoices extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  platFormfeeBefore(overrides?: CallOverrides): Promise<BigNumber>;
+
   platformFee(overrides?: CallOverrides): Promise<BigNumber>;
 
   validatePrediction(
@@ -420,6 +434,8 @@ export interface MultipleChoices extends BaseContract {
       _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    platFormfeeBefore(overrides?: CallOverrides): Promise<BigNumber>;
 
     platformFee(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -503,6 +519,8 @@ export interface MultipleChoices extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    platFormfeeBefore(overrides?: CallOverrides): Promise<BigNumber>;
+
     platformFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     validatePrediction(
@@ -579,6 +597,8 @@ export interface MultipleChoices extends BaseContract {
       _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    platFormfeeBefore(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     platformFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

@@ -11,7 +11,7 @@ task("create:Event").setAction(async function (_taskArgs, hre) {
   const { ethers } = hre;
   const [deployer] = await ethers.getSigners();
 
-  const prediction = await Prediction__factory.connect("0x88160ce0d8C300286FC7BB724f820C176f4030ca", deployer);
+  const prediction = await Prediction__factory.connect("0xb80fD25B76A82DBb43192Bfb60FDD8D9dFA9772c", deployer);
 
   const { timestamp } = await ethers.provider.getBlock("latest");
 
@@ -39,7 +39,7 @@ task("update:event:result")
     const { ethers } = hre;
     const [deployer] = await ethers.getSigners();
 
-    const event = await Event__factory.connect("0xD023E170E5Be8fa0167cb6a2EAFb9B0365bAe398", deployer);
+    const event = await Event__factory.connect("0x54d760D06e229a3100a915514CB93216B0444799", deployer);
 
     console.log(Number(_taskArgs.eventId), _taskArgs.result, "Line #46 action.ts");
 
@@ -58,7 +58,7 @@ task("create:Prediction")
       ethers.provider,
     );
 
-    const prediction = await Prediction__factory.connect("0x88160ce0d8C300286FC7BB724f820C176f4030ca", caller);
+    const prediction = await Prediction__factory.connect("0xb80fD25B76A82DBb43192Bfb60FDD8D9dFA9772c", caller);
 
     const tx = await prediction
       .connect(caller)
@@ -85,7 +85,7 @@ task("deposit:LP")
       ethers.provider,
     );
 
-    const prediction = await Prediction__factory.connect("0x88160ce0d8C300286FC7BB724f820C176f4030ca", caller);
+    const prediction = await Prediction__factory.connect("0xb80fD25B76A82DBb43192Bfb60FDD8D9dFA9772c", caller);
 
     const tx = await prediction
       .connect(caller)
@@ -104,9 +104,9 @@ task("update:event:data").setAction(async function (_taskArgs, hre) {
   const { ethers } = hre;
   const [deployer] = await ethers.getSigners();
 
-  const prediction = await Prediction__factory.connect("0x88160ce0d8C300286FC7BB724f820C176f4030ca", deployer);
+  const prediction = await Prediction__factory.connect("0xb80fD25B76A82DBb43192Bfb60FDD8D9dFA9772c", deployer);
 
-  const tx = await prediction.connect(deployer).setEventData("0xD023E170E5Be8fa0167cb6a2EAFb9B0365bAe398");
+  const tx = await prediction.connect(deployer).setEventData("0x54d760D06e229a3100a915514CB93216B0444799");
   console.log("\x1b[36m%s\x1b[0m", "tx", tx);
 });
 
@@ -114,7 +114,7 @@ task("calculate:potential:reward").setAction(async function (_taskArgs, hre) {
   const { ethers } = hre;
   const [deployer] = await ethers.getSigners();
 
-  const prediction = await Prediction__factory.connect("0x88160ce0d8C300286FC7BB724f820C176f4030ca", deployer);
+  const prediction = await Prediction__factory.connect("0xb80fD25B76A82DBb43192Bfb60FDD8D9dFA9772c", deployer);
 
   console.log(
     Math.round(

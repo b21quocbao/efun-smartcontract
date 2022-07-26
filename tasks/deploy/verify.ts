@@ -8,8 +8,8 @@ const execAsync = util.promisify(exec);
 task("verify:address").setAction(async function (_taskArgs, hre) {
   const { ethers } = hre;
   const addresses = [
-    "0x88160ce0d8C300286FC7BB724f820C176f4030ca",
-    "0xD023E170E5Be8fa0167cb6a2EAFb9B0365bAe398",
+    "0xb80fD25B76A82DBb43192Bfb60FDD8D9dFA9772c",
+    "0x54d760D06e229a3100a915514CB93216B0444799",
     "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
     "0xd4cf937089DAc1FA149B8cc87Daa04fC920B0C90",
     "0x77380fEcA9C1AFE1b6d1Bb077FbD637EE1bC921e",

@@ -17,6 +17,10 @@ contract GroupPredict is Initializable {
         return 100;
     }
 
+    function platFormfeeBefore() external view returns (uint256) {
+        return 0;
+    }
+
     function getAmountHasFee(uint256 _amount, uint256 _reward) external view returns (uint256) {
         return _reward - _amount;
     }

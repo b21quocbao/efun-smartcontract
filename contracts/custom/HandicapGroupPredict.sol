@@ -17,7 +17,12 @@ contract HandicapGroupPredict is Initializable {
         return 100;
     }
 
+    function platFormfeeBefore() external view returns (uint256) {
+        return 0;
+    }
+
     function getAmountHasFee(uint256 _amount, uint256 _reward) external view returns (uint256) {
+        if (_reward < _amount) return 0;
         return _reward - _amount;
     }
 

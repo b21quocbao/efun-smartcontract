@@ -43,7 +43,6 @@ export declare namespace EDataTypes {
 
 export interface PredictionInterface extends utils.Interface {
   functions: {
-    "bnbRate()": FunctionFragment;
     "calculateSponsor(uint256,address,uint256,uint256)": FunctionFragment;
     "claimCashBack(uint256,address,uint256)": FunctionFragment;
     "claimRemainingLP(uint256,address[])": FunctionFragment;
@@ -56,9 +55,7 @@ export interface PredictionInterface extends utils.Interface {
     "estimateRewardSponsor(uint256,address,address,uint256)": FunctionFragment;
     "eventData()": FunctionFragment;
     "eventDataAddress()": FunctionFragment;
-    "feeBNB()": FunctionFragment;
     "feeCollector()": FunctionFragment;
-    "feeEFUN()": FunctionFragment;
     "getAmountHasFee(uint256,uint256,uint256)": FunctionFragment;
     "getEventInfo(uint256,address)": FunctionFragment;
     "getFee(uint256)": FunctionFragment;
@@ -69,17 +66,13 @@ export interface PredictionInterface extends utils.Interface {
     "getRemainingLP(uint256,address[])": FunctionFragment;
     "getTokenAmount(address)": FunctionFragment;
     "initialize(uint256,uint256)": FunctionFragment;
-    "lotCollector()": FunctionFragment;
-    "lotRate()": FunctionFragment;
     "numPredicts(address,address,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
-    "participateRate()": FunctionFragment;
     "predict(uint256,uint256[],address[],uint256[])": FunctionFragment;
     "predictOptionStats(address,uint256,uint256)": FunctionFragment;
     "predictStats(address,uint256)": FunctionFragment;
     "predictions(address,address,uint256,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "rewardToken()": FunctionFragment;
     "setEfunToken(address)": FunctionFragment;
     "setEventData(address)": FunctionFragment;
     "setFeeCollector(address)": FunctionFragment;
@@ -88,7 +81,6 @@ export interface PredictionInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "bnbRate"
       | "calculateSponsor"
       | "claimCashBack"
       | "claimRemainingLP"
@@ -101,9 +93,7 @@ export interface PredictionInterface extends utils.Interface {
       | "estimateRewardSponsor"
       | "eventData"
       | "eventDataAddress"
-      | "feeBNB"
       | "feeCollector"
-      | "feeEFUN"
       | "getAmountHasFee"
       | "getEventInfo"
       | "getFee"
@@ -114,24 +104,19 @@ export interface PredictionInterface extends utils.Interface {
       | "getRemainingLP"
       | "getTokenAmount"
       | "initialize"
-      | "lotCollector"
-      | "lotRate"
       | "numPredicts"
       | "owner"
-      | "participateRate"
       | "predict"
       | "predictOptionStats"
       | "predictStats"
       | "predictions"
       | "renounceOwnership"
-      | "rewardToken"
       | "setEfunToken"
       | "setEventData"
       | "setFeeCollector"
       | "transferOwnership"
   ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: "bnbRate", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "calculateSponsor",
     values: [BigNumberish, string, BigNumberish, BigNumberish]
@@ -184,12 +169,10 @@ export interface PredictionInterface extends utils.Interface {
     functionFragment: "eventDataAddress",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "feeBNB", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "feeCollector",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "feeEFUN", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getAmountHasFee",
     values: [BigNumberish, BigNumberish, BigNumberish]
@@ -231,19 +214,10 @@ export interface PredictionInterface extends utils.Interface {
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "lotCollector",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "lotRate", values?: undefined): string;
-  encodeFunctionData(
     functionFragment: "numPredicts",
     values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "participateRate",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "predict",
     values: [BigNumberish, BigNumberish[], string[], BigNumberish[]]
@@ -265,10 +239,6 @@ export interface PredictionInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "rewardToken",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "setEfunToken",
     values: [string]
   ): string;
@@ -285,7 +255,6 @@ export interface PredictionInterface extends utils.Interface {
     values: [string]
   ): string;
 
-  decodeFunctionResult(functionFragment: "bnbRate", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "calculateSponsor",
     data: BytesLike
@@ -325,12 +294,10 @@ export interface PredictionInterface extends utils.Interface {
     functionFragment: "eventDataAddress",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "feeBNB", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "feeCollector",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "feeEFUN", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getAmountHasFee",
     data: BytesLike
@@ -366,19 +333,10 @@ export interface PredictionInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "lotCollector",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "lotRate", data: BytesLike): Result;
-  decodeFunctionResult(
     functionFragment: "numPredicts",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "participateRate",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "predict", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "predictOptionStats",
@@ -394,10 +352,6 @@ export interface PredictionInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "rewardToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -583,8 +537,6 @@ export interface Prediction extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    bnbRate(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     calculateSponsor(
       _eventId: BigNumberish,
       _token: string,
@@ -662,11 +614,7 @@ export interface Prediction extends BaseContract {
 
     eventDataAddress(overrides?: CallOverrides): Promise<[string]>;
 
-    feeBNB(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     feeCollector(overrides?: CallOverrides): Promise<[string]>;
-
-    feeEFUN(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getAmountHasFee(
       _eventId: BigNumberish,
@@ -734,10 +682,6 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    lotCollector(overrides?: CallOverrides): Promise<[string]>;
-
-    lotRate(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     numPredicts(
       arg0: string,
       arg1: string,
@@ -746,8 +690,6 @@ export interface Prediction extends BaseContract {
     ): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
-
-    participateRate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     predict(
       _eventId: BigNumberish,
@@ -788,8 +730,6 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    rewardToken(overrides?: CallOverrides): Promise<[string]>;
-
     setEfunToken(
       _efunToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -810,8 +750,6 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
-
-  bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
 
   calculateSponsor(
     _eventId: BigNumberish,
@@ -890,11 +828,7 @@ export interface Prediction extends BaseContract {
 
   eventDataAddress(overrides?: CallOverrides): Promise<string>;
 
-  feeBNB(overrides?: CallOverrides): Promise<BigNumber>;
-
   feeCollector(overrides?: CallOverrides): Promise<string>;
-
-  feeEFUN(overrides?: CallOverrides): Promise<BigNumber>;
 
   getAmountHasFee(
     _eventId: BigNumberish,
@@ -959,10 +893,6 @@ export interface Prediction extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  lotCollector(overrides?: CallOverrides): Promise<string>;
-
-  lotRate(overrides?: CallOverrides): Promise<BigNumber>;
-
   numPredicts(
     arg0: string,
     arg1: string,
@@ -971,8 +901,6 @@ export interface Prediction extends BaseContract {
   ): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
-
-  participateRate(overrides?: CallOverrides): Promise<BigNumber>;
 
   predict(
     _eventId: BigNumberish,
@@ -1013,8 +941,6 @@ export interface Prediction extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  rewardToken(overrides?: CallOverrides): Promise<string>;
-
   setEfunToken(
     _efunToken: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -1036,8 +962,6 @@ export interface Prediction extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
-
     calculateSponsor(
       _eventId: BigNumberish,
       _token: string,
@@ -1115,11 +1039,7 @@ export interface Prediction extends BaseContract {
 
     eventDataAddress(overrides?: CallOverrides): Promise<string>;
 
-    feeBNB(overrides?: CallOverrides): Promise<BigNumber>;
-
     feeCollector(overrides?: CallOverrides): Promise<string>;
-
-    feeEFUN(overrides?: CallOverrides): Promise<BigNumber>;
 
     getAmountHasFee(
       _eventId: BigNumberish,
@@ -1187,10 +1107,6 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    lotCollector(overrides?: CallOverrides): Promise<string>;
-
-    lotRate(overrides?: CallOverrides): Promise<BigNumber>;
-
     numPredicts(
       arg0: string,
       arg1: string,
@@ -1199,8 +1115,6 @@ export interface Prediction extends BaseContract {
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
-
-    participateRate(overrides?: CallOverrides): Promise<BigNumber>;
 
     predict(
       _eventId: BigNumberish,
@@ -1238,8 +1152,6 @@ export interface Prediction extends BaseContract {
     >;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
-
-    rewardToken(overrides?: CallOverrides): Promise<string>;
 
     setEfunToken(_efunToken: string, overrides?: CallOverrides): Promise<void>;
 
@@ -1365,8 +1277,6 @@ export interface Prediction extends BaseContract {
   };
 
   estimateGas: {
-    bnbRate(overrides?: CallOverrides): Promise<BigNumber>;
-
     calculateSponsor(
       _eventId: BigNumberish,
       _token: string,
@@ -1444,11 +1354,7 @@ export interface Prediction extends BaseContract {
 
     eventDataAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
-    feeBNB(overrides?: CallOverrides): Promise<BigNumber>;
-
     feeCollector(overrides?: CallOverrides): Promise<BigNumber>;
-
-    feeEFUN(overrides?: CallOverrides): Promise<BigNumber>;
 
     getAmountHasFee(
       _eventId: BigNumberish,
@@ -1514,10 +1420,6 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    lotCollector(overrides?: CallOverrides): Promise<BigNumber>;
-
-    lotRate(overrides?: CallOverrides): Promise<BigNumber>;
-
     numPredicts(
       arg0: string,
       arg1: string,
@@ -1526,8 +1428,6 @@ export interface Prediction extends BaseContract {
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
-
-    participateRate(overrides?: CallOverrides): Promise<BigNumber>;
 
     predict(
       _eventId: BigNumberish,
@@ -1562,8 +1462,6 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    rewardToken(overrides?: CallOverrides): Promise<BigNumber>;
-
     setEfunToken(
       _efunToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1586,8 +1484,6 @@ export interface Prediction extends BaseContract {
   };
 
   populateTransaction: {
-    bnbRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     calculateSponsor(
       _eventId: BigNumberish,
       _token: string,
@@ -1665,11 +1561,7 @@ export interface Prediction extends BaseContract {
 
     eventDataAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    feeBNB(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     feeCollector(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    feeEFUN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getAmountHasFee(
       _eventId: BigNumberish,
@@ -1735,10 +1627,6 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    lotCollector(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    lotRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     numPredicts(
       arg0: string,
       arg1: string,
@@ -1747,8 +1635,6 @@ export interface Prediction extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    participateRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     predict(
       _eventId: BigNumberish,
@@ -1782,8 +1668,6 @@ export interface Prediction extends BaseContract {
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    rewardToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     setEfunToken(
       _efunToken: string,

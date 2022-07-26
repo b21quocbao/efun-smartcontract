@@ -84,16 +84,16 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.prediction
       .connect(this.signers.user2)
-      .predict(1, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
+      .predict(1, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20.1")], { value: toWei("20.1") });
 
     await this.prediction
       .connect(this.signers.user3)
-      .predict(1, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
+      .predict(1, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10.05")], { value: toWei("10.05") });
 
     await this.prediction
       .connect(this.signers.user1)
-      .predict(1, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
+      .predict(1, [1], ["0x0000000000000000000000000000000000000000"], [toWei("30.15")], {
+        value: toWei("30.15"),
       });
 
     console.log(
@@ -173,20 +173,20 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.prediction
       .connect(this.signers.user2)
-      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], {
-        value: toWei("20"),
+      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20.1")], {
+        value: toWei("20.1"),
       });
 
     await this.prediction
       .connect(this.signers.user3)
-      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10")], {
-        value: toWei("10"),
+      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("10.05")], {
+        value: toWei("10.05"),
       });
 
     await this.prediction
       .connect(this.signers.user1)
-      .predict(2, [4], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
+      .predict(2, [4], ["0x0000000000000000000000000000000000000000"], [toWei("30.15")], {
+        value: toWei("30.15"),
       });
     console.log(
       await this.prediction
@@ -237,16 +237,16 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.prediction
       .connect(this.signers.user2)
-      .predict(3, [3], ["0x0000000000000000000000000000000000000000"], [toWei("20")], { value: toWei("20") });
+      .predict(3, [3], ["0x0000000000000000000000000000000000000000"], [toWei("20.1")], { value: toWei("20.1") });
 
     await this.prediction
       .connect(this.signers.user3)
-      .predict(3, [5], ["0x0000000000000000000000000000000000000000"], [toWei("10")], { value: toWei("10") });
+      .predict(3, [5], ["0x0000000000000000000000000000000000000000"], [toWei("10.05")], { value: toWei("10.05") });
 
     await this.prediction
       .connect(this.signers.user1)
-      .predict(3, [2], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
+      .predict(3, [2], ["0x0000000000000000000000000000000000000000"], [toWei("30.15")], {
+        value: toWei("30.15"),
       });
 
     console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
@@ -381,13 +381,13 @@ export function shouldBehaveLikeEvent(): void {
 
     await this.prediction
       .connect(this.signers.user1)
-      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20")], {
-        value: toWei("20"),
+      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei("20.1")], {
+        value: toWei("20.1"),
       });
     await this.prediction
       .connect(this.signers.user2)
-      .predict(2, [4], ["0x0000000000000000000000000000000000000000"], [toWei("30")], {
-        value: toWei("30"),
+      .predict(2, [4], ["0x0000000000000000000000000000000000000000"], [toWei("30.15")], {
+        value: toWei("30.15"),
       });
     const maxPay = fromWei(
       (
@@ -400,15 +400,27 @@ export function shouldBehaveLikeEvent(): void {
     await expect(
       this.prediction
         .connect(this.signers.user1)
-        .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei((Number(maxPay) + 1).toString())], {
-          value: toWei((Number(maxPay) + 1).toString()),
-        }),
+        .predict(
+          2,
+          [0],
+          ["0x0000000000000000000000000000000000000000"],
+          [toWei(((Number(maxPay) * 1005) / 1000 + 1).toString())],
+          {
+            value: toWei(((Number(maxPay) * 1005) / 1000 + 1).toString()),
+          },
+        ),
     ).to.be.revertedWith("not-enough-liquidity");
     await this.prediction
       .connect(this.signers.user1)
-      .predict(2, [0], ["0x0000000000000000000000000000000000000000"], [toWei(maxPay)], {
-        value: toWei(maxPay),
-      });
+      .predict(
+        2,
+        [0],
+        ["0x0000000000000000000000000000000000000000"],
+        [toWei(((Number(maxPay) * 1005) / 1000).toString())],
+        {
+          value: toWei(((Number(maxPay) * 1005) / 1000).toString()),
+        },
+      );
   });
 
   it("test cashback", async function () {

@@ -25,13 +25,6 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
     uint256 private oneHundredPrecent;
     address payable public feeCollector;
-    address payable public rewardToken; // remove in future
-    address payable public lotCollector; // remove in future
-    uint256 public feeBNB; // remove in future
-    uint256 public feeEFUN; // remove in future
-    uint256 public lotRate; // remove in future
-    uint256 public bnbRate; // remove in future
-    uint256 public participateRate; // remove in future
 
     IEvent public eventData;
     address public eventDataAddress;
@@ -231,9 +224,11 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
         for (uint256 i = 0; i < _tokens.length; ++i) {
             address _token = _tokens[i];
-            uint256 _amount = _amounts[i];
-            uint256 _index = _optionIndexs[i];
             (EDataTypes.Event memory _event, IHelper _helper, uint256 _liquidityPool, , ) = _getPRInfo(eventId, _token);
+            uint256 _amount = _amounts[i];
+            uint256 _platformAmount = (_amount * _helper.platFormfeeBefore()) / oneHundredPrecent;
+            _amount -= _platformAmount;
+            uint256 _index = _optionIndexs[i];
             if (_token == address(0)) {
                 require(_totalAmount >= _amount, "total-amount-not-same");
                 _totalAmount -= _amount;
@@ -266,6 +261,13 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
             if (_token != address(0)) {
                 IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
+                if (_platformAmount > 0) {
+                    IERC20Upgradeable(_token).safeTransfer(feeCollector, _platformAmount);
+                }
+            } else {
+                if (_platformAmount > 0) {
+                    payable(feeCollector).transfer(_platformAmount);
+                }
             }
 
             uint256 _userNumPredict = numPredicts[_token][msg.sender][eventId];
@@ -511,7 +513,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256 _hostFee
     ) internal returns (uint256 _idx) {
         if (!_affiliate) {
-            IERC20Upgradeable(efunToken).safeTransferFrom(msg.sender, address(this), 10000 * 10**9);
+            IERC20Upgradeable(efunToken).safeTransferFrom(msg.sender, address(this), 10000 * 10**18);
         }
         _idx = eventData.createSingleEvent(_times, _helperAddress, _odds, _datas, _creator, _pro, _affiliate, _hostFee);
 

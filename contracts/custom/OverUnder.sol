@@ -13,6 +13,10 @@ contract OverUnder is Initializable {
     }
 
     function platformFee() external view returns (uint256) {
+        return 0;
+    }
+
+    function platFormfeeBefore() external view returns (uint256) {
         return 50;
     }
 

@@ -11,6 +11,8 @@ interface IHelper {
 
     function platformFee() external view returns (uint256);
 
+    function platFormfeeBefore() external view returns (uint256);
+
     function getAmountHasFee(uint256 _amount, uint256 _reward) external view returns (uint256);
 
     function maxPayout(
