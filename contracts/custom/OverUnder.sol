@@ -54,8 +54,6 @@ contract OverUnder is Initializable {
     }
 
     function validatePrediction(
-        address _eventDataAddress,
-        uint256 _eventId,
         uint256 _predictStats,
         uint256[] calldata _predictOptionStats,
         uint256 _predictValue,

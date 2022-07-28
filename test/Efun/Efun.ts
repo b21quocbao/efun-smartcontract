@@ -73,70 +73,76 @@ describe("Unit tests", function () {
       await this.prediction.initialize(100, 10000);
       await this.prediction.connect(this.signers.admin).setEventData(this.event.address);
       await this.prediction.connect(this.signers.admin).setEfunToken(this.erc20Token.address);
+      await this.prediction.connect(this.signers.admin).setFeeCollector(this.signers.admin.address);
       await this.erc20Token.connect(this.signers.admin).approve(this.prediction.address, toWei("1000000"));
 
       const { timestamp } = await ethers.provider.getBlock("latest");
 
-      await this.event
+      await this.prediction
         .connect(this.signers.admin)
         .createSingleEvent(
           [timestamp + 20, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600],
           this.groupPredict.address,
           [0, 0, 0, 0],
           "",
-          this.signers.admin.address,
+          [],
+          [],
           0,
           false,
           0,
         );
 
-      await this.event
+      await this.prediction
         .connect(this.signers.admin)
         .createSingleEvent(
           [timestamp + 20, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600],
           this.multipleChoices.address,
           [23000, 12700, 47600, 35600],
           "",
-          this.signers.admin.address,
+          [],
+          [],
           0,
           false,
           0,
         );
 
-      await this.event
+      await this.prediction
         .connect(this.signers.admin)
         .createSingleEvent(
           [timestamp + 20, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600],
           this.handicap.address,
           [12000, 12000, 10000, 20000, 20000],
           "",
-          this.signers.admin.address,
+          [],
+          [],
           0,
           false,
           0,
         );
 
-      await this.event
+      await this.prediction
         .connect(this.signers.admin)
         .createSingleEvent(
           [timestamp + 20, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600],
           this.overUnder.address,
           [30 * 10000, 1.01 * 10000, 8 * 10000, 1.1 * 10000, 3.65 * 10000, 1.3 * 10000, 2.1 * 10000, 1.76 * 10000],
           "",
-          this.signers.admin.address,
+          [],
+          [],
           0,
           false,
           0,
         );
 
-      await this.event
+      await this.prediction
         .connect(this.signers.admin)
         .createSingleEvent(
           [timestamp + 20, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600],
           this.handicapGroupPredict.address,
           [12000, 12000, 10000, 20000, 20000],
           "",
-          this.signers.admin.address,
+          [],
+          [],
           0,
           false,
           0,

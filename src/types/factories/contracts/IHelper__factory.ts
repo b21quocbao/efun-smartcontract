@@ -442,16 +442,6 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_eventDataAddress",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_eventId",
-        type: "uint256",
-      },
-      {
         internalType: "uint256",
         name: "_predictStats",
         type: "uint256",

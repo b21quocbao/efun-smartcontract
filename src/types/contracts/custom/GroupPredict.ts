@@ -50,7 +50,7 @@ export interface GroupPredictInterface extends utils.Interface {
     "maxPayout(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256)": FunctionFragment;
     "platFormfeeBefore()": FunctionFragment;
     "platformFee()": FunctionFragment;
-    "validatePrediction(address,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "validatePrediction(uint256,uint256[],uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
 
   getFunction(
@@ -165,8 +165,6 @@ export interface GroupPredictInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "validatePrediction",
     values: [
-      string,
-      BigNumberish,
       BigNumberish,
       BigNumberish[],
       BigNumberish,
@@ -346,8 +344,6 @@ export interface GroupPredict extends BaseContract {
     platformFee(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     validatePrediction(
-      _eventDataAddress: string,
-      _eventId: BigNumberish,
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictValue: BigNumberish,
@@ -448,8 +444,6 @@ export interface GroupPredict extends BaseContract {
   platformFee(overrides?: CallOverrides): Promise<BigNumber>;
 
   validatePrediction(
-    _eventDataAddress: string,
-    _eventId: BigNumberish,
     _predictStats: BigNumberish,
     _predictOptionStats: BigNumberish[],
     _predictValue: BigNumberish,
@@ -550,8 +544,6 @@ export interface GroupPredict extends BaseContract {
     platformFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     validatePrediction(
-      _eventDataAddress: string,
-      _eventId: BigNumberish,
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictValue: BigNumberish,
@@ -658,8 +650,6 @@ export interface GroupPredict extends BaseContract {
     platformFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     validatePrediction(
-      _eventDataAddress: string,
-      _eventId: BigNumberish,
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictValue: BigNumberish,
@@ -761,8 +751,6 @@ export interface GroupPredict extends BaseContract {
     platformFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     validatePrediction(
-      _eventDataAddress: string,
-      _eventId: BigNumberish,
       _predictStats: BigNumberish,
       _predictOptionStats: BigNumberish[],
       _predictValue: BigNumberish,
