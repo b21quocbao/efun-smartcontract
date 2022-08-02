@@ -7,6 +7,33 @@ import { currentBlockTime, duration, increase } from "../utils/time";
 const { toWei, fromWei } = web3.utils;
 
 export function shouldBehaveLikeEvent(): void {
+  it("can calculate sponsor", async function () {
+    await this.erc20Token.connect(this.signers.admin).transfer(this.signers.user2.address, toWei("100"));
+    await this.erc20Token.connect(this.signers.user2).approve(this.prediction.address, toWei("100"));
+    await this.prediction.connect(this.signers.user2).predict(0, [0], [this.erc20Token.address], [toWei("20")]);
+    await this.prediction.estimateRewardSponsor(
+      0,
+      this.signers.user2.address,
+      "0x6ed2902b07eebae47fe738eeda1018fd9acdf953",
+      0,
+    );
+    console.log(
+      await this.groupPredict.calculateRewardSponsor(
+        this.event.address,
+        0,
+        "4000000000000000000000",
+        [0, 0, "2000000000000000000000", 0, 0],
+        {
+          predictionAmount: "2000000000000000000000",
+          predictOptions: 2,
+          claimed: false,
+        },
+        10000,
+        "1000000000000000000000",
+      ),
+    );
+  });
+
   it("can predict group predict event", async function () {
     await increase(duration.seconds(50));
 

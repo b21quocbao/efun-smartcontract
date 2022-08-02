@@ -47,6 +47,7 @@ export interface PredictionInterface extends utils.Interface {
     "claimCashBack(uint256,address,uint256)": FunctionFragment;
     "claimRemainingLP(uint256,address[])": FunctionFragment;
     "claimReward(uint256,address,uint256)": FunctionFragment;
+    "claimedLiquidityPool(uint256,address)": FunctionFragment;
     "createSingleEvent(uint256[3],address,uint256[],string,address[],uint256[],uint256,bool,uint256)": FunctionFragment;
     "depositLP(uint256,address[],uint256[])": FunctionFragment;
     "efunToken()": FunctionFragment;
@@ -64,8 +65,13 @@ export interface PredictionInterface extends utils.Interface {
     "getPredictInfo(uint256,address,address,uint256)": FunctionFragment;
     "getRemainingLP(uint256,address[])": FunctionFragment;
     "getTokenAmount(address)": FunctionFragment;
+    "hostFee(address,address,uint256)": FunctionFragment;
     "initialize(uint256,uint256)": FunctionFragment;
+    "liquidityPool(address,address)": FunctionFragment;
+    "liquidityPoolEvent(uint256,address)": FunctionFragment;
     "owner()": FunctionFragment;
+    "platFormfeeBefore(address)": FunctionFragment;
+    "platformFee(address)": FunctionFragment;
     "predict(uint256,uint256[],address[],uint256[])": FunctionFragment;
     "predictStats(uint256,address)": FunctionFragment;
     "predictions(uint256,address,address,uint256)": FunctionFragment;
@@ -82,6 +88,7 @@ export interface PredictionInterface extends utils.Interface {
       | "claimCashBack"
       | "claimRemainingLP"
       | "claimReward"
+      | "claimedLiquidityPool"
       | "createSingleEvent"
       | "depositLP"
       | "efunToken"
@@ -99,8 +106,13 @@ export interface PredictionInterface extends utils.Interface {
       | "getPredictInfo"
       | "getRemainingLP"
       | "getTokenAmount"
+      | "hostFee"
       | "initialize"
+      | "liquidityPool"
+      | "liquidityPoolEvent"
       | "owner"
+      | "platFormfeeBefore"
+      | "platformFee"
       | "predict"
       | "predictStats"
       | "predictions"
@@ -126,6 +138,10 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "claimReward",
     values: [BigNumberish, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "claimedLiquidityPool",
+    values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "createSingleEvent",
@@ -200,10 +216,27 @@ export interface PredictionInterface extends utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
+    functionFragment: "hostFee",
+    values: [string, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "initialize",
     values: [BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(
+    functionFragment: "liquidityPool",
+    values: [string, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "liquidityPoolEvent",
+    values: [BigNumberish, string]
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "platFormfeeBefore",
+    values: [string]
+  ): string;
+  encodeFunctionData(functionFragment: "platformFee", values: [string]): string;
   encodeFunctionData(
     functionFragment: "predict",
     values: [BigNumberish, BigNumberish[], string[], BigNumberish[]]
@@ -251,6 +284,10 @@ export interface PredictionInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "claimReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "claimedLiquidityPool",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -309,8 +346,25 @@ export interface PredictionInterface extends utils.Interface {
     functionFragment: "getTokenAmount",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "hostFee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "liquidityPool",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "liquidityPoolEvent",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "platFormfeeBefore",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "platformFee",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "predict", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "predictStats",
@@ -535,6 +589,12 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    claimedLiquidityPool(
+      arg0: BigNumberish,
+      arg1: string,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
     createSingleEvent(
       _times: [BigNumberish, BigNumberish, BigNumberish],
       _helperAddress: string,
@@ -640,13 +700,42 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    hostFee(
+      _helperAddress: string,
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     initialize(
       _participateRate: BigNumberish,
       _oneHundredPrecent: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    liquidityPool(
+      arg0: string,
+      arg1: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    liquidityPoolEvent(
+      arg0: BigNumberish,
+      arg1: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
+
+    platFormfeeBefore(
+      _helperAddress: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    platformFee(
+      _helperAddress: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     predict(
       _eventId: BigNumberish,
@@ -728,6 +817,12 @@ export interface Prediction extends BaseContract {
     _predictNum: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  claimedLiquidityPool(
+    arg0: BigNumberish,
+    arg1: string,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   createSingleEvent(
     _times: [BigNumberish, BigNumberish, BigNumberish],
@@ -831,13 +926,42 @@ export interface Prediction extends BaseContract {
 
   getTokenAmount(token: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+  hostFee(
+    _helperAddress: string,
+    _eventDataAddress: string,
+    _eventId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   initialize(
     _participateRate: BigNumberish,
     _oneHundredPrecent: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  liquidityPool(
+    arg0: string,
+    arg1: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  liquidityPoolEvent(
+    arg0: BigNumberish,
+    arg1: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   owner(overrides?: CallOverrides): Promise<string>;
+
+  platFormfeeBefore(
+    _helperAddress: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  platformFee(
+    _helperAddress: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   predict(
     _eventId: BigNumberish,
@@ -919,6 +1043,12 @@ export interface Prediction extends BaseContract {
       _predictNum: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    claimedLiquidityPool(
+      arg0: BigNumberish,
+      arg1: string,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     createSingleEvent(
       _times: [BigNumberish, BigNumberish, BigNumberish],
@@ -1025,13 +1155,42 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    hostFee(
+      _helperAddress: string,
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     initialize(
       _participateRate: BigNumberish,
       _oneHundredPrecent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
+    liquidityPool(
+      arg0: string,
+      arg1: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    liquidityPoolEvent(
+      arg0: BigNumberish,
+      arg1: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<string>;
+
+    platFormfeeBefore(
+      _helperAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    platformFee(
+      _helperAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     predict(
       _eventId: BigNumberish,
@@ -1215,6 +1374,12 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    claimedLiquidityPool(
+      arg0: BigNumberish,
+      arg1: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     createSingleEvent(
       _times: [BigNumberish, BigNumberish, BigNumberish],
       _helperAddress: string,
@@ -1318,13 +1483,42 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    hostFee(
+      _helperAddress: string,
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     initialize(
       _participateRate: BigNumberish,
       _oneHundredPrecent: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    liquidityPool(
+      arg0: string,
+      arg1: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    liquidityPoolEvent(
+      arg0: BigNumberish,
+      arg1: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    platFormfeeBefore(
+      _helperAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    platformFee(
+      _helperAddress: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     predict(
       _eventId: BigNumberish,
@@ -1400,6 +1594,12 @@ export interface Prediction extends BaseContract {
       _token: string,
       _predictNum: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    claimedLiquidityPool(
+      arg0: BigNumberish,
+      arg1: string,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     createSingleEvent(
@@ -1505,13 +1705,42 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    hostFee(
+      _helperAddress: string,
+      _eventDataAddress: string,
+      _eventId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     initialize(
       _participateRate: BigNumberish,
       _oneHundredPrecent: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    liquidityPool(
+      arg0: string,
+      arg1: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    liquidityPoolEvent(
+      arg0: BigNumberish,
+      arg1: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    platFormfeeBefore(
+      _helperAddress: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    platformFee(
+      _helperAddress: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     predict(
       _eventId: BigNumberish,

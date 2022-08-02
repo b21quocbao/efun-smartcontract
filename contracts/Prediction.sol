@@ -28,15 +28,37 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
     IEvent public eventData;
     address public eventDataAddress;
-    mapping(address => mapping(address => uint256)) private liquidityPool;
-    mapping(uint256 => mapping(address => uint256)) private liquidityPoolEvent;
-    mapping(uint256 => mapping(address => bool)) private claimedLiquidityPool;
+    mapping(address => mapping(address => uint256)) public liquidityPool;
+    mapping(uint256 => mapping(address => uint256)) public liquidityPoolEvent;
+    mapping(uint256 => mapping(address => bool)) public claimedLiquidityPool;
     address payable public efunToken;
 
     function initialize(uint256 _participateRate, uint256 _oneHundredPrecent) public initializer {
         OwnableUpgradeable.__Ownable_init();
         ReentrancyGuardUpgradeable.__ReentrancyGuard_init();
         oneHundredPrecent = _oneHundredPrecent;
+        setFeeCollector(0x9AFfAA4c1c3Eb3fDdAfEd379C25E50a68A323044);
+        setEventData(0xdb48A5e4b09B5241e812c26763E94C1780B04635);
+        setEfunToken(0x6746E37A756DA9E34f0BBF1C0495784Ba33b79B4);
+    }
+
+    function hostFee(
+        address _helperAddress,
+        address _eventDataAddress,
+        uint256 _eventId
+    ) public view returns (uint256) {
+        IHelper _helper = IHelper(_helperAddress);
+        return _helper.hostFee(eventDataAddress, _eventId);
+    }
+
+    function platformFee(address _helperAddress) public view returns (uint256) {
+        IHelper _helper = IHelper(_helperAddress);
+        return _helper.platformFee();
+    }
+
+    function platFormfeeBefore(address _helperAddress) public view returns (uint256) {
+        IHelper _helper = IHelper(_helperAddress);
+        return _helper.platFormfeeBefore();
     }
 
     function createSingleEvent(
@@ -63,7 +85,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         feeCollector = payable(_feeCollector);
     }
 
-    function setEventData(address _eventData) external onlyOwner {
+    function setEventData(address _eventData) public onlyOwner {
         eventData = IEvent(_eventData);
         eventDataAddress = _eventData;
     }

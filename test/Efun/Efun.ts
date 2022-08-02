@@ -85,11 +85,12 @@ describe("Unit tests", function () {
           this.groupPredict.address,
           [0, 0, 0, 0],
           "",
-          [],
-          [],
+          [this.erc20Token.address, "0x0000000000000000000000000000000000000000"],
+          [toWei("10"), toWei("10")],
           0,
           false,
           0,
+          { value: toWei("10") },
         );
 
       await this.prediction

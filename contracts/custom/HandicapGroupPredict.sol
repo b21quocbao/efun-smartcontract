@@ -72,19 +72,18 @@ contract HandicapGroupPredict is Initializable {
         uint256 _index = _predictions.predictOptions;
         uint256 _odd = _event.odds[_index];
 
-        if (_event.resultIndex == 4 || _event.resultIndex == 3) {
-            if (_predictOptionStats[4] == 0) {
-                return _predictions.predictionAmount;
-            }
-        }
-
-        if (_event.resultIndex == 0 || _event.resultIndex == 1) {
-            if (_predictOptionStats[0] == 0) {
-                return _predictions.predictionAmount;
-            }
-        }
-
         if (_validate) {
+            if (_event.resultIndex == 4 || _event.resultIndex == 3) {
+                if (_predictOptionStats[4] == 0) {
+                    return _predictions.predictionAmount;
+                }
+            }
+
+            if (_event.resultIndex == 0 || _event.resultIndex == 1) {
+                if (_predictOptionStats[0] == 0) {
+                    return _predictions.predictionAmount;
+                }
+            }
             require((_index == 0 && _event.resultIndex != 4) || (_index == 4 && _event.resultIndex != 0), "no-reward");
         } else {
             return ((_predictStats + _liquidityPool) * _predictions.predictionAmount) / _predictOptionStats[_index];
@@ -122,8 +121,18 @@ contract HandicapGroupPredict is Initializable {
         uint256 _index = _predictions.predictOptions;
         uint256 _odd = _event.odds[_index];
 
-        if (_predictOptionStats[_event.resultIndex] == 0) {
-            return 0;
+        if (_event.status == EDataTypes.EventStatus.FINISH) {
+            if (_event.resultIndex == 4 || _event.resultIndex == 3) {
+                if (_predictOptionStats[4] == 0) {
+                    return 0;
+                }
+            }
+
+            if (_event.resultIndex == 0 || _event.resultIndex == 1) {
+                if (_predictOptionStats[0] == 0) {
+                    return 0;
+                }
+            }
         }
 
         _reward = (_liquidityPool * _predictions.predictionAmount) / _predictOptionStats[_index];

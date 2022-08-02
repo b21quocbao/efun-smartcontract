@@ -71,11 +71,10 @@ contract GroupPredict is Initializable {
         uint256 _index = _predictions.predictOptions;
         uint256 _odd = _event.odds[_index];
 
-        if (_predictOptionStats[_event.resultIndex] == 0) {
-            return _predictions.predictionAmount;
-        }
-
         if (_validate) {
+            if (_predictOptionStats[_event.resultIndex] == 0) {
+                return _predictions.predictionAmount;
+            }
             require(_event.resultIndex == _predictions.predictOptions, "no-reward");
         }
 
@@ -98,7 +97,7 @@ contract GroupPredict is Initializable {
         uint256 _index = _predictions.predictOptions;
         uint256 _odd = _event.odds[_index];
 
-        if (_predictOptionStats[_event.resultIndex] == 0) {
+        if (_event.status == EDataTypes.EventStatus.FINISH && _predictOptionStats[_event.resultIndex] == 0) {
             return 0;
         }
 

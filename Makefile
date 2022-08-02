@@ -1,6 +1,12 @@
 create-base:
-	yarn hardhat deploy:Event --network bscTestnet
 	yarn hardhat deploy:Prediction --network bscTestnet
+	yarn hardhat deploy:Event --network bscTestnet
+create-games:
+	yarn hardhat deploy:MultipleChoices --network bscTestnet
+	yarn hardhat deploy:GroupPredict --network bscTestnet
+	yarn hardhat deploy:HandicapGroupPredict --network bscTestnet
+	yarn hardhat deploy:Handicap --network bscTestnet
+	yarn hardhat deploy:OverUnder --network bscTestnet
 upgrade:
 	yarn hardhat upgrade:Prediction --network bscTestnet --address 0x737Df0F21b8C98E1F2CB2D652428f337191Bd929
 	yarn hardhat upgrade:Event --network bscTestnet --address 0x54d760D06e229a3100a915514CB93216B0444799

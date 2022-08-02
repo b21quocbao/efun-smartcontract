@@ -140,3 +140,27 @@ task("calculate:potential:reward").setAction(async function (_taskArgs, hre) {
     "potential 1",
   );
 });
+
+task("calculate:potential:multiple").setAction(async function (_taskArgs, hre) {
+  const { ethers } = hre;
+  const [deployer] = await ethers.getSigners();
+
+  const contract = await GroupPredict__factory.connect("0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208", deployer);
+
+  console.log(
+    await contract.calculateRewardSponsor(
+      "0x54d760d06e229a3100a915514cb93216b0444799",
+      66,
+      "4000000000000000000000",
+      [0, "2000000000000000000000", 0, 0, 0],
+      {
+        predictionAmount: "2000000000000000000000",
+        predictOptions: 2,
+        claimed: false,
+      },
+      10000,
+      "1000000000000000000000",
+    ),
+    "potential 1",
+  );
+});

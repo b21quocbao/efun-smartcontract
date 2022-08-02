@@ -40,7 +40,7 @@ task("verify:single:address")
     console.log(currentImplAddress, "Line #18 verify.ts");
 
     console.log(
-      await execAsync("yarn hardhat verify --network bscTestnet " + currentImplAddress).catch(err => {
+      await execAsync(`yarn hardhat verify --network bscTestnet ` + currentImplAddress).catch(err => {
         console.log(err, "Line #23 verify.ts");
       }),
       "Line #24 verify.ts",
