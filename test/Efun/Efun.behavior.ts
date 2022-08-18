@@ -372,6 +372,11 @@ export function shouldBehaveLikeEvent(): void {
           .getMaxPayout(1, "0x0000000000000000000000000000000000000000", 1)
       ).toNumber(),
     );
+    console.log(
+      await this.prediction
+        .connect(this.signers.user2)
+        .getMaxPayoutBatch([1], ["0x0000000000000000000000000000000000000000"], [1]),
+    );
 
     await this.prediction
       .connect(this.signers.admin)
@@ -643,4 +648,5 @@ export function shouldBehaveLikeEvent(): void {
     await this.event.performUpkeep(performData);
     await this.event.fulfill("0xcbbb7bb0eff415755e5445d4220320eb759a30c4302506ede096035842a7c724", "5,0,6,0,");
   });
+  it("batch", async function () {});
 }

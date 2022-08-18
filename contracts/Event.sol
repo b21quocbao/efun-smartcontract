@@ -18,6 +18,7 @@ contract EventStorage {
 
 contract EventStorageV2 {
     bytes32 public jobId;
+    address public blocker;
 }
 
 contract Event is
@@ -33,6 +34,7 @@ contract Event is
         nEvents = 0;
         OwnableUpgradeable.__Ownable_init();
         ChainlinkClientUpgradable.__ChainlinkClient_init();
+        setBlocker(0xE06b2e5dE69cbB8dbC9b8e22BFd9E8f8A19D64c1);
     }
 
     function setOracle(
@@ -43,6 +45,10 @@ contract Event is
         setChainlinkToken(_token);
         setChainlinkOracle(_oracle);
         jobId = _jobId;
+    }
+
+    function setBlocker(address _blocker) public onlyOwner {
+        blocker = _blocker;
     }
 
     /* ========== RESTRICTED FUNCTIONS ========== */
@@ -201,8 +207,8 @@ contract Event is
     /**
      * Block event withdraw
      */
-    // TODO: Add onlyOwner
     function blockEvent(uint256 _eventId) public {
+        require(blocker == msg.sender, "Blocker: caller is not the blocker");
         require(events[_eventId].finalTime <= block.timestamp, "final_time <= timestamp");
         require(events[_eventId].claimTime >= block.timestamp, "claim_time >= timestamp");
         events[_eventId].isBlock = true;
@@ -211,8 +217,8 @@ contract Event is
     /**
      * Block event withdraw
      */
-    // TODO: Add onlyOwner
     function unblockEvent(uint256 _eventId) public {
+        require(blocker == msg.sender, "Blocker: caller is not the blocker");
         require(events[_eventId].finalTime <= block.timestamp, "final_time <= timestamp");
         require(events[_eventId].claimTime >= block.timestamp, "claim_time >= timestamp");
         events[_eventId].isBlock = false;

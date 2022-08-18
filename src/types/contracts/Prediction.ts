@@ -61,6 +61,7 @@ export interface PredictionInterface extends utils.Interface {
     "getEventInfo(uint256,address)": FunctionFragment;
     "getFee(uint256)": FunctionFragment;
     "getMaxPayout(uint256,address,uint256)": FunctionFragment;
+    "getMaxPayoutBatch(uint256[],address[],uint256[])": FunctionFragment;
     "getPotentialReward(uint256,address,uint256,uint256)": FunctionFragment;
     "getPredictInfo(uint256,address,address,uint256)": FunctionFragment;
     "getRemainingLP(uint256,address[])": FunctionFragment;
@@ -102,6 +103,7 @@ export interface PredictionInterface extends utils.Interface {
       | "getEventInfo"
       | "getFee"
       | "getMaxPayout"
+      | "getMaxPayoutBatch"
       | "getPotentialReward"
       | "getPredictInfo"
       | "getRemainingLP"
@@ -198,6 +200,10 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getMaxPayout",
     values: [BigNumberish, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMaxPayoutBatch",
+    values: [BigNumberish[], string[], BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "getPotentialReward",
@@ -328,6 +334,10 @@ export interface PredictionInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "getFee", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getMaxPayout",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMaxPayoutBatch",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -673,6 +683,13 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    getMaxPayoutBatch(
+      _eventIds: BigNumberish[],
+      _tokens: string[],
+      _indexs: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<[BigNumber[]]>;
+
     getPotentialReward(
       _eventId: BigNumberish,
       _token: string,
@@ -902,6 +919,13 @@ export interface Prediction extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  getMaxPayoutBatch(
+    _eventIds: BigNumberish[],
+    _tokens: string[],
+    _indexs: BigNumberish[],
+    overrides?: CallOverrides
+  ): Promise<BigNumber[]>;
+
   getPotentialReward(
     _eventId: BigNumberish,
     _token: string,
@@ -1127,6 +1151,13 @@ export interface Prediction extends BaseContract {
       _index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getMaxPayoutBatch(
+      _eventIds: BigNumberish[],
+      _tokens: string[],
+      _indexs: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<BigNumber[]>;
 
     getPotentialReward(
       _eventId: BigNumberish,
@@ -1456,6 +1487,13 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getMaxPayoutBatch(
+      _eventIds: BigNumberish[],
+      _tokens: string[],
+      _indexs: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getPotentialReward(
       _eventId: BigNumberish,
       _token: string,
@@ -1675,6 +1713,13 @@ export interface Prediction extends BaseContract {
       _eventId: BigNumberish,
       _token: string,
       _index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getMaxPayoutBatch(
+      _eventIds: BigNumberish[],
+      _tokens: string[],
+      _indexs: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

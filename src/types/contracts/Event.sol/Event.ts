@@ -83,6 +83,7 @@ export declare namespace EDataTypes {
 export interface EventInterface extends utils.Interface {
   functions: {
     "blockEvent(uint256)": FunctionFragment;
+    "blocker()": FunctionFragment;
     "checkUpkeep(bytes)": FunctionFragment;
     "createSingleEvent(uint256[3],address,uint256[],string,address,uint256,bool,uint256)": FunctionFragment;
     "events(uint256)": FunctionFragment;
@@ -94,6 +95,7 @@ export interface EventInterface extends utils.Interface {
     "owner()": FunctionFragment;
     "performUpkeep(bytes)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "setBlocker(address)": FunctionFragment;
     "setOracle(address,address,bytes32)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "unblockEvent(uint256)": FunctionFragment;
@@ -104,6 +106,7 @@ export interface EventInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "blockEvent"
+      | "blocker"
       | "checkUpkeep"
       | "createSingleEvent"
       | "events"
@@ -115,6 +118,7 @@ export interface EventInterface extends utils.Interface {
       | "owner"
       | "performUpkeep"
       | "renounceOwnership"
+      | "setBlocker"
       | "setOracle"
       | "transferOwnership"
       | "unblockEvent"
@@ -126,6 +130,7 @@ export interface EventInterface extends utils.Interface {
     functionFragment: "blockEvent",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "blocker", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "checkUpkeep",
     values: [BytesLike]
@@ -167,6 +172,7 @@ export interface EventInterface extends utils.Interface {
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "setBlocker", values: [string]): string;
   encodeFunctionData(
     functionFragment: "setOracle",
     values: [string, string, BytesLike]
@@ -189,6 +195,7 @@ export interface EventInterface extends utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "blockEvent", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "blocker", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "checkUpkeep",
     data: BytesLike
@@ -212,6 +219,7 @@ export interface EventInterface extends utils.Interface {
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setBlocker", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setOracle", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
@@ -346,6 +354,8 @@ export interface Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    blocker(overrides?: CallOverrides): Promise<[string]>;
+
     checkUpkeep(
       arg0: BytesLike,
       overrides?: CallOverrides
@@ -434,6 +444,11 @@ export interface Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setBlocker(
+      _blocker: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setOracle(
       _token: string,
       _oracle: string,
@@ -466,6 +481,8 @@ export interface Event extends BaseContract {
     _eventId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  blocker(overrides?: CallOverrides): Promise<string>;
 
   checkUpkeep(
     arg0: BytesLike,
@@ -553,6 +570,11 @@ export interface Event extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setBlocker(
+    _blocker: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setOracle(
     _token: string,
     _oracle: string,
@@ -585,6 +607,8 @@ export interface Event extends BaseContract {
       _eventId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    blocker(overrides?: CallOverrides): Promise<string>;
 
     checkUpkeep(
       arg0: BytesLike,
@@ -668,6 +692,8 @@ export interface Event extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
+    setBlocker(_blocker: string, overrides?: CallOverrides): Promise<void>;
+
     setOracle(
       _token: string,
       _oracle: string,
@@ -744,6 +770,8 @@ export interface Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    blocker(overrides?: CallOverrides): Promise<BigNumber>;
+
     checkUpkeep(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     createSingleEvent(
@@ -787,6 +815,11 @@ export interface Event extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setBlocker(
+      _blocker: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setOracle(
       _token: string,
       _oracle: string,
@@ -820,6 +853,8 @@ export interface Event extends BaseContract {
       _eventId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    blocker(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     checkUpkeep(
       arg0: BytesLike,
@@ -870,6 +905,11 @@ export interface Event extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setBlocker(
+      _blocker: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

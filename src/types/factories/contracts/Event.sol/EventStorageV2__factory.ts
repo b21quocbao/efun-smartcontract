@@ -11,6 +11,19 @@ import type {
 const _abi = [
   {
     inputs: [],
+    name: "blocker",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "jobId",
     outputs: [
       {
@@ -25,7 +38,7 @@ const _abi = [
 ];
 
 const _bytecode =
-  "0x6080604052348015600f57600080fd5b50605480601d6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063c2939d9714602d575b600080fd5b603560005481565b60405190815260200160405180910390f3fea164736f6c6343000804000a";
+  "0x608060405234801561001057600080fd5b5060a28061001f6000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c8063be0ba8d2146037578063c2939d97146080575b600080fd5b60015460569073ffffffffffffffffffffffffffffffffffffffff1681565b60405173ffffffffffffffffffffffffffffffffffffffff90911681526020015b60405180910390f35b608860005481565b604051908152602001607756fea164736f6c6343000804000a";
 
 type EventStorageV2ConstructorParams =
   | [signer?: Signer]

@@ -128,16 +128,11 @@ task("calculate:potential:reward").setAction(async function (_taskArgs, hre) {
   const prediction = await Prediction__factory.connect("0x737Df0F21b8C98E1F2CB2D652428f337191Bd929", deployer);
 
   console.log(
-    Math.round(
-      Number(
-        fromWei(
-          (
-            await prediction.getPotentialReward(527, "0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d", 1, toWei("2"))
-          ).toString(),
-        ),
-      ),
+    await prediction.getMaxPayoutBatch(
+      [172, 172],
+      ["0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d", "0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d"],
+      [0, 1],
     ),
-    "potential 1",
   );
 });
 

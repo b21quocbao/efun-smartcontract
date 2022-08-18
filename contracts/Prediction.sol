@@ -158,6 +158,37 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             );
     }
 
+    function getMaxPayoutBatch(
+        uint256[] calldata _eventIds,
+        address[] calldata _tokens,
+        uint256[] calldata _indexs
+    ) public view returns (uint256[] memory) {
+        uint256[] memory _results = new uint256[](_eventIds.length);
+
+        for (uint256 i = 0; i < _eventIds.length; ++i) {
+            uint256 _index = _indexs[i];
+            uint256 _eventId = _eventIds[i];
+            (
+                EDataTypes.Event memory _event,
+                IHelper _helper,
+                uint256 _liquidityPool,
+                uint256[] memory _predictOptionStat,
+                uint256 _predictStat
+            ) = _getPRInfo(_eventId, _tokens[i]);
+            _results[i] = _helper.maxPayout(
+                eventDataAddress,
+                _eventId,
+                _predictStat,
+                _predictOptionStat,
+                _event.odds[_index],
+                _liquidityPool,
+                oneHundredPrecent,
+                _index
+            );
+        }
+        return _results;
+    }
+
     function getPotentialReward(
         uint256 _eventId,
         address _token,

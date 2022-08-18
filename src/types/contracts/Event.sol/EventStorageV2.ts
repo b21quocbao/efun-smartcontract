@@ -21,13 +21,16 @@ import type {
 
 export interface EventStorageV2Interface extends utils.Interface {
   functions: {
+    "blocker()": FunctionFragment;
     "jobId()": FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: "jobId"): FunctionFragment;
+  getFunction(nameOrSignatureOrTopic: "blocker" | "jobId"): FunctionFragment;
 
+  encodeFunctionData(functionFragment: "blocker", values?: undefined): string;
   encodeFunctionData(functionFragment: "jobId", values?: undefined): string;
 
+  decodeFunctionResult(functionFragment: "blocker", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "jobId", data: BytesLike): Result;
 
   events: {};
@@ -60,22 +63,32 @@ export interface EventStorageV2 extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    blocker(overrides?: CallOverrides): Promise<[string]>;
+
     jobId(overrides?: CallOverrides): Promise<[string]>;
   };
+
+  blocker(overrides?: CallOverrides): Promise<string>;
 
   jobId(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    blocker(overrides?: CallOverrides): Promise<string>;
+
     jobId(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {};
 
   estimateGas: {
+    blocker(overrides?: CallOverrides): Promise<BigNumber>;
+
     jobId(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    blocker(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     jobId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }
