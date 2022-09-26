@@ -45,6 +45,7 @@ export interface PredictionInterface extends utils.Interface {
   functions: {
     "calculateSponsor(uint256,address,uint256,uint256)": FunctionFragment;
     "claimCashBack(uint256,address,uint256)": FunctionFragment;
+    "claimHostFee(uint256[],address)": FunctionFragment;
     "claimRemainingLP(uint256,address[])": FunctionFragment;
     "claimReward(uint256,address,uint256)": FunctionFragment;
     "claimedLiquidityPool(uint256,address)": FunctionFragment;
@@ -59,7 +60,6 @@ export interface PredictionInterface extends utils.Interface {
     "feeCollector()": FunctionFragment;
     "getAmountHasFee(uint256,uint256,uint256)": FunctionFragment;
     "getEventInfo(uint256,address)": FunctionFragment;
-    "getFee(uint256)": FunctionFragment;
     "getMaxPayout(uint256,address,uint256)": FunctionFragment;
     "getMaxPayoutBatch(uint256[],address[],uint256[])": FunctionFragment;
     "getPotentialReward(uint256,address,uint256,uint256)": FunctionFragment;
@@ -87,6 +87,7 @@ export interface PredictionInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "calculateSponsor"
       | "claimCashBack"
+      | "claimHostFee"
       | "claimRemainingLP"
       | "claimReward"
       | "claimedLiquidityPool"
@@ -101,7 +102,6 @@ export interface PredictionInterface extends utils.Interface {
       | "feeCollector"
       | "getAmountHasFee"
       | "getEventInfo"
-      | "getFee"
       | "getMaxPayout"
       | "getMaxPayoutBatch"
       | "getPotentialReward"
@@ -132,6 +132,10 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "claimCashBack",
     values: [BigNumberish, string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "claimHostFee",
+    values: [BigNumberish[], string]
   ): string;
   encodeFunctionData(
     functionFragment: "claimRemainingLP",
@@ -192,10 +196,6 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getEventInfo",
     values: [BigNumberish, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getFee",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getMaxPayout",
@@ -285,6 +285,10 @@ export interface PredictionInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "claimHostFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "claimRemainingLP",
     data: BytesLike
   ): Result;
@@ -331,7 +335,6 @@ export interface PredictionInterface extends utils.Interface {
     functionFragment: "getEventInfo",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "getFee", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getMaxPayout",
     data: BytesLike
@@ -586,6 +589,12 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    claimHostFee(
+      _eventIds: BigNumberish[],
+      _token: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     claimRemainingLP(
       _eventId: BigNumberish,
       _tokens: string[],
@@ -668,13 +677,6 @@ export interface Prediction extends BaseContract {
       token: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
-
-    getFee(
-      _eventId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber] & { hostFee: BigNumber; platformFee: BigNumber }
-    >;
 
     getMaxPayout(
       _eventId: BigNumberish,
@@ -822,6 +824,12 @@ export interface Prediction extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  claimHostFee(
+    _eventIds: BigNumberish[],
+    _token: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   claimRemainingLP(
     _eventId: BigNumberish,
     _tokens: string[],
@@ -904,13 +912,6 @@ export interface Prediction extends BaseContract {
     token: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
-
-  getFee(
-    _eventId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [BigNumber, BigNumber] & { hostFee: BigNumber; platformFee: BigNumber }
-  >;
 
   getMaxPayout(
     _eventId: BigNumberish,
@@ -1055,6 +1056,12 @@ export interface Prediction extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    claimHostFee(
+      _eventIds: BigNumberish[],
+      _token: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     claimRemainingLP(
       _eventId: BigNumberish,
       _tokens: string[],
@@ -1137,13 +1144,6 @@ export interface Prediction extends BaseContract {
       token: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    getFee(
-      _eventId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber] & { hostFee: BigNumber; platformFee: BigNumber }
-    >;
 
     getMaxPayout(
       _eventId: BigNumberish,
@@ -1392,6 +1392,12 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    claimHostFee(
+      _eventIds: BigNumberish[],
+      _token: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     claimRemainingLP(
       _eventId: BigNumberish,
       _tokens: string[],
@@ -1472,11 +1478,6 @@ export interface Prediction extends BaseContract {
     getEventInfo(
       eventId: BigNumberish,
       token: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getFee(
-      _eventId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1621,6 +1622,12 @@ export interface Prediction extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    claimHostFee(
+      _eventIds: BigNumberish[],
+      _token: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     claimRemainingLP(
       _eventId: BigNumberish,
       _tokens: string[],
@@ -1701,11 +1708,6 @@ export interface Prediction extends BaseContract {
     getEventInfo(
       eventId: BigNumberish,
       token: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getFee(
-      _eventId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

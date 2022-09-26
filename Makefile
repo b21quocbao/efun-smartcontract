@@ -17,4 +17,12 @@ upgrade:
 	yarn hardhat upgrade:OverUnder --network bscTestnet --address 0x0CE4809548ADc080F203da3F4AF56fBAdDE8Ae00
 verify:
 	yarn hardhat verify:address --network bscTestnet
+upgrade-mainnet:
+	yarn hardhat upgrade:Prediction --network bsc --address 0x6F351e74dC41a3FbfdF11424894a29c7686004de
+	yarn hardhat upgrade:Event --network bsc --address 0xdb48A5e4b09B5241e812c26763E94C1780B04635
+	yarn hardhat upgrade:MultipleChoices --network bsc --address 0xCe496fFa56849EDdfB70e12f008d2127631966c6  
+	yarn hardhat upgrade:GroupPredict --network bsc --address 0x32F8cB58D9CE271C6De8429d6fB6D074E667664D  
+	yarn hardhat upgrade:HandicapGroupPredict --network bscTestnet --address 0xe34F7787CbD75f8c3248e30516AaFc48a1668f82
+	yarn hardhat upgrade:Handicap --network bscTestnet --address 0xc835c891e71d5c648e88B5ca57C33362b1c29682
+	yarn hardhat upgrade:OverUnder --network bscTestnet --address 0xCEB7c00383B39135D61cF240f0cc6093290F21ED
 

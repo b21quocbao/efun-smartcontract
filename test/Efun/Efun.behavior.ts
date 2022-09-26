@@ -83,6 +83,8 @@ export function shouldBehaveLikeEvent(): void {
     ).to.be.revertedWith("no-reward");
 
     console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
+    await this.prediction.connect(this.signers.admin).claimHostFee([0], "0x0000000000000000000000000000000000000000");
+    console.log(Math.round(Number(fromWei((await this.signers.admin.getBalance()).toString()))), "admin");
     console.log(Math.round(Number(fromWei((await this.signers.user1.getBalance()).toString()))), "user1");
     console.log(Math.round(Number(fromWei((await this.signers.user2.getBalance()).toString()))), "user2");
     console.log(Math.round(Number(fromWei((await this.signers.user3.getBalance()).toString()))), "user3");
@@ -649,4 +651,5 @@ export function shouldBehaveLikeEvent(): void {
     await this.event.fulfill("0xcbbb7bb0eff415755e5445d4220320eb759a30c4302506ede096035842a7c724", "5,0,6,0,");
   });
   it("batch", async function () {});
+  it("claim host fee", async function () {});
 }

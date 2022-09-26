@@ -377,7 +377,9 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         _reward = estimateReward(_eventId, msg.sender, _token, _predictNum, true);
 
         if (_reward > 0) {
-            (uint256 hostFee, uint256 platformFee) = getFee(_eventId);
+            IHelper _helper = IHelper(_event.helperAddress);
+            uint256 hostFee = _helper.hostFee(eventDataAddress, _eventId);
+            uint256 platformFee = _helper.platformFee();
             uint256 _amountHasFee = getAmountHasFee(
                 _eventId,
                 predictions[_eventId][msg.sender][_token][_predictNum].predictionAmount,
@@ -421,20 +423,6 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 _liquidityPool,
                 validate
             );
-    }
-
-    /**
-     * @dev Estimate reward Sponsor
-     */
-    function getFee(uint256 _eventId) public view returns (uint256 hostFee, uint256 platformFee) {
-        EDataTypes.Event memory _event = eventData.info(_eventId);
-        IHelper _helper = IHelper(_event.helperAddress);
-        hostFee = _helper.hostFee(eventDataAddress, _eventId);
-        platformFee = _helper.platformFee();
-        if (_event.affiliate) {
-            hostFee = 0;
-            platformFee = 0;
-        }
     }
 
     /**
@@ -514,6 +502,31 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     }
 
     /**
+     * @dev Claims host fee
+     */
+    function claimHostFee(uint256[] calldata _eventIds, address _token) public {
+        for (uint256 i = 0; i < _eventIds.length; ++i) {
+            uint256 _eventId = _eventIds[i];
+            EDataTypes.Event memory _event = eventData.info(_eventId);
+            require(msg.sender == _event.creator, "unauthorized");
+            IHelper _helper = IHelper(_event.helperAddress);
+            uint256 hostFee = _helper.hostFee(eventDataAddress, _eventId);
+            uint256 prediction = predictStats[_eventId][_token].options[_event.resultIndex];
+            uint256 _amountHasFee = predictStats[_eventId][_token].value - prediction;
+            uint256 _hostAmount = (_amountHasFee * hostFee) / oneHundredPrecent;
+            if (_token == address(0)) {
+                if (_hostAmount > 0) {
+                    payable(_event.creator).transfer(_hostAmount);
+                }
+            } else {
+                if (_hostAmount > 0) {
+                    IERC20Upgradeable(_token).safeTransfer(_event.creator, _hostAmount);
+                }
+            }
+        }
+    }
+
+    /**
      * @dev Claims reward
      */
     function claimCashBack(
@@ -559,7 +572,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256 _hostFee
     ) internal returns (uint256 _idx) {
         if (!_affiliate) {
-            IERC20Upgradeable(efunToken).safeTransferFrom(msg.sender, feeCollector, 10000 * 10**18);
+            IERC20Upgradeable(efunToken).safeTransferFrom(msg.sender, feeCollector, 2000 * 10**18);
         }
         _idx = eventData.createSingleEvent(_times, _helperAddress, _odds, _datas, _creator, _pro, _affiliate, _hostFee);
 
@@ -678,16 +691,10 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             if (_platformAmount > 0) {
                 payable(feeCollector).transfer(_platformAmount);
             }
-            if (_hostAmount > 0) {
-                payable(_creator).transfer(_hostAmount);
-            }
             payable(_toAddress).transfer(_reward - _platformAmount - _hostAmount);
         } else {
             if (_platformAmount > 0) {
                 IERC20Upgradeable(_token).safeTransfer(feeCollector, _platformAmount);
-            }
-            if (_hostAmount > 0) {
-                IERC20Upgradeable(_token).safeTransfer(_creator, _hostAmount);
             }
             IERC20Upgradeable(_token).safeTransfer(_toAddress, _reward - _platformAmount - _hostAmount);
         }

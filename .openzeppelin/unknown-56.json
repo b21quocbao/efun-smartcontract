@@ -1522,7 +1522,7 @@
             "label": "events",
             "offset": 0,
             "slot": "0",
-            "type": "t_mapping(t_uint256,t_struct(Event)3062_storage)",
+            "type": "t_mapping(t_uint256,t_struct(Event)4364_storage)",
             "contract": "EventStorage",
             "src": "contracts\\Event.sol:15"
           },
@@ -1643,7 +1643,7 @@
             "label": "s_ens",
             "offset": 0,
             "slot": "111",
-            "type": "t_contract(ENSInterface)420",
+            "type": "t_contract(ENSInterface)1195",
             "contract": "ChainlinkClientUpgradable",
             "src": "contracts\\ChainlinkClientUpgradable.sol:30"
           },
@@ -1659,7 +1659,7 @@
             "label": "s_link",
             "offset": 0,
             "slot": "113",
-            "type": "t_contract(LinkTokenInterface)534",
+            "type": "t_contract(LinkTokenInterface)1309",
             "contract": "ChainlinkClientUpgradable",
             "src": "contracts\\ChainlinkClientUpgradable.sol:32"
           },
@@ -1667,7 +1667,7 @@
             "label": "s_oracle",
             "offset": 0,
             "slot": "114",
-            "type": "t_contract(OperatorInterface)614",
+            "type": "t_contract(OperatorInterface)1389",
             "contract": "ChainlinkClientUpgradable",
             "src": "contracts\\ChainlinkClientUpgradable.sol:33"
           },
@@ -1729,19 +1729,19 @@
             "label": "bytes32",
             "numberOfBytes": "32"
           },
-          "t_contract(ENSInterface)420": {
+          "t_contract(ENSInterface)1195": {
             "label": "contract ENSInterface",
             "numberOfBytes": "20"
           },
-          "t_contract(LinkTokenInterface)534": {
+          "t_contract(LinkTokenInterface)1309": {
             "label": "contract LinkTokenInterface",
             "numberOfBytes": "20"
           },
-          "t_contract(OperatorInterface)614": {
+          "t_contract(OperatorInterface)1389": {
             "label": "contract OperatorInterface",
             "numberOfBytes": "20"
           },
-          "t_enum(EventStatus)3029": {
+          "t_enum(EventStatus)4331": {
             "label": "enum EDataTypes.EventStatus",
             "members": ["AVAILABLE", "PROGRESS", "FINISH"],
             "numberOfBytes": "1"
@@ -1750,7 +1750,7 @@
             "label": "mapping(bytes32 => address)",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_uint256,t_struct(Event)3062_storage)": {
+          "t_mapping(t_uint256,t_struct(Event)4364_storage)": {
             "label": "mapping(uint256 => struct EDataTypes.Event)",
             "numberOfBytes": "32"
           },
@@ -1758,7 +1758,7 @@
             "label": "string",
             "numberOfBytes": "32"
           },
-          "t_struct(Event)3062_storage": {
+          "t_struct(Event)4364_storage": {
             "label": "struct EDataTypes.Event",
             "members": [
               {
@@ -1787,7 +1787,7 @@
               },
               {
                 "label": "status",
-                "type": "t_enum(EventStatus)3029",
+                "type": "t_enum(EventStatus)4331",
                 "offset": 0,
                 "slot": "4"
               },

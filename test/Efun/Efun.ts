@@ -89,7 +89,7 @@ describe("Unit tests", function () {
           [toWei("10"), toWei("10")],
           0,
           false,
-          0,
+          5,
           { value: toWei("10") },
         );
 
