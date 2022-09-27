@@ -32,14 +32,20 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     mapping(uint256 => mapping(address => uint256)) public liquidityPoolEvent;
     mapping(uint256 => mapping(address => bool)) public claimedLiquidityPool;
     address payable public efunToken;
+    uint256 public creationFee;
 
-    function initialize(uint256 _participateRate, uint256 _oneHundredPrecent) public initializer {
+    function initialize(
+        uint256 _participateRate,
+        uint256 _oneHundredPrecent,
+        uint256 _creationFee
+    ) public initializer {
         OwnableUpgradeable.__Ownable_init();
         ReentrancyGuardUpgradeable.__ReentrancyGuard_init();
         oneHundredPrecent = _oneHundredPrecent;
         setFeeCollector(0x9AFfAA4c1c3Eb3fDdAfEd379C25E50a68A323044);
         setEventData(0xdb48A5e4b09B5241e812c26763E94C1780B04635);
         setEfunToken(0x6746E37A756DA9E34f0BBF1C0495784Ba33b79B4);
+        creationFee = _creationFee;
     }
 
     function hostFee(
@@ -92,6 +98,10 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
     function setEfunToken(address _efunToken) public onlyOwner {
         efunToken = payable(_efunToken);
+    }
+
+    function setCreationFee(uint256 _creationFee) public onlyOwner {
+        creationFee = _creationFee;
     }
 
     /**
@@ -572,7 +582,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         uint256 _hostFee
     ) internal returns (uint256 _idx) {
         if (!_affiliate) {
-            IERC20Upgradeable(efunToken).safeTransferFrom(msg.sender, feeCollector, 2000 * 10**18);
+            IERC20Upgradeable(efunToken).safeTransferFrom(msg.sender, feeCollector, creationFee);
         }
         _idx = eventData.createSingleEvent(_times, _helperAddress, _odds, _datas, _creator, _pro, _affiliate, _hostFee);
 
@@ -587,7 +597,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             _datas,
             _pro,
             _affiliate,
-            _hostFee
+            _hostFee,
+            creationFee
         );
     }
 
@@ -725,7 +736,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         string datas,
         uint256 pro,
         bool affiliate,
-        uint256 _hostFee
+        uint256 _hostFee,
+        uint256 creationFee
     );
     event LPDeposited(uint256 eventId, address token, uint256 amount);
     event LPClaimed(uint256 eventId, address token, uint256 amount);

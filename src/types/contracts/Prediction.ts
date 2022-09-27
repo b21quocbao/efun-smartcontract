@@ -50,6 +50,7 @@ export interface PredictionInterface extends utils.Interface {
     "claimReward(uint256,address,uint256)": FunctionFragment;
     "claimedLiquidityPool(uint256,address)": FunctionFragment;
     "createSingleEvent(uint256[3],address,uint256[],string,address[],uint256[],uint256,bool,uint256)": FunctionFragment;
+    "creationFee()": FunctionFragment;
     "depositLP(uint256,address[],uint256[])": FunctionFragment;
     "efunToken()": FunctionFragment;
     "emergencyWithdraw(address,uint256)": FunctionFragment;
@@ -67,7 +68,7 @@ export interface PredictionInterface extends utils.Interface {
     "getRemainingLP(uint256,address[])": FunctionFragment;
     "getTokenAmount(address)": FunctionFragment;
     "hostFee(address,address,uint256)": FunctionFragment;
-    "initialize(uint256,uint256)": FunctionFragment;
+    "initialize(uint256,uint256,uint256)": FunctionFragment;
     "liquidityPool(address,address)": FunctionFragment;
     "liquidityPoolEvent(uint256,address)": FunctionFragment;
     "owner()": FunctionFragment;
@@ -77,6 +78,7 @@ export interface PredictionInterface extends utils.Interface {
     "predictStats(uint256,address)": FunctionFragment;
     "predictions(uint256,address,address,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "setCreationFee(uint256)": FunctionFragment;
     "setEfunToken(address)": FunctionFragment;
     "setEventData(address)": FunctionFragment;
     "setFeeCollector(address)": FunctionFragment;
@@ -92,6 +94,7 @@ export interface PredictionInterface extends utils.Interface {
       | "claimReward"
       | "claimedLiquidityPool"
       | "createSingleEvent"
+      | "creationFee"
       | "depositLP"
       | "efunToken"
       | "emergencyWithdraw"
@@ -119,6 +122,7 @@ export interface PredictionInterface extends utils.Interface {
       | "predictStats"
       | "predictions"
       | "renounceOwnership"
+      | "setCreationFee"
       | "setEfunToken"
       | "setEventData"
       | "setFeeCollector"
@@ -162,6 +166,10 @@ export interface PredictionInterface extends utils.Interface {
       boolean,
       BigNumberish
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "creationFee",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "depositLP",
@@ -227,7 +235,7 @@ export interface PredictionInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "liquidityPool",
@@ -258,6 +266,10 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setCreationFee",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "setEfunToken",
@@ -302,6 +314,10 @@ export interface PredictionInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "createSingleEvent",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "creationFee",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "depositLP", data: BytesLike): Result;
@@ -392,6 +408,10 @@ export interface PredictionInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setCreationFee",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setEfunToken",
     data: BytesLike
   ): Result;
@@ -410,7 +430,7 @@ export interface PredictionInterface extends utils.Interface {
 
   events: {
     "CashBackClaimed(uint256,uint256,address,address)": EventFragment;
-    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256,bool,uint256)": EventFragment;
+    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256,bool,uint256,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "LPClaimed(uint256,address,uint256)": EventFragment;
     "LPDeposited(uint256,address,uint256)": EventFragment;
@@ -454,6 +474,7 @@ export interface EventCreatedEventObject {
   pro: BigNumber;
   affiliate: boolean;
   _hostFee: BigNumber;
+  creationFee: BigNumber;
 }
 export type EventCreatedEvent = TypedEvent<
   [
@@ -467,6 +488,7 @@ export type EventCreatedEvent = TypedEvent<
     string,
     BigNumber,
     boolean,
+    BigNumber,
     BigNumber
   ],
   EventCreatedEventObject
@@ -627,6 +649,8 @@ export interface Prediction extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    creationFee(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     depositLP(
       _eventId: BigNumberish,
       _tokens: string[],
@@ -729,6 +753,7 @@ export interface Prediction extends BaseContract {
     initialize(
       _participateRate: BigNumberish,
       _oneHundredPrecent: BigNumberish,
+      _creationFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -785,6 +810,11 @@ export interface Prediction extends BaseContract {
     >;
 
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setCreationFee(
+      _creationFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -861,6 +891,8 @@ export interface Prediction extends BaseContract {
     _hostFee: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  creationFee(overrides?: CallOverrides): Promise<BigNumber>;
 
   depositLP(
     _eventId: BigNumberish,
@@ -961,6 +993,7 @@ export interface Prediction extends BaseContract {
   initialize(
     _participateRate: BigNumberish,
     _oneHundredPrecent: BigNumberish,
+    _creationFee: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1017,6 +1050,11 @@ export interface Prediction extends BaseContract {
   >;
 
   renounceOwnership(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setCreationFee(
+    _creationFee: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1093,6 +1131,8 @@ export interface Prediction extends BaseContract {
       _hostFee: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    creationFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     depositLP(
       _eventId: BigNumberish,
@@ -1196,6 +1236,7 @@ export interface Prediction extends BaseContract {
     initialize(
       _participateRate: BigNumberish,
       _oneHundredPrecent: BigNumberish,
+      _creationFee: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1253,6 +1294,11 @@ export interface Prediction extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
+    setCreationFee(
+      _creationFee: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setEfunToken(_efunToken: string, overrides?: CallOverrides): Promise<void>;
 
     setEventData(_eventData: string, overrides?: CallOverrides): Promise<void>;
@@ -1282,7 +1328,7 @@ export interface Prediction extends BaseContract {
       token?: null
     ): CashBackClaimedEventFilter;
 
-    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256,bool,uint256)"(
+    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256,bool,uint256,uint256)"(
       idx?: null,
       startTime?: null,
       deadlineTime?: null,
@@ -1293,7 +1339,8 @@ export interface Prediction extends BaseContract {
       datas?: null,
       pro?: null,
       affiliate?: null,
-      _hostFee?: null
+      _hostFee?: null,
+      creationFee?: null
     ): EventCreatedEventFilter;
     EventCreated(
       idx?: null,
@@ -1306,7 +1353,8 @@ export interface Prediction extends BaseContract {
       datas?: null,
       pro?: null,
       affiliate?: null,
-      _hostFee?: null
+      _hostFee?: null,
+      creationFee?: null
     ): EventCreatedEventFilter;
 
     "Initialized(uint8)"(version?: null): InitializedEventFilter;
@@ -1430,6 +1478,8 @@ export interface Prediction extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    creationFee(overrides?: CallOverrides): Promise<BigNumber>;
+
     depositLP(
       _eventId: BigNumberish,
       _tokens: string[],
@@ -1532,6 +1582,7 @@ export interface Prediction extends BaseContract {
     initialize(
       _participateRate: BigNumberish,
       _oneHundredPrecent: BigNumberish,
+      _creationFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1582,6 +1633,11 @@ export interface Prediction extends BaseContract {
     ): Promise<BigNumber>;
 
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setCreationFee(
+      _creationFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1659,6 +1715,8 @@ export interface Prediction extends BaseContract {
       _hostFee: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    creationFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     depositLP(
       _eventId: BigNumberish,
@@ -1762,6 +1820,7 @@ export interface Prediction extends BaseContract {
     initialize(
       _participateRate: BigNumberish,
       _oneHundredPrecent: BigNumberish,
+      _creationFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1812,6 +1871,11 @@ export interface Prediction extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setCreationFee(
+      _creationFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

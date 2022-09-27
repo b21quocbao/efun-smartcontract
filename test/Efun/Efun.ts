@@ -70,7 +70,7 @@ describe("Unit tests", function () {
         this.operator.address,
         "0xe4c45e0420104e1ca472a14ce6a445af00000000000000000000000000000000",
       );
-      await this.prediction.initialize(100, 10000);
+      await this.prediction.initialize(100, 10000, toWei("2000"));
       await this.prediction.connect(this.signers.admin).setEventData(this.event.address);
       await this.prediction.connect(this.signers.admin).setEfunToken(this.erc20Token.address);
       await this.prediction.connect(this.signers.admin).setFeeCollector(this.signers.admin.address);

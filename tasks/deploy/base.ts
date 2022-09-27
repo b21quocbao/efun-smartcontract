@@ -11,7 +11,7 @@ const { toWei } = web3.utils;
 
 task("deploy:Prediction").setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
   const PredictionFactory: Prediction__factory = <Prediction__factory>await ethers.getContractFactory("Prediction");
-  const predictionFactory = await upgrades.deployProxy(PredictionFactory, [100, 10000]);
+  const predictionFactory = await upgrades.deployProxy(PredictionFactory, [100, 10000, toWei("2000")]);
   console.log("Prediction deployed to: ", predictionFactory.address);
 });
 
