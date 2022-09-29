@@ -10,6 +10,25 @@ import type {
 
 const _abi = [
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "aggregator",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "blocker",
     outputs: [
@@ -17,6 +36,25 @@ const _abi = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "finalResult",
+    outputs: [
+      {
+        internalType: "int256",
+        name: "",
+        type: "int256",
       },
     ],
     stateMutability: "view",
@@ -38,7 +76,7 @@ const _abi = [
 ];
 
 const _bytecode =
-  "0x608060405234801561001057600080fd5b5060a28061001f6000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c8063be0ba8d2146037578063c2939d97146080575b600080fd5b60015460569073ffffffffffffffffffffffffffffffffffffffff1681565b60405173ffffffffffffffffffffffffffffffffffffffff90911681526020015b60405180910390f35b608860005481565b604051908152602001607756fea164736f6c6343000804000a";
+  "0x608060405234801561001057600080fd5b5061012d806100206000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c806304a37f0914610051578063be0ba8d214610084578063c210d489146100c9578063c2939d97146100ff575b600080fd5b61007161005f366004610108565b60036020526000908152604090205481565b6040519081526020015b60405180910390f35b6001546100a49073ffffffffffffffffffffffffffffffffffffffff1681565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200161007b565b6100a46100d7366004610108565b60026020526000908152604090205473ffffffffffffffffffffffffffffffffffffffff1681565b61007160005481565b600060208284031215610119578081fd5b503591905056fea164736f6c6343000804000a";
 
 type EventStorageV2ConstructorParams =
   | [signer?: Signer]

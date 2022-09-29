@@ -78,7 +78,7 @@ export declare namespace EDataTypes {
 
 export interface IEventInterface extends utils.Interface {
   functions: {
-    "createSingleEvent(uint256[3],address,uint256[],string,address,uint256,bool,uint256)": FunctionFragment;
+    "createSingleEvent(uint256[5],address[3],uint256[],string,bool)": FunctionFragment;
     "info(uint256)": FunctionFragment;
   };
 
@@ -89,14 +89,11 @@ export interface IEventInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "createSingleEvent",
     values: [
-      [BigNumberish, BigNumberish, BigNumberish],
-      string,
+      [BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish],
+      [string, string, string],
       BigNumberish[],
       string,
-      string,
-      BigNumberish,
-      boolean,
-      BigNumberish
+      boolean
     ]
   ): string;
   encodeFunctionData(functionFragment: "info", values: [BigNumberish]): string;
@@ -138,14 +135,17 @@ export interface IEvent extends BaseContract {
 
   functions: {
     createSingleEvent(
-      _times: [BigNumberish, BigNumberish, BigNumberish],
-      _helperAddress: string,
+      _numInfos: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      _addresses: [string, string, string],
       _odds: BigNumberish[],
       _datas: string,
-      _creator: string,
-      _pro: BigNumberish,
       _affiliate: boolean,
-      _hostFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -158,14 +158,17 @@ export interface IEvent extends BaseContract {
   };
 
   createSingleEvent(
-    _times: [BigNumberish, BigNumberish, BigNumberish],
-    _helperAddress: string,
+    _numInfos: [
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ],
+    _addresses: [string, string, string],
     _odds: BigNumberish[],
     _datas: string,
-    _creator: string,
-    _pro: BigNumberish,
     _affiliate: boolean,
-    _hostFee: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -176,14 +179,17 @@ export interface IEvent extends BaseContract {
 
   callStatic: {
     createSingleEvent(
-      _times: [BigNumberish, BigNumberish, BigNumberish],
-      _helperAddress: string,
+      _numInfos: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      _addresses: [string, string, string],
       _odds: BigNumberish[],
       _datas: string,
-      _creator: string,
-      _pro: BigNumberish,
       _affiliate: boolean,
-      _hostFee: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -197,14 +203,17 @@ export interface IEvent extends BaseContract {
 
   estimateGas: {
     createSingleEvent(
-      _times: [BigNumberish, BigNumberish, BigNumberish],
-      _helperAddress: string,
+      _numInfos: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      _addresses: [string, string, string],
       _odds: BigNumberish[],
       _datas: string,
-      _creator: string,
-      _pro: BigNumberish,
       _affiliate: boolean,
-      _hostFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -213,14 +222,17 @@ export interface IEvent extends BaseContract {
 
   populateTransaction: {
     createSingleEvent(
-      _times: [BigNumberish, BigNumberish, BigNumberish],
-      _helperAddress: string,
+      _numInfos: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      _addresses: [string, string, string],
       _odds: BigNumberish[],
       _datas: string,
-      _creator: string,
-      _pro: BigNumberish,
       _affiliate: boolean,
-      _hostFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

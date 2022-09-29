@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
 import web3 from "web3";
 
 import { currentBlockTime, duration, increase } from "../utils/time";
@@ -352,14 +351,15 @@ export function shouldBehaveLikeEvent(): void {
       this.event
         .connect(this.signers.user1)
         .createSingleEvent(
-          [1653907007, 1653914187, 1653914187],
-          "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+          [1653907007, 1653914187, 1653914187, 0, 0],
+          [
+            "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+            "0x0000000000000000000000000000000000000000",
+            this.signers.user1.address,
+          ],
           [10000, 10000],
           "",
-          this.signers.user1.address,
-          0,
           false,
-          0,
         ),
     ).to.be.revertedWith("end_time > deadline_time");
   });
@@ -623,26 +623,28 @@ export function shouldBehaveLikeEvent(): void {
     await this.event
       .connect(this.signers.admin)
       .createSingleEvent(
-        [timestamp, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600],
-        "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+        [timestamp, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600, 1, 0],
+        [
+          "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+          "0x0000000000000000000000000000000000000000",
+          this.signers.user1.address,
+        ],
         [10000, 10000],
         "",
-        this.signers.user1.address,
-        1,
         false,
-        0,
       );
     await this.event
       .connect(this.signers.admin)
       .createSingleEvent(
-        [timestamp, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600],
-        "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+        [timestamp, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600, 2, 0],
+        [
+          "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+          "0x0000000000000000000000000000000000000000",
+          this.signers.user1.address,
+        ],
         [10000, 10000],
         "",
-        this.signers.user1.address,
-        2,
         false,
-        0,
       );
     await increase(duration.days(10));
     const { performData } = await this.event.checkUpkeep("0x");

@@ -4,6 +4,7 @@
 import type {
   BaseContract,
   BigNumber,
+  BigNumberish,
   BytesLike,
   CallOverrides,
   PopulatedTransaction,
@@ -21,16 +22,33 @@ import type {
 
 export interface EventStorageV2Interface extends utils.Interface {
   functions: {
+    "aggregator(uint256)": FunctionFragment;
     "blocker()": FunctionFragment;
+    "finalResult(uint256)": FunctionFragment;
     "jobId()": FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: "blocker" | "jobId"): FunctionFragment;
+  getFunction(
+    nameOrSignatureOrTopic: "aggregator" | "blocker" | "finalResult" | "jobId"
+  ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "aggregator",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "blocker", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "finalResult",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "jobId", values?: undefined): string;
 
+  decodeFunctionResult(functionFragment: "aggregator", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "blocker", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "finalResult",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "jobId", data: BytesLike): Result;
 
   events: {};
@@ -63,17 +81,41 @@ export interface EventStorageV2 extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    aggregator(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     blocker(overrides?: CallOverrides): Promise<[string]>;
+
+    finalResult(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     jobId(overrides?: CallOverrides): Promise<[string]>;
   };
 
+  aggregator(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
   blocker(overrides?: CallOverrides): Promise<string>;
+
+  finalResult(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   jobId(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    aggregator(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
     blocker(overrides?: CallOverrides): Promise<string>;
+
+    finalResult(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     jobId(overrides?: CallOverrides): Promise<string>;
   };
@@ -81,13 +123,33 @@ export interface EventStorageV2 extends BaseContract {
   filters: {};
 
   estimateGas: {
+    aggregator(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     blocker(overrides?: CallOverrides): Promise<BigNumber>;
+
+    finalResult(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     jobId(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    aggregator(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     blocker(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    finalResult(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     jobId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };

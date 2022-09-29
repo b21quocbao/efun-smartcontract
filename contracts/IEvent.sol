@@ -9,13 +9,10 @@ interface IEvent {
     function info(uint256 _eventId) external view returns (EDataTypes.Event memory _event);
 
     function createSingleEvent(
-        uint256[3] memory _times,
-        address _helperAddress,
+        uint256[5] memory _numInfos,
+        address[3] memory _addresses,
         uint256[] calldata _odds,
         string memory _datas,
-        address _creator,
-        uint256 _pro,
-        bool _affiliate,
-        uint256 _hostFee
+        bool _affiliate
     ) external returns (uint256 _idx);
 }

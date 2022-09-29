@@ -8,6 +8,7 @@ import "./ChainlinkClientUpgradable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./EDataTypes.sol";
 import "@chainlink/contracts/src/v0.8/KeeperCompatible.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 import "hardhat/console.sol";
 
@@ -19,6 +20,9 @@ contract EventStorage {
 contract EventStorageV2 {
     bytes32 public jobId;
     address public blocker;
+    mapping(uint256 => address) public aggregator;
+    mapping(uint256 => int256) public finalResult;
+    AggregatorV3Interface internal priceFeed;
 }
 
 contract Event is
@@ -77,36 +81,34 @@ contract Event is
     }
 
     function createSingleEvent(
-        uint256[3] memory _times,
-        address _helperAddress,
+        uint256[5] memory _numInfos,
+        address[3] memory _addresses,
         uint256[] calldata _odds,
         string memory _datas,
-        address _creator,
-        uint256 _pro,
-        bool _affiliate,
-        uint256 _hostFee
+        bool _affiliate
     ) external returns (uint256 _idx) {
-        require(_times[0] < _times[1], "deadline_time > start_time");
-        require(_times[1] < _times[2], "end_time > deadline_time");
+        require(_numInfos[0] < _numInfos[1], "deadline_time > start_time");
+        require(_numInfos[1] < _numInfos[2], "end_time > deadline_time");
         _idx = nEvents;
 
         events[_idx] = EDataTypes.Event(
-            _times[0],
-            _times[1],
-            _times[2],
+            _numInfos[0],
+            _numInfos[1],
+            _numInfos[2],
             0,
             EDataTypes.EventStatus.AVAILABLE,
-            _helperAddress,
-            _creator,
+            _addresses[0],
+            _addresses[2],
             _odds,
             _datas,
-            _pro,
+            _numInfos[3],
             false,
             0,
             0,
             _affiliate,
-            _hostFee
+            _numInfos[4]
         );
+        aggregator[_idx] = _addresses[1];
         nEvents++;
     }
 
@@ -138,20 +140,42 @@ contract Event is
     }
 
     function performUpkeep(bytes calldata performData) public override {
-        Chainlink.Request memory req = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
-        req.add("get", string(performData));
-        req.add("path", "data");
-        sendChainlinkRequest(req, 0);
-
         uint256 number = 0;
+        bool callOracle = false;
         for (uint256 i = 0; i < performData.length; i++) {
             uint8 c = uint8(performData[i]);
             if (c >= 48 && c < 58) {
                 number = number * 10 + c - 48;
             } else {
-                events[number].status = EDataTypes.EventStatus.PROGRESS;
+                if (events[number].pro == 5) {
+                    priceFeed = AggregatorV3Interface(aggregator[number]);
+                    (, int256 price, , , ) = priceFeed.latestRoundData();
+                    for (uint256 i = 0; i < events[number].odds.length; i++) {
+                        if (
+                            (i != events[number].odds.length - 1 && price < int256(events[number].odds[i])) ||
+                            i == events[number].odds.length - 1
+                        ) {
+                            events[number].finalTime = block.timestamp;
+                            events[number].claimTime = block.timestamp;
+                            events[number].resultIndex = i;
+                            events[number].status = EDataTypes.EventStatus.FINISH;
+                            finalResult[number] = price;
+                            break;
+                        }
+                    }
+                } else {
+                    events[number].status = EDataTypes.EventStatus.PROGRESS;
+                    callOracle = true;
+                }
                 number = 0;
             }
+        }
+
+        if (callOracle) {
+            Chainlink.Request memory req = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
+            req.add("get", string(performData));
+            req.add("path", "data");
+            sendChainlinkRequest(req, 0);
         }
     }
 

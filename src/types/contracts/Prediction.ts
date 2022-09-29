@@ -49,7 +49,7 @@ export interface PredictionInterface extends utils.Interface {
     "claimRemainingLP(uint256,address[])": FunctionFragment;
     "claimReward(uint256,address,uint256)": FunctionFragment;
     "claimedLiquidityPool(uint256,address)": FunctionFragment;
-    "createSingleEvent(uint256[3],address,uint256[],string,address[],uint256[],uint256,bool,uint256)": FunctionFragment;
+    "createSingleEvent(uint256[5],address[3],uint256[],string,address[],uint256[],bool)": FunctionFragment;
     "creationFee()": FunctionFragment;
     "depositLP(uint256,address[],uint256[])": FunctionFragment;
     "efunToken()": FunctionFragment;
@@ -156,15 +156,13 @@ export interface PredictionInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "createSingleEvent",
     values: [
-      [BigNumberish, BigNumberish, BigNumberish],
-      string,
+      [BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish],
+      [string, string, string],
       BigNumberish[],
       string,
       string[],
       BigNumberish[],
-      BigNumberish,
-      boolean,
-      BigNumberish
+      boolean
     ]
   ): string;
   encodeFunctionData(
@@ -430,7 +428,7 @@ export interface PredictionInterface extends utils.Interface {
 
   events: {
     "CashBackClaimed(uint256,uint256,address,address)": EventFragment;
-    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256,bool,uint256,uint256)": EventFragment;
+    "EventCreated(uint256,uint256[5],address[3],uint256[],string,bool,uint256)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "LPClaimed(uint256,address,uint256)": EventFragment;
     "LPDeposited(uint256,address,uint256)": EventFragment;
@@ -464,31 +462,21 @@ export type CashBackClaimedEventFilter = TypedEventFilter<CashBackClaimedEvent>;
 
 export interface EventCreatedEventObject {
   idx: BigNumber;
-  startTime: BigNumber;
-  deadlineTime: BigNumber;
-  endTime: BigNumber;
-  helperAddress: string;
-  creator: string;
+  numInfos: [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber];
+  addresses: [string, string, string];
   odds: BigNumber[];
   datas: string;
-  pro: BigNumber;
   affiliate: boolean;
-  _hostFee: BigNumber;
   creationFee: BigNumber;
 }
 export type EventCreatedEvent = TypedEvent<
   [
     BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    string,
-    string,
+    [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber],
+    [string, string, string],
     BigNumber[],
     string,
-    BigNumber,
     boolean,
-    BigNumber,
     BigNumber
   ],
   EventCreatedEventObject
@@ -637,15 +625,19 @@ export interface Prediction extends BaseContract {
     ): Promise<[boolean]>;
 
     createSingleEvent(
-      _times: [BigNumberish, BigNumberish, BigNumberish],
-      _helperAddress: string,
+      _numInfos: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      _addresses: [string, string, string],
       _odds: BigNumberish[],
       _datas: string,
       _tokens: string[],
       _amounts: BigNumberish[],
-      _pro: BigNumberish,
       _affiliate: boolean,
-      _hostFee: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -880,15 +872,19 @@ export interface Prediction extends BaseContract {
   ): Promise<boolean>;
 
   createSingleEvent(
-    _times: [BigNumberish, BigNumberish, BigNumberish],
-    _helperAddress: string,
+    _numInfos: [
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ],
+    _addresses: [string, string, string],
     _odds: BigNumberish[],
     _datas: string,
     _tokens: string[],
     _amounts: BigNumberish[],
-    _pro: BigNumberish,
     _affiliate: boolean,
-    _hostFee: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1120,15 +1116,19 @@ export interface Prediction extends BaseContract {
     ): Promise<boolean>;
 
     createSingleEvent(
-      _times: [BigNumberish, BigNumberish, BigNumberish],
-      _helperAddress: string,
+      _numInfos: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      _addresses: [string, string, string],
       _odds: BigNumberish[],
       _datas: string,
       _tokens: string[],
       _amounts: BigNumberish[],
-      _pro: BigNumberish,
       _affiliate: boolean,
-      _hostFee: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1328,32 +1328,22 @@ export interface Prediction extends BaseContract {
       token?: null
     ): CashBackClaimedEventFilter;
 
-    "EventCreated(uint256,uint256,uint256,uint256,address,address,uint256[],string,uint256,bool,uint256,uint256)"(
+    "EventCreated(uint256,uint256[5],address[3],uint256[],string,bool,uint256)"(
       idx?: null,
-      startTime?: null,
-      deadlineTime?: null,
-      endTime?: null,
-      helperAddress?: null,
-      creator?: null,
+      numInfos?: null,
+      addresses?: null,
       odds?: null,
       datas?: null,
-      pro?: null,
       affiliate?: null,
-      _hostFee?: null,
       creationFee?: null
     ): EventCreatedEventFilter;
     EventCreated(
       idx?: null,
-      startTime?: null,
-      deadlineTime?: null,
-      endTime?: null,
-      helperAddress?: null,
-      creator?: null,
+      numInfos?: null,
+      addresses?: null,
       odds?: null,
       datas?: null,
-      pro?: null,
       affiliate?: null,
-      _hostFee?: null,
       creationFee?: null
     ): EventCreatedEventFilter;
 
@@ -1466,15 +1456,19 @@ export interface Prediction extends BaseContract {
     ): Promise<BigNumber>;
 
     createSingleEvent(
-      _times: [BigNumberish, BigNumberish, BigNumberish],
-      _helperAddress: string,
+      _numInfos: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      _addresses: [string, string, string],
       _odds: BigNumberish[],
       _datas: string,
       _tokens: string[],
       _amounts: BigNumberish[],
-      _pro: BigNumberish,
       _affiliate: boolean,
-      _hostFee: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1704,15 +1698,19 @@ export interface Prediction extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     createSingleEvent(
-      _times: [BigNumberish, BigNumberish, BigNumberish],
-      _helperAddress: string,
+      _numInfos: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      _addresses: [string, string, string],
       _odds: BigNumberish[],
       _datas: string,
       _tokens: string[],
       _amounts: BigNumberish[],
-      _pro: BigNumberish,
       _affiliate: boolean,
-      _hostFee: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

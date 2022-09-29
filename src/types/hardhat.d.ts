@@ -73,6 +73,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ConfirmedOwnerWithProposal__factory>;
     getContractFactory(
+      name: "AggregatorV3Interface",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AggregatorV3Interface__factory>;
+    getContractFactory(
       name: "ChainlinkRequestInterface",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ChainlinkRequestInterface__factory>;
@@ -316,6 +320,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.ConfirmedOwnerWithProposal>;
+    getContractAt(
+      name: "AggregatorV3Interface",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.AggregatorV3Interface>;
     getContractAt(
       name: "ChainlinkRequestInterface",
       address: string,

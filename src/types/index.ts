@@ -34,6 +34,8 @@ export type { Operator } from "./@chainlink/contracts/src/v0.7/Operator";
 export { Operator__factory } from "./factories/@chainlink/contracts/src/v0.7/Operator__factory";
 export type { ChainlinkClient } from "./@chainlink/contracts/src/v0.8/ChainlinkClient";
 export { ChainlinkClient__factory } from "./factories/@chainlink/contracts/src/v0.8/ChainlinkClient__factory";
+export type { AggregatorV3Interface } from "./@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface";
+export { AggregatorV3Interface__factory } from "./factories/@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface__factory";
 export type { ENSInterface } from "./@chainlink/contracts/src/v0.8/interfaces/ENSInterface";
 export { ENSInterface__factory } from "./factories/@chainlink/contracts/src/v0.8/interfaces/ENSInterface__factory";
 export type { KeeperCompatibleInterface } from "./@chainlink/contracts/src/v0.8/interfaces/KeeperCompatibleInterface";

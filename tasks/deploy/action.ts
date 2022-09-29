@@ -5,7 +5,7 @@ import { GroupPredict__factory } from "../../src/types";
 import { Event__factory } from "../../src/types/factories/contracts/Event__factory";
 import { Prediction__factory } from "../../src/types/factories/contracts/Prediction__factory";
 
-const { toWei, fromWei } = web3.utils;
+const { toWei } = web3.utils;
 
 task("create:Event").setAction(async function (_taskArgs, hre) {
   const { ethers } = hre;
@@ -16,15 +16,17 @@ task("create:Event").setAction(async function (_taskArgs, hre) {
   const { timestamp } = await ethers.provider.getBlock("latest");
 
   const tx = await prediction.createSingleEvent(
-    [timestamp + 60, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600],
-    "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+    [timestamp + 60, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600, 0, 0],
+    [
+      "0x3c1f84dEEF00F0EE6DDEcDe585A4e2dA7C234208",
+      "0x0000000000000000000000000000000000000000",
+      "0x0000000000000000000000000000000000000000",
+    ],
     [10000, 10000],
     "",
     ["0x0000000000000000000000000000000000000000"],
     [toWei("0.0001")],
-    0,
     false,
-    0,
     {
       value: toWei("0.0001"),
     },

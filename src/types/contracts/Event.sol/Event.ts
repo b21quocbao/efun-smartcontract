@@ -82,11 +82,13 @@ export declare namespace EDataTypes {
 
 export interface EventInterface extends utils.Interface {
   functions: {
+    "aggregator(uint256)": FunctionFragment;
     "blockEvent(uint256)": FunctionFragment;
     "blocker()": FunctionFragment;
     "checkUpkeep(bytes)": FunctionFragment;
-    "createSingleEvent(uint256[3],address,uint256[],string,address,uint256,bool,uint256)": FunctionFragment;
+    "createSingleEvent(uint256[5],address[3],uint256[],string,bool)": FunctionFragment;
     "events(uint256)": FunctionFragment;
+    "finalResult(uint256)": FunctionFragment;
     "fulfill(bytes32,string)": FunctionFragment;
     "info(uint256)": FunctionFragment;
     "initialize()": FunctionFragment;
@@ -105,11 +107,13 @@ export interface EventInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "aggregator"
       | "blockEvent"
       | "blocker"
       | "checkUpkeep"
       | "createSingleEvent"
       | "events"
+      | "finalResult"
       | "fulfill"
       | "info"
       | "initialize"
@@ -127,6 +131,10 @@ export interface EventInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(
+    functionFragment: "aggregator",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "blockEvent",
     values: [BigNumberish]
   ): string;
@@ -138,18 +146,19 @@ export interface EventInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "createSingleEvent",
     values: [
-      [BigNumberish, BigNumberish, BigNumberish],
-      string,
+      [BigNumberish, BigNumberish, BigNumberish, BigNumberish, BigNumberish],
+      [string, string, string],
       BigNumberish[],
       string,
-      string,
-      BigNumberish,
-      boolean,
-      BigNumberish
+      boolean
     ]
   ): string;
   encodeFunctionData(
     functionFragment: "events",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "finalResult",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -194,6 +203,7 @@ export interface EventInterface extends utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "aggregator", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "blockEvent", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "blocker", data: BytesLike): Result;
   decodeFunctionResult(
@@ -205,6 +215,10 @@ export interface EventInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "events", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "finalResult",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "fulfill", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "info", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -349,6 +363,11 @@ export interface Event extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    aggregator(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     blockEvent(
       _eventId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -364,14 +383,17 @@ export interface Event extends BaseContract {
     >;
 
     createSingleEvent(
-      _times: [BigNumberish, BigNumberish, BigNumberish],
-      _helperAddress: string,
+      _numInfos: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      _addresses: [string, string, string],
       _odds: BigNumberish[],
       _datas: string,
-      _creator: string,
-      _pro: BigNumberish,
       _affiliate: boolean,
-      _hostFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -411,6 +433,11 @@ export interface Event extends BaseContract {
         hostFee: BigNumber;
       }
     >;
+
+    finalResult(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     fulfill(
       _requestId: BytesLike,
@@ -477,6 +504,8 @@ export interface Event extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  aggregator(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
   blockEvent(
     _eventId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -492,14 +521,17 @@ export interface Event extends BaseContract {
   >;
 
   createSingleEvent(
-    _times: [BigNumberish, BigNumberish, BigNumberish],
-    _helperAddress: string,
+    _numInfos: [
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ],
+    _addresses: [string, string, string],
     _odds: BigNumberish[],
     _datas: string,
-    _creator: string,
-    _pro: BigNumberish,
     _affiliate: boolean,
-    _hostFee: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -539,6 +571,11 @@ export interface Event extends BaseContract {
       hostFee: BigNumber;
     }
   >;
+
+  finalResult(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   fulfill(
     _requestId: BytesLike,
@@ -603,6 +640,8 @@ export interface Event extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    aggregator(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
     blockEvent(
       _eventId: BigNumberish,
       overrides?: CallOverrides
@@ -618,14 +657,17 @@ export interface Event extends BaseContract {
     >;
 
     createSingleEvent(
-      _times: [BigNumberish, BigNumberish, BigNumberish],
-      _helperAddress: string,
+      _numInfos: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      _addresses: [string, string, string],
       _odds: BigNumberish[],
       _datas: string,
-      _creator: string,
-      _pro: BigNumberish,
       _affiliate: boolean,
-      _hostFee: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -665,6 +707,11 @@ export interface Event extends BaseContract {
         hostFee: BigNumber;
       }
     >;
+
+    finalResult(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     fulfill(
       _requestId: BytesLike,
@@ -765,6 +812,11 @@ export interface Event extends BaseContract {
   };
 
   estimateGas: {
+    aggregator(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     blockEvent(
       _eventId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -775,18 +827,26 @@ export interface Event extends BaseContract {
     checkUpkeep(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     createSingleEvent(
-      _times: [BigNumberish, BigNumberish, BigNumberish],
-      _helperAddress: string,
+      _numInfos: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      _addresses: [string, string, string],
       _odds: BigNumberish[],
       _datas: string,
-      _creator: string,
-      _pro: BigNumberish,
       _affiliate: boolean,
-      _hostFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     events(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    finalResult(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     fulfill(
       _requestId: BytesLike,
@@ -849,6 +909,11 @@ export interface Event extends BaseContract {
   };
 
   populateTransaction: {
+    aggregator(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     blockEvent(
       _eventId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -862,18 +927,26 @@ export interface Event extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     createSingleEvent(
-      _times: [BigNumberish, BigNumberish, BigNumberish],
-      _helperAddress: string,
+      _numInfos: [
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish,
+        BigNumberish
+      ],
+      _addresses: [string, string, string],
       _odds: BigNumberish[],
       _datas: string,
-      _creator: string,
-      _pro: BigNumberish,
       _affiliate: boolean,
-      _hostFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     events(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    finalResult(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

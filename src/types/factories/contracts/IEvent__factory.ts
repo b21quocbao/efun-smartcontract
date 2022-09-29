@@ -10,14 +10,14 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256[3]",
-        name: "_times",
-        type: "uint256[3]",
+        internalType: "uint256[5]",
+        name: "_numInfos",
+        type: "uint256[5]",
       },
       {
-        internalType: "address",
-        name: "_helperAddress",
-        type: "address",
+        internalType: "address[3]",
+        name: "_addresses",
+        type: "address[3]",
       },
       {
         internalType: "uint256[]",
@@ -30,24 +30,9 @@ const _abi = [
         type: "string",
       },
       {
-        internalType: "address",
-        name: "_creator",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_pro",
-        type: "uint256",
-      },
-      {
         internalType: "bool",
         name: "_affiliate",
         type: "bool",
-      },
-      {
-        internalType: "uint256",
-        name: "_hostFee",
-        type: "uint256",
       },
     ],
     name: "createSingleEvent",

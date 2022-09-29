@@ -68,19 +68,18 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     }
 
     function createSingleEvent(
-        uint256[3] memory _times,
-        address _helperAddress,
+        uint256[5] memory _numInfos,
+        address[3] memory _addresses,
         uint256[] calldata _odds,
         string memory _datas,
         address[] calldata _tokens,
         uint256[] calldata _amounts,
-        uint256 _pro,
-        bool _affiliate,
-        uint256 _hostFee
+        bool _affiliate
     ) external payable returns (uint256 _idx) {
         uint256 len = _odds.length;
+        _addresses[2] = msg.sender;
 
-        _idx = _createEvent(_times, _helperAddress, msg.sender, _odds, _datas, _pro, _affiliate, _hostFee);
+        _idx = _createEvent(_numInfos, _addresses, _odds, _datas, _affiliate);
         predictStats[_idx][address(0)].options = new uint256[](_odds.length);
         predictStats[_idx][efunToken].options = new uint256[](_odds.length);
         EDataTypes.Event memory _event = eventData.info(_idx);
@@ -572,34 +571,18 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     /* =============== INTERNAL FUNCTION ==================== */
 
     function _createEvent(
-        uint256[3] memory _times,
-        address _helperAddress,
-        address _creator,
+        uint256[5] memory _numInfos,
+        address[3] memory _addresses,
         uint256[] calldata _odds,
         string memory _datas,
-        uint256 _pro,
-        bool _affiliate,
-        uint256 _hostFee
+        bool _affiliate
     ) internal returns (uint256 _idx) {
         if (!_affiliate) {
             IERC20Upgradeable(efunToken).safeTransferFrom(msg.sender, feeCollector, creationFee);
         }
-        _idx = eventData.createSingleEvent(_times, _helperAddress, _odds, _datas, _creator, _pro, _affiliate, _hostFee);
+        _idx = eventData.createSingleEvent(_numInfos, _addresses, _odds, _datas, _affiliate);
 
-        emit EventCreated(
-            _idx,
-            _times[0],
-            _times[1],
-            _times[2],
-            _helperAddress,
-            _creator,
-            _odds,
-            _datas,
-            _pro,
-            _affiliate,
-            _hostFee,
-            creationFee
-        );
+        emit EventCreated(_idx, _numInfos, _addresses, _odds, _datas, _affiliate, creationFee);
     }
 
     function _deposit(
@@ -727,16 +710,11 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
     event EventCreated(
         uint256 idx,
-        uint256 startTime,
-        uint256 deadlineTime,
-        uint256 endTime,
-        address helperAddress,
-        address creator,
+        uint256[5] numInfos,
+        address[3] addresses,
         uint256[] odds,
         string datas,
-        uint256 pro,
         bool affiliate,
-        uint256 _hostFee,
         uint256 creationFee
     );
     event LPDeposited(uint256 eventId, address token, uint256 amount);
