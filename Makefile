@@ -15,6 +15,8 @@ upgrade:
 	yarn hardhat upgrade:HandicapGroupPredict --network bscTestnet --address 0xF212e709550EAcf106E7Ad8823eA65C154c86113
 	yarn hardhat upgrade:Handicap --network bscTestnet --address 0xd4cf937089DAc1FA149B8cc87Daa04fC920B0C90
 	yarn hardhat upgrade:OverUnder --network bscTestnet --address 0x0CE4809548ADc080F203da3F4AF56fBAdDE8Ae00
+	yarn hardhat upgrade:ComPool --network bscTestnet --address 0x93dE7a818fD7d75BE5C1D040205Ac9C927bCBC46
+	yarn hardhat upgrade:ELPToken --network bscTestnet --address 0x7342e835F4186E5069ADb2E168941B089C968133
 verify:
 	yarn hardhat verify:address --network bscTestnet
 upgrade-mainnet:
@@ -22,7 +24,7 @@ upgrade-mainnet:
 	yarn hardhat upgrade:Event --network bsc --address 0xdb48A5e4b09B5241e812c26763E94C1780B04635
 	yarn hardhat upgrade:MultipleChoices --network bsc --address 0xCe496fFa56849EDdfB70e12f008d2127631966c6  
 	yarn hardhat upgrade:GroupPredict --network bsc --address 0x32F8cB58D9CE271C6De8429d6fB6D074E667664D  
-	yarn hardhat upgrade:HandicapGroupPredict --network bscTestnet --address 0xe34F7787CbD75f8c3248e30516AaFc48a1668f82
-	yarn hardhat upgrade:Handicap --network bscTestnet --address 0xc835c891e71d5c648e88B5ca57C33362b1c29682
-	yarn hardhat upgrade:OverUnder --network bscTestnet --address 0xCEB7c00383B39135D61cF240f0cc6093290F21ED
+	yarn hardhat upgrade:HandicapGroupPredict --network bsc --address 0xe34F7787CbD75f8c3248e30516AaFc48a1668f82
+	yarn hardhat upgrade:Handicap --network bsc --address 0xc835c891e71d5c648e88B5ca57C33362b1c29682
+	yarn hardhat upgrade:OverUnder --network bsc --address 0xCEB7c00383B39135D61cF240f0cc6093290F21ED
 

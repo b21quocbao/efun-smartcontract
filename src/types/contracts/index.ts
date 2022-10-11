@@ -11,6 +11,8 @@ import type * as custom from "./custom";
 export type { custom };
 export type { APIConsumer } from "./APIConsumer";
 export type { ChainlinkClientUpgradable } from "./ChainlinkClientUpgradable";
+export type { ComPool } from "./ComPool";
+export type { ELPToken } from "./ELPToken";
 export type { IEvent } from "./IEvent";
 export type { IHelper } from "./IHelper";
 export type { Prediction } from "./Prediction";

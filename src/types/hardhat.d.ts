@@ -133,6 +133,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ReentrancyGuardUpgradeable__factory>;
     getContractFactory(
+      name: "ERC20Upgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20Upgradeable__factory>;
+    getContractFactory(
+      name: "IERC20MetadataUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20MetadataUpgradeable__factory>;
+    getContractFactory(
       name: "IERC20Upgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20Upgradeable__factory>;
@@ -165,6 +173,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ChainlinkClientUpgradable__factory>;
     getContractFactory(
+      name: "ComPool",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ComPool__factory>;
+    getContractFactory(
       name: "GroupPredict",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.GroupPredict__factory>;
@@ -184,6 +196,10 @@ declare module "hardhat/types/runtime" {
       name: "OverUnder",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OverUnder__factory>;
+    getContractFactory(
+      name: "ELPToken",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ELPToken__factory>;
     getContractFactory(
       name: "ERC20Token",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -396,6 +412,16 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ReentrancyGuardUpgradeable>;
     getContractAt(
+      name: "ERC20Upgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC20Upgradeable>;
+    getContractAt(
+      name: "IERC20MetadataUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20MetadataUpgradeable>;
+    getContractAt(
       name: "IERC20Upgradeable",
       address: string,
       signer?: ethers.Signer
@@ -436,6 +462,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ChainlinkClientUpgradable>;
     getContractAt(
+      name: "ComPool",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ComPool>;
+    getContractAt(
       name: "GroupPredict",
       address: string,
       signer?: ethers.Signer
@@ -460,6 +491,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.OverUnder>;
+    getContractAt(
+      name: "ELPToken",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ELPToken>;
     getContractAt(
       name: "ERC20Token",
       address: string,

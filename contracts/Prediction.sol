@@ -8,6 +8,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "./IEvent.sol";
 import "./IHelper.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+import "./ComPool.sol";
 
 // import "@openzeppelin/contracts/utils/Strings.sol";
 
@@ -33,6 +34,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     mapping(uint256 => mapping(address => bool)) public claimedLiquidityPool;
     address payable public efunToken;
     uint256 public creationFee;
+    mapping(uint256 => uint256) public allocations;
+    mapping(address => address) public liquidityPoolAddress;
 
     function initialize(
         uint256 _participateRate,
@@ -74,7 +77,8 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         string memory _datas,
         address[] calldata _tokens,
         uint256[] calldata _amounts,
-        bool _affiliate
+        bool _affiliate,
+        uint256 _allocate
     ) external payable returns (uint256 _idx) {
         uint256 len = _odds.length;
         _addresses[2] = msg.sender;
@@ -82,7 +86,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         _idx = _createEvent(_numInfos, _addresses, _odds, _datas, _affiliate);
         predictStats[_idx][address(0)].options = new uint256[](_odds.length);
         predictStats[_idx][efunToken].options = new uint256[](_odds.length);
-        EDataTypes.Event memory _event = eventData.info(_idx);
+        allocations[_idx] = _allocate;
         _deposit(msg.value, _idx, _tokens, _amounts, len);
     }
 
@@ -101,6 +105,10 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
 
     function setCreationFee(uint256 _creationFee) public onlyOwner {
         creationFee = _creationFee;
+    }
+
+    function setLiquidityPoolAddress(address _token, address _pool) public onlyOwner {
+        liquidityPoolAddress[_token] = _pool;
     }
 
     /**
@@ -286,7 +294,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             address _token = _tokens[i];
             uint256 _liquidityPool = liquidityPoolEvent[_eventId][_token];
             if (_event.affiliate) {
-                _liquidityPool = liquidityPoolEvent[0][_token];
+                _liquidityPool = ComPool(liquidityPoolAddress[_token]).getAllocation(allocations[eventId]);
             }
             uint256 _amount = _amounts[i];
             uint256 _platformAmount = (_amount * _helper.platFormfeeBefore()) / oneHundredPrecent;
@@ -316,11 +324,22 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             );
 
             if (_token != address(0)) {
-                IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
+                if (_event.affiliate) {
+                    IERC20Upgradeable(_token).safeTransferFrom(
+                        msg.sender,
+                        address(liquidityPoolAddress[_token]),
+                        _amount
+                    );
+                } else {
+                    IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
+                }
                 if (_platformAmount > 0) {
                     IERC20Upgradeable(_token).safeTransfer(feeCollector, _platformAmount);
                 }
             } else {
+                if (_event.affiliate) {
+                    payable(liquidityPoolAddress[_token]).transfer(_platformAmount);
+                }
                 if (_platformAmount > 0) {
                     payable(feeCollector).transfer(_platformAmount);
                 }
@@ -435,7 +454,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     }
 
     /**
-     * @dev Estimate reward Sponsor
+     * @dev Get amount has fee
      */
     function getAmountHasFee(
         uint256 _eventId,
@@ -536,7 +555,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     }
 
     /**
-     * @dev Claims reward
+     * @dev Claims cash back
      */
     function claimCashBack(
         uint256 _eventId,
@@ -627,7 +646,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         _helper = IHelper(_event.helperAddress);
         _liquidityPool = liquidityPoolEvent[_eventId][_token];
         if (_event.affiliate) {
-            _liquidityPool = liquidityPoolEvent[0][_token];
+            _liquidityPool = ComPool(liquidityPoolAddress[_token]).getAllocation(allocations[_eventId]);
         }
         _predictOptionStat = predictStats[_eventId][_token].options;
         if (_predictOptionStat.length == 0) {
@@ -664,7 +683,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         _prediction = predictions[eventId][user][token][predictNum];
         _liquidityPool = liquidityPoolEvent[_eventId][_token];
         if (_event.affiliate) {
-            _liquidityPool = liquidityPoolEvent[0][_token];
+            _liquidityPool = ComPool(liquidityPoolAddress[token]).getAllocation(allocations[eventId]);
         }
     }
 

@@ -92,6 +92,7 @@ describe("Unit tests", function () {
           [this.erc20Token.address, "0x0000000000000000000000000000000000000000"],
           [toWei("10"), toWei("10")],
           false,
+          0,
           { value: toWei("10") },
         );
 
@@ -109,6 +110,7 @@ describe("Unit tests", function () {
           [],
           [],
           false,
+          0,
         );
 
       await this.prediction
@@ -125,6 +127,7 @@ describe("Unit tests", function () {
           [],
           [],
           false,
+          0,
         );
 
       await this.prediction
@@ -141,6 +144,7 @@ describe("Unit tests", function () {
           [],
           [],
           false,
+          0,
         );
 
       await this.prediction
@@ -157,6 +161,7 @@ describe("Unit tests", function () {
           [],
           [],
           false,
+          0,
         );
     });
 

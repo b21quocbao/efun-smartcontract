@@ -150,16 +150,23 @@ contract Event is
                 if (events[number].pro == 5) {
                     priceFeed = AggregatorV3Interface(aggregator[number]);
                     (, int256 price, , , ) = priceFeed.latestRoundData();
-                    for (uint256 i = 0; i < events[number].odds.length; i++) {
+                    for (uint256 i = events[number].odds.length / 2; i < events[number].odds.length; i++) {
                         if (
                             (i != events[number].odds.length - 1 && price < int256(events[number].odds[i])) ||
                             i == events[number].odds.length - 1
                         ) {
                             events[number].finalTime = block.timestamp;
                             events[number].claimTime = block.timestamp;
-                            events[number].resultIndex = i;
+                            events[number].resultIndex = i - events[number].odds.length / 2;
                             events[number].status = EDataTypes.EventStatus.FINISH;
                             finalResult[number] = price;
+                            emit EventResultUpdated(
+                                msg.sender,
+                                number,
+                                events[number].resultIndex,
+                                events[number].finalTime,
+                                events[number].claimTime
+                            );
                             break;
                         }
                     }
