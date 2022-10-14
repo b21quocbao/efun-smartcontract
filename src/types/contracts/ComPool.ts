@@ -9,7 +9,6 @@ import type {
   CallOverrides,
   ContractTransaction,
   Overrides,
-  PayableOverrides,
   PopulatedTransaction,
   Signer,
   utils,
@@ -36,8 +35,10 @@ export interface ComPoolInterface extends utils.Interface {
     "getAllocation(uint256)": FunctionFragment;
     "initialize(uint256,address)": FunctionFragment;
     "owner()": FunctionFragment;
+    "potentialLoss()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setDistribution(string[],uint256[])": FunctionFragment;
+    "setPotentialLossPercent(uint256)": FunctionFragment;
     "token()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
@@ -51,8 +52,10 @@ export interface ComPoolInterface extends utils.Interface {
       | "getAllocation"
       | "initialize"
       | "owner"
+      | "potentialLoss"
       | "renounceOwnership"
       | "setDistribution"
+      | "setPotentialLossPercent"
       | "token"
       | "transferOwnership"
   ): FunctionFragment;
@@ -77,12 +80,20 @@ export interface ComPoolInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "potentialLoss",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "setDistribution",
     values: [string[], BigNumberish[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setPotentialLossPercent",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "token", values?: undefined): string;
   encodeFunctionData(
@@ -104,11 +115,19 @@ export interface ComPoolInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "potentialLoss",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "setDistribution",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setPotentialLossPercent",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
@@ -186,7 +205,7 @@ export interface ComPool extends BaseContract {
 
     deposit(
       _amount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     getAllocation(
@@ -202,6 +221,8 @@ export interface ComPool extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    potentialLoss(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -209,6 +230,11 @@ export interface ComPool extends BaseContract {
     setDistribution(
       _names: string[],
       _allocs: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setPotentialLossPercent(
+      _potentialLoss: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -234,7 +260,7 @@ export interface ComPool extends BaseContract {
 
   deposit(
     _amount: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   getAllocation(
@@ -250,6 +276,8 @@ export interface ComPool extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
+  potentialLoss(overrides?: CallOverrides): Promise<BigNumber>;
+
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -257,6 +285,11 @@ export interface ComPool extends BaseContract {
   setDistribution(
     _names: string[],
     _allocs: BigNumberish[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setPotentialLossPercent(
+    _potentialLoss: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -292,11 +325,18 @@ export interface ComPool extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
+    potentialLoss(overrides?: CallOverrides): Promise<BigNumber>;
+
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     setDistribution(
       _names: string[],
       _allocs: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setPotentialLossPercent(
+      _potentialLoss: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -337,7 +377,7 @@ export interface ComPool extends BaseContract {
 
     deposit(
       _amount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     getAllocation(
@@ -353,6 +393,8 @@ export interface ComPool extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
+    potentialLoss(overrides?: CallOverrides): Promise<BigNumber>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -360,6 +402,11 @@ export interface ComPool extends BaseContract {
     setDistribution(
       _names: string[],
       _allocs: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setPotentialLossPercent(
+      _potentialLoss: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -386,7 +433,7 @@ export interface ComPool extends BaseContract {
 
     deposit(
       _amount: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     getAllocation(
@@ -402,6 +449,8 @@ export interface ComPool extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    potentialLoss(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -409,6 +458,11 @@ export interface ComPool extends BaseContract {
     setDistribution(
       _names: string[],
       _allocs: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setPotentialLossPercent(
+      _potentialLoss: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

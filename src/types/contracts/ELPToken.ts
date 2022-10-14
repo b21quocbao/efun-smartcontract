@@ -31,26 +31,37 @@ export interface ELPTokenInterface extends utils.Interface {
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "buyToken(address,uint256)": FunctionFragment;
+    "buyNFT(uint256)": FunctionFragment;
+    "buyToken(uint256)": FunctionFragment;
     "checkUpkeep(bytes)": FunctionFragment;
+    "classes(uint256)": FunctionFragment;
     "counter()": FunctionFragment;
     "currentNav()": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "efunToken()": FunctionFragment;
+    "elpAmtOfClass(uint256)": FunctionFragment;
+    "elpAmtOfNft()": FunctionFragment;
+    "erc721Token()": FunctionFragment;
     "feeCollector()": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "initialize(string,string,address,address,address,address,uint256)": FunctionFragment;
+    "initialize(string,string,address,address,address,address,uint256,uint256,address)": FunctionFragment;
     "lastTimeStamp()": FunctionFragment;
     "maxSellAmount()": FunctionFragment;
     "maxSellAmountPerAddress()": FunctionFragment;
     "name()": FunctionFragment;
+    "oneHundredPrecent()": FunctionFragment;
     "owner()": FunctionFragment;
     "performUpkeep(bytes)": FunctionFragment;
     "poolAddress()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "sellFee()": FunctionFragment;
+    "sellNft(uint256)": FunctionFragment;
     "sellToken(uint256)": FunctionFragment;
+    "setElpAmtOfClass(uint256[])": FunctionFragment;
+    "setErc721Token(address)": FunctionFragment;
     "setFeeCollector(address)": FunctionFragment;
+    "setSellFee(uint256)": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSellAmount(uint256,address)": FunctionFragment;
     "totalSupply()": FunctionFragment;
@@ -64,13 +75,18 @@ export interface ELPTokenInterface extends utils.Interface {
       | "allowance"
       | "approve"
       | "balanceOf"
+      | "buyNFT"
       | "buyToken"
       | "checkUpkeep"
+      | "classes"
       | "counter"
       | "currentNav"
       | "decimals"
       | "decreaseAllowance"
       | "efunToken"
+      | "elpAmtOfClass"
+      | "elpAmtOfNft"
+      | "erc721Token"
       | "feeCollector"
       | "increaseAllowance"
       | "initialize"
@@ -78,12 +94,18 @@ export interface ELPTokenInterface extends utils.Interface {
       | "maxSellAmount"
       | "maxSellAmountPerAddress"
       | "name"
+      | "oneHundredPrecent"
       | "owner"
       | "performUpkeep"
       | "poolAddress"
       | "renounceOwnership"
+      | "sellFee"
+      | "sellNft"
       | "sellToken"
+      | "setElpAmtOfClass"
+      | "setErc721Token"
       | "setFeeCollector"
+      | "setSellFee"
       | "symbol"
       | "totalSellAmount"
       | "totalSupply"
@@ -102,12 +124,20 @@ export interface ELPTokenInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
+    functionFragment: "buyNFT",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "buyToken",
-    values: [string, BigNumberish]
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "checkUpkeep",
     values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "classes",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "counter", values?: undefined): string;
   encodeFunctionData(
@@ -121,6 +151,18 @@ export interface ELPTokenInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "efunToken", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "elpAmtOfClass",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "elpAmtOfNft",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "erc721Token",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "feeCollector",
     values?: undefined
   ): string;
@@ -130,7 +172,17 @@ export interface ELPTokenInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [string, string, string, string, string, string, BigNumberish]
+    values: [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      BigNumberish,
+      BigNumberish,
+      string
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "lastTimeStamp",
@@ -145,6 +197,10 @@ export interface ELPTokenInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "oneHundredPrecent",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "performUpkeep",
@@ -158,13 +214,30 @@ export interface ELPTokenInterface extends utils.Interface {
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "sellFee", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "sellNft",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "sellToken",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "setElpAmtOfClass",
+    values: [BigNumberish[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setErc721Token",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setFeeCollector",
     values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setSellFee",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
@@ -191,11 +264,13 @@ export interface ELPTokenInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "buyNFT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "buyToken", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "checkUpkeep",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "classes", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "counter", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "currentNav", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
@@ -204,6 +279,18 @@ export interface ELPTokenInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "efunToken", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "elpAmtOfClass",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "elpAmtOfNft",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "erc721Token",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "feeCollector",
     data: BytesLike
@@ -226,6 +313,10 @@ export interface ELPTokenInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "oneHundredPrecent",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "performUpkeep",
@@ -239,11 +330,22 @@ export interface ELPTokenInterface extends utils.Interface {
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "sellFee", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "sellNft", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "sellToken", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setElpAmtOfClass",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setErc721Token",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "setFeeCollector",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setSellFee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSellAmount",
@@ -270,6 +372,7 @@ export interface ELPTokenInterface extends utils.Interface {
     "ChainlinkRequested(bytes32)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
+    "TokenAction(address,uint256,uint256,uint256,uint256,bool,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
@@ -279,6 +382,7 @@ export interface ELPTokenInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "ChainlinkRequested"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TokenAction"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
@@ -346,6 +450,22 @@ export type OwnershipTransferredEvent = TypedEvent<
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
+export interface TokenActionEventObject {
+  user: string;
+  nav: BigNumber;
+  amount: BigNumber;
+  fee: BigNumber;
+  nftId: BigNumber;
+  isBuy: boolean;
+  timestamp: BigNumber;
+}
+export type TokenActionEvent = TypedEvent<
+  [string, BigNumber, BigNumber, BigNumber, BigNumber, boolean, BigNumber],
+  TokenActionEventObject
+>;
+
+export type TokenActionEventFilter = TypedEventFilter<TokenActionEvent>;
+
 export interface TransferEventObject {
   from: string;
   to: string;
@@ -399,8 +519,12 @@ export interface ELPToken extends BaseContract {
 
     balanceOf(account: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    buyNFT(
+      _class: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     buyToken(
-      _to: string,
       _elpAmt: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -411,6 +535,11 @@ export interface ELPToken extends BaseContract {
     ): Promise<
       [boolean, string] & { upkeepNeeded: boolean; performData: string }
     >;
+
+    classes(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     counter(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -425,6 +554,15 @@ export interface ELPToken extends BaseContract {
     ): Promise<ContractTransaction>;
 
     efunToken(overrides?: CallOverrides): Promise<[string]>;
+
+    elpAmtOfClass(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    elpAmtOfNft(overrides?: CallOverrides): Promise<[string]>;
+
+    erc721Token(overrides?: CallOverrides): Promise<[string]>;
 
     feeCollector(overrides?: CallOverrides): Promise<[string]>;
 
@@ -442,6 +580,8 @@ export interface ELPToken extends BaseContract {
       _to: string,
       _feeCollector: string,
       _elpAmt: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _erc721Token: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -452,6 +592,8 @@ export interface ELPToken extends BaseContract {
     maxSellAmountPerAddress(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
+
+    oneHundredPrecent(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -466,13 +608,35 @@ export interface ELPToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    sellFee(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    sellNft(
+      _tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     sellToken(
       _elpAmt: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setElpAmtOfClass(
+      _elpAmtOfClass: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setErc721Token(
+      _erc721Token: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setFeeCollector(
       _feeCollector: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setSellFee(
+      _sellFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -519,8 +683,12 @@ export interface ELPToken extends BaseContract {
 
   balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+  buyNFT(
+    _class: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   buyToken(
-    _to: string,
     _elpAmt: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -531,6 +699,8 @@ export interface ELPToken extends BaseContract {
   ): Promise<
     [boolean, string] & { upkeepNeeded: boolean; performData: string }
   >;
+
+  classes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   counter(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -545,6 +715,15 @@ export interface ELPToken extends BaseContract {
   ): Promise<ContractTransaction>;
 
   efunToken(overrides?: CallOverrides): Promise<string>;
+
+  elpAmtOfClass(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  elpAmtOfNft(overrides?: CallOverrides): Promise<string>;
+
+  erc721Token(overrides?: CallOverrides): Promise<string>;
 
   feeCollector(overrides?: CallOverrides): Promise<string>;
 
@@ -562,6 +741,8 @@ export interface ELPToken extends BaseContract {
     _to: string,
     _feeCollector: string,
     _elpAmt: BigNumberish,
+    _oneHundredPrecent: BigNumberish,
+    _erc721Token: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -572,6 +753,8 @@ export interface ELPToken extends BaseContract {
   maxSellAmountPerAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
   name(overrides?: CallOverrides): Promise<string>;
+
+  oneHundredPrecent(overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -586,13 +769,35 @@ export interface ELPToken extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  sellFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+  sellNft(
+    _tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   sellToken(
     _elpAmt: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setElpAmtOfClass(
+    _elpAmtOfClass: BigNumberish[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setErc721Token(
+    _erc721Token: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setFeeCollector(
     _feeCollector: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setSellFee(
+    _sellFee: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -639,11 +844,9 @@ export interface ELPToken extends BaseContract {
 
     balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    buyToken(
-      _to: string,
-      _elpAmt: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    buyNFT(_class: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    buyToken(_elpAmt: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     checkUpkeep(
       arg0: BytesLike,
@@ -651,6 +854,8 @@ export interface ELPToken extends BaseContract {
     ): Promise<
       [boolean, string] & { upkeepNeeded: boolean; performData: string }
     >;
+
+    classes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     counter(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -665,6 +870,15 @@ export interface ELPToken extends BaseContract {
     ): Promise<boolean>;
 
     efunToken(overrides?: CallOverrides): Promise<string>;
+
+    elpAmtOfClass(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    elpAmtOfNft(overrides?: CallOverrides): Promise<string>;
+
+    erc721Token(overrides?: CallOverrides): Promise<string>;
 
     feeCollector(overrides?: CallOverrides): Promise<string>;
 
@@ -682,6 +896,8 @@ export interface ELPToken extends BaseContract {
       _to: string,
       _feeCollector: string,
       _elpAmt: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _erc721Token: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -693,6 +909,8 @@ export interface ELPToken extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<string>;
 
+    oneHundredPrecent(overrides?: CallOverrides): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<string>;
 
     performUpkeep(arg0: BytesLike, overrides?: CallOverrides): Promise<void>;
@@ -701,10 +919,29 @@ export interface ELPToken extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
+    sellFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    sellNft(_tokenId: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
     sellToken(_elpAmt: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    setElpAmtOfClass(
+      _elpAmtOfClass: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setErc721Token(
+      _erc721Token: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setFeeCollector(
       _feeCollector: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setSellFee(
+      _sellFee: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -776,6 +1013,25 @@ export interface ELPToken extends BaseContract {
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
 
+    "TokenAction(address,uint256,uint256,uint256,uint256,bool,uint256)"(
+      user?: null,
+      nav?: null,
+      amount?: null,
+      fee?: null,
+      nftId?: null,
+      isBuy?: null,
+      timestamp?: null
+    ): TokenActionEventFilter;
+    TokenAction(
+      user?: null,
+      nav?: null,
+      amount?: null,
+      fee?: null,
+      nftId?: null,
+      isBuy?: null,
+      timestamp?: null
+    ): TokenActionEventFilter;
+
     "Transfer(address,address,uint256)"(
       from?: string | null,
       to?: string | null,
@@ -803,13 +1059,19 @@ export interface ELPToken extends BaseContract {
 
     balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    buyNFT(
+      _class: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     buyToken(
-      _to: string,
       _elpAmt: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     checkUpkeep(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
+    classes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     counter(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -824,6 +1086,15 @@ export interface ELPToken extends BaseContract {
     ): Promise<BigNumber>;
 
     efunToken(overrides?: CallOverrides): Promise<BigNumber>;
+
+    elpAmtOfClass(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    elpAmtOfNft(overrides?: CallOverrides): Promise<BigNumber>;
+
+    erc721Token(overrides?: CallOverrides): Promise<BigNumber>;
 
     feeCollector(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -841,6 +1112,8 @@ export interface ELPToken extends BaseContract {
       _to: string,
       _feeCollector: string,
       _elpAmt: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _erc721Token: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -851,6 +1124,8 @@ export interface ELPToken extends BaseContract {
     maxSellAmountPerAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
+
+    oneHundredPrecent(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -865,13 +1140,35 @@ export interface ELPToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    sellFee(overrides?: CallOverrides): Promise<BigNumber>;
+
+    sellNft(
+      _tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     sellToken(
       _elpAmt: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setElpAmtOfClass(
+      _elpAmtOfClass: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setErc721Token(
+      _erc721Token: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setFeeCollector(
       _feeCollector: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setSellFee(
+      _sellFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -922,14 +1219,23 @@ export interface ELPToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    buyNFT(
+      _class: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     buyToken(
-      _to: string,
       _elpAmt: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     checkUpkeep(
       arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    classes(
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -947,6 +1253,15 @@ export interface ELPToken extends BaseContract {
 
     efunToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    elpAmtOfClass(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    elpAmtOfNft(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    erc721Token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     feeCollector(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     increaseAllowance(
@@ -963,6 +1278,8 @@ export interface ELPToken extends BaseContract {
       _to: string,
       _feeCollector: string,
       _elpAmt: BigNumberish,
+      _oneHundredPrecent: BigNumberish,
+      _erc721Token: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -975,6 +1292,8 @@ export interface ELPToken extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    oneHundredPrecent(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -989,13 +1308,35 @@ export interface ELPToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    sellFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    sellNft(
+      _tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     sellToken(
       _elpAmt: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setElpAmtOfClass(
+      _elpAmtOfClass: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setErc721Token(
+      _erc721Token: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setFeeCollector(
       _feeCollector: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setSellFee(
+      _sellFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

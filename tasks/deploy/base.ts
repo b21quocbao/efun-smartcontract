@@ -3,9 +3,16 @@ import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 import web3 from "web3";
 
-import { ComPool__factory, ELPToken__factory, ERC20Token, ERC20Token__factory } from "../../src/types";
+import {
+  ComPool__factory,
+  ELPToken__factory,
+  ERC20Token,
+  ERC20Token__factory,
+  ERC721Token,
+  ERC721Token__factory,
+} from "../../src/types";
 import type { Event__factory } from "../../src/types/factories/contracts/Event.sol/Event__factory";
-import type { Prediction__factory } from "../../src/types/factories/contracts/Prediction__factory";
+import { Prediction__factory } from "../../src/types/factories/contracts/Prediction__factory";
 
 const { toWei } = web3.utils;
 
@@ -22,45 +29,77 @@ task("deploy:Event").setAction(async function (taskArguments: TaskArguments, { e
 });
 
 task("deploy:ELPToken")
-  .addParam("poolAddress", "Pool contract address")
   .addParam("efunAddress", "Efun contract address")
   .addParam("feeCollector", "Fee collector")
-  .addParam("elpAmount", "ELP amount")
-  .setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
-    const [deployer] = await ethers.getSigners();
-    const comPool = await ComPool__factory.connect(taskArguments.poolAddress, deployer);
-    const ELPTokenFactory: ELPToken__factory = <ELPToken__factory>await ethers.getContractFactory("ELPToken");
-    const elpTokenFactory = await upgrades.deployProxy(ELPTokenFactory, [
-      "EFUN Liquidity Pool Token",
-      "ELP",
-      taskArguments.poolAddress, // Testnet: 0x465b5d723eD174D5A10d16a7b86D3de925ab4f91
-      taskArguments.efunAddress, // Testnet: 0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d, Mainnet: 0x6746E37A756DA9E34f0BBF1C0495784Ba33b79B4
-      deployer.address,
-      taskArguments.feeCollector, // Testnet: 0x826bb7fA8155F31E8f7ad9c5B78947C85C45Ee30, Mainnet: 0x9AFfAA4c1c3Eb3fDdAfEd379C25E50a68A323044
-      taskArguments.elpAmount, // 10**3
-    ]);
-    await comPool.approve(elpTokenFactory.address);
-    console.log("ELPToken deployed to: ", elpTokenFactory.address);
-  });
-
-task("deploy:ComPool")
-  .addParam("efunAddress", "Efun contract address")
-  .addParam("efunAmount", "Efun amount")
+  .addParam("predictionAddress", "Prediction address")
   .setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
     const [deployer] = await ethers.getSigners();
 
+    // Deploy ERC721
+    const erc721Factory: ERC721Token__factory = <ERC721Token__factory>await ethers.getContractFactory("ERC721Token");
+    const erc721Contract: ERC721Token = <ERC721Token>(
+      await erc721Factory
+        .connect(deployer)
+        .deploy(
+          "EFUN NFT",
+          "EFT",
+          "0x0000000000000000000000000000000000000000",
+          "0x0000000000000000000000000000000000000000",
+        )
+    );
+    console.log("ERC721Token deployed to: ", erc721Contract.address);
+
+    // Deploy ComPool
     const ComPoolFactory: ComPool__factory = <ComPool__factory>await ethers.getContractFactory("ComPool");
     const comPoolFactory = await upgrades.deployProxy(ComPoolFactory, [
       10000,
       taskArguments.efunAddress, // Testnet: 0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d, Mainnet: 0x6746E37A756DA9E34f0BBF1C0495784Ba33b79B4
     ]);
+    console.log("ComPool deployed to: ", comPoolFactory.address);
+    const comPoolContract = ComPool__factory.connect(comPoolFactory.address, deployer);
+
+    // Deploy ELP
+    const ELPTokenFactory: ELPToken__factory = <ELPToken__factory>await ethers.getContractFactory("ELPToken");
+    const elpTokenFactory = await upgrades.deployProxy(ELPTokenFactory, [
+      "EFUN Liquidity Pool Token",
+      "ELP",
+      comPoolContract.address,
+      taskArguments.efunAddress, // Testnet: 0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d, Mainnet: 0x6746E37A756DA9E34f0BBF1C0495784Ba33b79B4
+      deployer.address,
+      taskArguments.feeCollector, // Testnet: 0x826bb7fA8155F31E8f7ad9c5B78947C85C45Ee30, Mainnet: 0x9AFfAA4c1c3Eb3fDdAfEd379C25E50a68A323044
+      toWei("100"), // 10**3
+      10000,
+      erc721Contract.address,
+    ]);
+    console.log("ELPToken deployed to: ", elpTokenFactory.address);
+    const elpContract = ELPToken__factory.connect(elpTokenFactory.address, deployer);
 
     const erc20Token = ERC20Token__factory.connect(taskArguments.efunAddress, deployer);
-    await erc20Token.approve(comPoolFactory.address, taskArguments.efunAmount);
-    const comPool = ComPool__factory.connect(comPoolFactory.address, deployer);
-    await comPool.deposit(taskArguments.efunAmount);
+    const predictionContract = Prediction__factory.connect(taskArguments.predictionAddress, deployer);
 
-    console.log("ComPool deployed to: ", comPoolFactory.address);
+    await erc721Contract.setElpTokenAddress(elpTokenFactory.address);
+    // await erc721Contract.setExchangeContractAddress(exchangeContractAddress); // TODO
+    await comPoolContract.approve(elpTokenFactory.address);
+    await comPoolContract.approve(taskArguments.predictionAddress);
+    console.log(await (await erc20Token.approve(comPoolFactory.address, toWei("100000"))).wait());
+    console.log(await erc20Token.allowance(deployer.address, comPoolFactory.address), "Line #81 base.ts");
+
+    await comPoolContract.deposit(toWei("100000"));
+
+    await predictionContract.setLiquidityPoolAddress(erc20Token.address, comPoolFactory.address);
+  });
+
+task("deposit:Pool")
+  .addParam("poolAddress", "Efun contract address")
+  .addParam("predictionAddress", "Prediction address")
+  .addParam("efunAddress", "Efun address")
+  .setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {
+    const [deployer] = await ethers.getSigners();
+    const comPoolContract = ComPool__factory.connect(taskArguments.poolAddress, deployer);
+    const predictionContract = Prediction__factory.connect(taskArguments.predictionAddress, deployer);
+    await comPoolContract.deposit(toWei("100000"));
+
+    await predictionContract.setLiquidityPoolAddress(taskArguments.efunAddress, comPoolContract.address);
   });
 
 task("deploy:ERC20")

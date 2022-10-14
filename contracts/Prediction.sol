@@ -293,11 +293,12 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         for (uint256 i = 0; i < _tokens.length; ++i) {
             address _token = _tokens[i];
             uint256 _liquidityPool = liquidityPoolEvent[_eventId][_token];
-            if (_event.affiliate) {
-                _liquidityPool = ComPool(liquidityPoolAddress[_token]).getAllocation(allocations[eventId]);
-            }
             uint256 _amount = _amounts[i];
             uint256 _platformAmount = (_amount * _helper.platFormfeeBefore()) / oneHundredPrecent;
+            if (_event.affiliate) {
+                _liquidityPool = ComPool(liquidityPoolAddress[_token]).getAllocation(allocations[eventId]);
+                _platformAmount = 0;
+            }
             _amount -= _platformAmount;
             uint256 _index = _optionIndexs[i];
             if (_token == address(0)) {
@@ -332,14 +333,11 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                     );
                 } else {
                     IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
-                }
-                if (_platformAmount > 0) {
-                    IERC20Upgradeable(_token).safeTransfer(feeCollector, _platformAmount);
+                    if (_platformAmount > 0) {
+                        IERC20Upgradeable(_token).safeTransfer(feeCollector, _platformAmount);
+                    }
                 }
             } else {
-                if (_event.affiliate) {
-                    payable(liquidityPoolAddress[_token]).transfer(_platformAmount);
-                }
                 if (_platformAmount > 0) {
                     payable(feeCollector).transfer(_platformAmount);
                 }
@@ -413,7 +411,16 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                 predictions[_eventId][msg.sender][_token][_predictNum].predictionAmount,
                 _reward
             );
-            transferMoney(_token, msg.sender, _amountHasFee, _reward, hostFee, platformFee, _event.creator);
+            transferMoney(
+                _event.affiliate,
+                _token,
+                msg.sender,
+                _amountHasFee,
+                _reward,
+                hostFee,
+                platformFee,
+                _event.creator
+            );
             predictions[_eventId][msg.sender][_token][_predictNum].claimed = true;
         }
 
@@ -573,7 +580,12 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         );
         require(predictions[_eventId][msg.sender][_token][_predictNum].claimed == false, "claimed");
 
-        transferMoneyNoFee(_token, msg.sender, predictions[_eventId][msg.sender][_token][_predictNum].predictionAmount);
+        transferMoneyNoFee(
+            _event.affiliate,
+            _token,
+            msg.sender,
+            predictions[_eventId][msg.sender][_token][_predictNum].predictionAmount
+        );
         predictions[_eventId][msg.sender][_token][_predictNum].claimed = true;
 
         emit CashBackClaimed(_eventId, _predictNum, msg.sender, _token);
@@ -688,6 +700,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     }
 
     function transferMoney(
+        bool _affiliate,
         address _token,
         address _toAddress,
         uint256 _amountHasFee,
@@ -706,6 +719,10 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             }
             payable(_toAddress).transfer(_reward - _platformAmount - _hostAmount);
         } else {
+            if (_affiliate) {
+                IERC20Upgradeable(_token).safeTransferFrom(liquidityPoolAddress[_token], _toAddress, _reward);
+                return;
+            }
             if (_platformAmount > 0) {
                 IERC20Upgradeable(_token).safeTransfer(feeCollector, _platformAmount);
             }
@@ -714,6 +731,7 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
     }
 
     function transferMoneyNoFee(
+        bool _affiliate,
         address _token,
         address _toAddress,
         uint256 _amount
@@ -721,6 +739,9 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
         if (_token == address(0)) {
             payable(_toAddress).transfer(_amount);
         } else {
+            if (_affiliate) {
+                IERC20Upgradeable(_token).safeTransferFrom(liquidityPoolAddress[_token], _toAddress, _amount);
+            }
             IERC20Upgradeable(_token).safeTransfer(_toAddress, _amount);
         }
     }

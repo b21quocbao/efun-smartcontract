@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity =0.8.4;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
@@ -16,11 +16,15 @@ contract ComPool is OwnableUpgradeable {
     uint256 private oneHundredPrecent;
     address public token;
     mapping(uint256 => Allocation) public allocations;
+    uint256 public potentialLoss;
 
     function initialize(uint256 _oneHundredPrecent, address _token) public initializer {
         oneHundredPrecent = _oneHundredPrecent;
         token = _token;
         OwnableUpgradeable.__Ownable_init();
+        allocations[0] = Allocation("Sport", (oneHundredPrecent * 80) / 100); // 80%
+        allocations[1] = Allocation("Others", (oneHundredPrecent * 20) / 100); // 20%
+        potentialLoss = (oneHundredPrecent * 2) / 100; // 2%
     }
 
     function approve(address _elpToken) public onlyOwner {
@@ -39,13 +43,17 @@ contract ComPool is OwnableUpgradeable {
             allocations[i].name = _names[i];
             allocations[i].alloc = _allocs[i];
         }
-        require(_totalAlloc == 100 * oneHundredPrecent, "not-equal-hundred-percent");
+        require(_totalAlloc == oneHundredPrecent, "not-equal-hundred-percent");
+    }
+
+    function setPotentialLossPercent(uint256 _potentialLoss) public onlyOwner {
+        potentialLoss = _potentialLoss;
     }
 
     /**
      * @dev Deposit to pool
      */
-    function deposit(uint256 _amount) public payable {
+    function deposit(uint256 _amount) public {
         IERC20Upgradeable(token).safeTransferFrom(msg.sender, address(this), _amount);
     }
 
@@ -60,6 +68,6 @@ contract ComPool is OwnableUpgradeable {
      * @dev Get pool allocation acoording to game play
      */
     function getAllocation(uint256 _idx) public view returns (uint256) {
-        return (allocations[_idx].alloc * capacity()) / 50;
+        return (((capacity() * allocations[_idx].alloc) / oneHundredPrecent) * potentialLoss) / oneHundredPrecent;
     }
 }

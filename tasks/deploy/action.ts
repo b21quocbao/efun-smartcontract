@@ -1,7 +1,7 @@
 import { task } from "hardhat/config";
 import web3 from "web3";
 
-import { GroupPredict__factory } from "../../src/types";
+import { ELPToken__factory, ERC20Token__factory, GroupPredict__factory } from "../../src/types";
 import { Event__factory } from "../../src/types/factories/contracts/Event__factory";
 import { Prediction__factory } from "../../src/types/factories/contracts/Prediction__factory";
 
@@ -161,4 +161,29 @@ task("calculate:potential:multiple").setAction(async function (_taskArgs, hre) {
     ),
     "potential 1",
   );
+});
+
+task("approve:token").setAction(async function (_taskArgs, hre) {
+  const { ethers } = hre;
+  const [deployer] = await ethers.getSigners();
+
+  const contract = await ERC20Token__factory.connect("0x8e2a402b5debc184eb4c3f659ccc29a3b5d8f24d", deployer);
+
+  console.log(
+    await contract.approve(
+      "0xF810eed87C658830d7f47cB4264ca47FD9F6Be34",
+      "100000000000000000000000000000000000000000000000000",
+    ),
+    "potential 1",
+  );
+});
+
+task("buy:elp").setAction(async function (_taskArgs, hre) {
+  const { ethers } = hre;
+  const [deployer] = await ethers.getSigners();
+
+  const contract = ELPToken__factory.connect("0xF810eed87C658830d7f47cB4264ca47FD9F6Be34", deployer);
+
+  console.log(await contract.buyToken(toWei("1000")), "potential 1");
+  console.log(await contract.currentNav(), "potential 1");
 });

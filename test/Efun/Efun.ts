@@ -3,6 +3,7 @@ import { artifacts, ethers, waffle } from "hardhat";
 import type { Artifact } from "hardhat/types";
 import web3 from "web3";
 
+import { ComPool, ELPToken, ERC721Token } from "../../src/types";
 import type { Operator } from "../../src/types/@chainlink/contracts/src/v0.7/Operator";
 import type { ERC20Token } from "../../src/types/contracts/Erc20Token.sol/ERC20Token";
 import type { Event } from "../../src/types/contracts/Event.sol/Event";
@@ -27,6 +28,7 @@ describe("Unit tests", function () {
     this.signers.user1 = signers[1];
     this.signers.user2 = signers[2];
     this.signers.user3 = signers[3];
+    this.signers.feeCollector = signers[4];
   });
 
   describe("Efun", function () {
@@ -41,6 +43,9 @@ describe("Unit tests", function () {
       const erc20TokenArtifact: Artifact = await artifacts.readArtifact("ERC20Token");
       const linkTokenArtifact: Artifact = await artifacts.readArtifact("LinkToken");
       const operatorArtifact: Artifact = await artifacts.readArtifact("Operator");
+      const comPoolArtifact: Artifact = await artifacts.readArtifact("ComPool");
+      const elpTokenArtifact: Artifact = await artifacts.readArtifact("ELPToken");
+      const erc721TokenArtifact: Artifact = await artifacts.readArtifact("ERC721Token");
 
       this.event = <Event>await waffle.deployContract(this.signers.admin, eventArtifact, []);
       this.prediction = <Prediction>await waffle.deployContract(this.signers.admin, predictionArtifact, []);
@@ -54,7 +59,7 @@ describe("Unit tests", function () {
       this.handicap = <Handicap>await waffle.deployContract(this.signers.admin, handicapArtifact, []);
       this.overUnder = <OverUnder>await waffle.deployContract(this.signers.admin, overUnderArtifact, []);
       this.erc20Token = <ERC20Token>(
-        await waffle.deployContract(this.signers.admin, erc20TokenArtifact, ["EFUN", "EFUN", toWei("1000000")])
+        await waffle.deployContract(this.signers.admin, erc20TokenArtifact, ["EFUN", "EFUN", toWei("100000000")])
       );
       this.linkToken = <LinkToken>await waffle.deployContract(this.signers.admin, linkTokenArtifact, []);
       this.operator = <Operator>(
@@ -63,6 +68,14 @@ describe("Unit tests", function () {
           this.signers.admin.address,
         ])
       );
+      this.comPool = <ComPool>await waffle.deployContract(this.signers.admin, comPoolArtifact, []);
+      this.elpToken = <ELPToken>await waffle.deployContract(this.signers.admin, elpTokenArtifact, []);
+      this.erc721Token = <ERC721Token>await waffle.deployContract(this.signers.admin, erc721TokenArtifact, [
+        "EFUN NFT",
+        "EFT",
+        this.signers.admin.address, // ZeroEX address
+        this.elpToken.address,
+      ]);
 
       await this.event.initialize();
       await this.event.setOracle(
@@ -163,6 +176,42 @@ describe("Unit tests", function () {
           false,
           0,
         );
+
+      await this.prediction.connect(this.signers.admin).createSingleEvent(
+        [timestamp + 20, timestamp + 7 * 24 * 3600, timestamp + 10 * 24 * 3600, 0, 0],
+        [
+          this.multipleChoices.address,
+          "0x0000000000000000000000000000000000000000",
+          "0x0000000000000000000000000000000000000000",
+        ],
+        [23000, 12700, 47600, 35600],
+        "",
+        [],
+        [],
+        true, // affiliate
+        0,
+      );
+
+      // Community Pool & ELP & NFT
+      await this.comPool.initialize(10000, this.erc20Token.address);
+      await this.elpToken.initialize(
+        "ELPToken",
+        "ELP",
+        this.comPool.address,
+        this.erc20Token.address,
+        this.signers.admin.address,
+        this.signers.feeCollector.address,
+        toWei("1000"),
+        10000,
+        this.erc721Token.address,
+      );
+      await this.comPool.connect(this.signers.admin).approve(this.elpToken.address);
+      await this.comPool.connect(this.signers.admin).approve(this.prediction.address);
+      await this.erc20Token.connect(this.signers.admin).approve(this.comPool.address, toWei("1000000"));
+      await this.comPool.connect(this.signers.admin).deposit(toWei("1000000"));
+      await this.prediction
+        .connect(this.signers.admin)
+        .setLiquidityPoolAddress(this.erc20Token.address, this.comPool.address);
     });
 
     shouldBehaveLikeEvent();

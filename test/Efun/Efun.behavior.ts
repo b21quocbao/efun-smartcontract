@@ -652,6 +652,110 @@ export function shouldBehaveLikeEvent(): void {
     await this.event.performUpkeep(performData);
     await this.event.fulfill("0xcbbb7bb0eff415755e5445d4220320eb759a30c4302506ede096035842a7c724", "5,0,6,0,");
   });
-  it("batch", async function () {});
-  it("claim host fee", async function () {});
+
+  it("buy/sell elp", async function () {
+    await this.erc20Token.connect(this.signers.admin).transfer(this.signers.user1.address, toWei("1000000"));
+    console.log(await this.elpToken.currentNav(), "Nav");
+    console.log((await this.elpToken.balanceOf(this.signers.user1.address)).toString(), "Elp Balance user1");
+    console.log((await this.erc20Token.balanceOf(this.signers.user1.address)).toString(), "Erc20 Balance user1");
+    await this.erc20Token.connect(this.signers.user1).approve(this.elpToken.address, toWei("100000"));
+    await this.elpToken.connect(this.signers.user1).buyToken(toWei("100"));
+    console.log("----------------------------------------------------------------------------------");
+
+    console.log((await this.elpToken.balanceOf(this.signers.user1.address)).toString(), "Elp Balance user1");
+    console.log((await this.erc20Token.balanceOf(this.signers.user1.address)).toString(), "Erc20 Balance user1");
+    await this.elpToken.connect(this.signers.admin).performUpkeep("0x");
+    console.log((await this.elpToken.maxSellAmount()).toString(), "Max sell amount");
+    await this.elpToken.connect(this.signers.user1).sellToken(toWei("11"));
+    console.log("----------------------------------------------------------------------------------");
+
+    console.log((await this.elpToken.balanceOf(this.signers.user1.address)).toString(), "Elp Balance user1");
+    console.log((await this.erc20Token.balanceOf(this.signers.user1.address)).toString(), "Erc20 Balance user1");
+  });
+
+  it("buy/sell nft", async function () {
+    await this.erc20Token.connect(this.signers.admin).transfer(this.signers.user1.address, toWei("1000000"));
+    console.log(await this.elpToken.currentNav(), "Nav");
+    console.log((await this.elpToken.balanceOf(this.signers.user1.address)).toString(), "Elp Balance user1");
+    console.log((await this.erc20Token.balanceOf(this.signers.user1.address)).toString(), "Erc20 Balance user1");
+    await this.erc20Token.connect(this.signers.user1).approve(this.elpToken.address, toWei("100000000"));
+    await this.erc20Token.connect(this.signers.admin).approve(this.elpToken.address, toWei("9000000000"));
+    await this.elpToken.connect(this.signers.admin).buyToken(toWei("90000"));
+    const tokenId = await this.elpToken.connect(this.signers.user1).buyNFT(0);
+    console.log("----------------------------------------------------------------------------------");
+
+    console.log((await this.elpToken.balanceOf(this.signers.user1.address)).toString(), "Elp Balance user1");
+    console.log((await this.erc20Token.balanceOf(this.signers.user1.address)).toString(), "Erc20 Balance user1");
+    await this.elpToken.connect(this.signers.admin).performUpkeep("0x");
+    console.log((await this.elpToken.maxSellAmount()).toString(), "Max sell amount");
+    console.log(tokenId.value, "Line #686 Efun.behavior.ts");
+    await this.elpToken.connect(this.signers.user1).sellNft(1);
+    console.log("----------------------------------------------------------------------------------");
+
+    console.log((await this.elpToken.balanceOf(this.signers.user1.address)).toString(), "Elp Balance user1");
+    console.log((await this.erc20Token.balanceOf(this.signers.user1.address)).toString(), "Erc20 Balance user1");
+  });
+
+  it("affiliate", async function () {
+    await this.erc20Token.connect(this.signers.admin).transfer(this.signers.user1.address, toWei("1000000"));
+    await this.erc20Token.connect(this.signers.admin).transfer(this.signers.user2.address, toWei("1000000"));
+    await this.erc20Token.connect(this.signers.admin).transfer(this.signers.user3.address, toWei("1000000"));
+    await this.erc20Token.connect(this.signers.user1).approve(this.prediction.address, toWei("10000000000000"));
+    await this.erc20Token.connect(this.signers.user2).approve(this.prediction.address, toWei("10000000000000"));
+    await this.erc20Token.connect(this.signers.user3).approve(this.prediction.address, toWei("10000000000000"));
+
+    await increase(duration.seconds(50));
+    await this.prediction.connect(this.signers.user2).predict(5, [0], [this.erc20Token.address], [toWei("20.1")]);
+
+    await this.prediction.connect(this.signers.user3).predict(5, [0], [this.erc20Token.address], [toWei("10.05")]);
+
+    await this.prediction.connect(this.signers.user1).predict(5, [1], [this.erc20Token.address], [toWei("30.15")]);
+
+    console.log(
+      Math.round(Number(fromWei((await this.erc20Token.balanceOf(this.signers.user1.address)).toString()))),
+      "user1",
+    );
+    console.log(
+      Math.round(Number(fromWei((await this.erc20Token.balanceOf(this.signers.user2.address)).toString()))),
+      "user2",
+    );
+    console.log(
+      Math.round(Number(fromWei((await this.erc20Token.balanceOf(this.signers.user3.address)).toString()))),
+      "user3",
+    );
+    console.log(
+      Math.round(Number(fromWei((await this.erc20Token.balanceOf(this.comPool.address)).toString()))),
+      "pool",
+    );
+
+    await increase(duration.days(10));
+    console.log("----------------------------------------------------------------------------------");
+
+    await this.event.connect(this.signers.admin).updateEventResult(5, 0);
+    await increase(duration.days(2));
+    await this.prediction.connect(this.signers.user2).claimReward(5, this.erc20Token.address, 0);
+
+    await this.prediction.connect(this.signers.user3).claimReward(5, this.erc20Token.address, 0);
+
+    await expect(
+      this.prediction.connect(this.signers.user1).claimReward(5, this.erc20Token.address, 0),
+    ).to.be.revertedWith("no-reward");
+
+    console.log(
+      Math.round(Number(fromWei((await this.erc20Token.balanceOf(this.signers.user1.address)).toString()))),
+      "user1",
+    );
+    console.log(
+      Math.round(Number(fromWei((await this.erc20Token.balanceOf(this.signers.user2.address)).toString()))),
+      "user2",
+    );
+    console.log(
+      Math.round(Number(fromWei((await this.erc20Token.balanceOf(this.signers.user3.address)).toString()))),
+      "user3",
+    );
+    console.log(
+      Math.round(Number(fromWei((await this.erc20Token.balanceOf(this.comPool.address)).toString()))),
+      "pool",
+    );
+  });
 }

@@ -1,6 +1,7 @@
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 import type { Fixture } from "ethereum-waffle";
 
+import { ComPool, ELPToken, ERC721Token } from "../src/types";
 import type { Operator } from "../src/types/@chainlink/contracts/src/v0.7/Operator";
 import type { APIConsumer } from "../src/types/contracts/APIConsumer";
 import type { ERC20Token } from "../src/types/contracts/Erc20Token.sol/ERC20Token";
@@ -26,6 +27,9 @@ declare module "mocha" {
     linkToken: LinkToken;
     apiConsumer: APIConsumer;
     operator: Operator;
+    comPool: ComPool;
+    elpToken: ELPToken;
+    erc721Token: ERC721Token;
     loadFixture: <T>(fixture: Fixture<T>) => Promise<T>;
     signers: Signers;
   }
@@ -36,4 +40,5 @@ export interface Signers {
   user1: SignerWithAddress;
   user2: SignerWithAddress;
   user3: SignerWithAddress;
+  feeCollector: SignerWithAddress;
 }
