@@ -28,6 +28,9 @@ contract ELPToken is ERC20Upgradeable, OwnableUpgradeable, KeeperCompatibleInter
     mapping(uint256 => uint256) public classes;
     uint256[] public elpAmtOfClass;
     uint256 public oneHundredPrecent;
+    uint256 public capacity;
+    uint256[] public limits;
+    uint256[] public counts;
 
     /**
      * @dev Constructor that gives msg.sender all of existing tokens.
@@ -53,6 +56,9 @@ contract ELPToken is ERC20Upgradeable, OwnableUpgradeable, KeeperCompatibleInter
         sellFee = (_oneHundredPrecent * 2) / 100;
         erc721Token = _erc721Token;
         elpAmtOfClass = [100 ether, 500 ether, 1000 ether, 5000 ether, 10000 ether];
+        limits = [200, 30, 15, 4, 3];
+        counts = [0, 0, 0, 0, 0];
+        capacity = _elpAmt;
         _mint(_to, _elpAmt);
     }
 
@@ -61,7 +67,7 @@ contract ELPToken is ERC20Upgradeable, OwnableUpgradeable, KeeperCompatibleInter
     }
 
     function currentNav() public view returns (uint256) {
-        return ComPool(poolAddress).capacity() / totalSupply();
+        return ComPool(poolAddress).capacity() / capacity;
     }
 
     function setSellFee(uint256 _sellFee) public onlyOwner {
@@ -76,8 +82,16 @@ contract ELPToken is ERC20Upgradeable, OwnableUpgradeable, KeeperCompatibleInter
         elpAmtOfClass = _elpAmtOfClass;
     }
 
+    function setLimits(uint256[] memory _limits) public onlyOwner {
+        limits = _limits;
+    }
+
+    function setCounts(uint256[] memory _counts) public onlyOwner {
+        counts = _counts;
+    }
+
     function buyToken(uint256 _elpAmt) public {
-        _buyToken(_elpAmt, 0);
+        _buyToken(_elpAmt, 0, 0);
     }
 
     function sellToken(uint256 _elpAmt) public {
@@ -88,7 +102,9 @@ contract ELPToken is ERC20Upgradeable, OwnableUpgradeable, KeeperCompatibleInter
         uint256 elpAmt = elpAmtOfClass[_class];
         uint256 tokenId = ERC721Token(erc721Token).mint(msg.sender);
         classes[tokenId] = _class;
-        _buyToken(elpAmt, tokenId);
+        require(counts[_class] < limits[_class], "exceed-limits");
+        ++counts[_class];
+        _buyToken(elpAmt, tokenId, counts[_class]);
         return tokenId;
     }
 
@@ -98,11 +114,16 @@ contract ELPToken is ERC20Upgradeable, OwnableUpgradeable, KeeperCompatibleInter
         _sellToken(_elpAmt, _tokenId);
     }
 
-    function _buyToken(uint256 _elpAmt, uint256 _nft) private {
+    function _buyToken(
+        uint256 _elpAmt,
+        uint256 _nft,
+        uint256 _classId
+    ) private {
         uint256 _currentNav = currentNav();
         uint256 _efunAmt = _currentNav * _elpAmt;
         IERC20Upgradeable(efunToken).safeTransferFrom(msg.sender, address(poolAddress), _efunAmt);
-        emit TokenAction(msg.sender, _currentNav, _elpAmt, 0, _nft, true, block.timestamp);
+        emit TokenAction(msg.sender, _currentNav, _elpAmt, 0, _nft, true, _classId, block.timestamp);
+        capacity += _elpAmt;
         if (_nft == 0) {
             _mint(msg.sender, _elpAmt);
         }
@@ -125,7 +146,8 @@ contract ELPToken is ERC20Upgradeable, OwnableUpgradeable, KeeperCompatibleInter
             feeCollector,
             (_efunAmt * sellFee) / oneHundredPrecent
         );
-        emit TokenAction(msg.sender, _currentNav, _elpAmt, sellFee, _nft, false, block.timestamp);
+        emit TokenAction(msg.sender, _currentNav, _elpAmt, sellFee, _nft, false, 0, block.timestamp);
+        capacity -= _elpAmt;
         if (_nft == 0) {
             _burn(msg.sender, _elpAmt);
         }
@@ -157,6 +179,7 @@ contract ELPToken is ERC20Upgradeable, OwnableUpgradeable, KeeperCompatibleInter
         uint256 fee,
         uint256 nftId,
         bool isBuy,
+        uint256 classId,
         uint256 timestamp
     );
 }

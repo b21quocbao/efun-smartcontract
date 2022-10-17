@@ -33,9 +33,11 @@ export interface ELPTokenInterface extends utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "buyNFT(uint256)": FunctionFragment;
     "buyToken(uint256)": FunctionFragment;
+    "capacity()": FunctionFragment;
     "checkUpkeep(bytes)": FunctionFragment;
     "classes(uint256)": FunctionFragment;
     "counter()": FunctionFragment;
+    "counts(uint256)": FunctionFragment;
     "currentNav()": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
@@ -47,6 +49,7 @@ export interface ELPTokenInterface extends utils.Interface {
     "increaseAllowance(address,uint256)": FunctionFragment;
     "initialize(string,string,address,address,address,address,uint256,uint256,address)": FunctionFragment;
     "lastTimeStamp()": FunctionFragment;
+    "limits(uint256)": FunctionFragment;
     "maxSellAmount()": FunctionFragment;
     "maxSellAmountPerAddress()": FunctionFragment;
     "name()": FunctionFragment;
@@ -58,9 +61,11 @@ export interface ELPTokenInterface extends utils.Interface {
     "sellFee()": FunctionFragment;
     "sellNft(uint256)": FunctionFragment;
     "sellToken(uint256)": FunctionFragment;
+    "setCounts(uint256[])": FunctionFragment;
     "setElpAmtOfClass(uint256[])": FunctionFragment;
     "setErc721Token(address)": FunctionFragment;
     "setFeeCollector(address)": FunctionFragment;
+    "setLimits(uint256[])": FunctionFragment;
     "setSellFee(uint256)": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSellAmount(uint256,address)": FunctionFragment;
@@ -77,9 +82,11 @@ export interface ELPTokenInterface extends utils.Interface {
       | "balanceOf"
       | "buyNFT"
       | "buyToken"
+      | "capacity"
       | "checkUpkeep"
       | "classes"
       | "counter"
+      | "counts"
       | "currentNav"
       | "decimals"
       | "decreaseAllowance"
@@ -91,6 +98,7 @@ export interface ELPTokenInterface extends utils.Interface {
       | "increaseAllowance"
       | "initialize"
       | "lastTimeStamp"
+      | "limits"
       | "maxSellAmount"
       | "maxSellAmountPerAddress"
       | "name"
@@ -102,9 +110,11 @@ export interface ELPTokenInterface extends utils.Interface {
       | "sellFee"
       | "sellNft"
       | "sellToken"
+      | "setCounts"
       | "setElpAmtOfClass"
       | "setErc721Token"
       | "setFeeCollector"
+      | "setLimits"
       | "setSellFee"
       | "symbol"
       | "totalSellAmount"
@@ -131,6 +141,7 @@ export interface ELPTokenInterface extends utils.Interface {
     functionFragment: "buyToken",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "capacity", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "checkUpkeep",
     values: [BytesLike]
@@ -140,6 +151,10 @@ export interface ELPTokenInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "counter", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "counts",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "currentNav",
     values?: undefined
@@ -189,6 +204,10 @@ export interface ELPTokenInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "limits",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "maxSellAmount",
     values?: undefined
   ): string;
@@ -224,6 +243,10 @@ export interface ELPTokenInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "setCounts",
+    values: [BigNumberish[]]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setElpAmtOfClass",
     values: [BigNumberish[]]
   ): string;
@@ -234,6 +257,10 @@ export interface ELPTokenInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "setFeeCollector",
     values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setLimits",
+    values: [BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "setSellFee",
@@ -266,12 +293,14 @@ export interface ELPTokenInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "buyNFT", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "buyToken", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "capacity", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "checkUpkeep",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "classes", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "counter", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "counts", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "currentNav", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(
@@ -304,6 +333,7 @@ export interface ELPTokenInterface extends utils.Interface {
     functionFragment: "lastTimeStamp",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "limits", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "maxSellAmount",
     data: BytesLike
@@ -333,6 +363,7 @@ export interface ELPTokenInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "sellFee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "sellNft", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "sellToken", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setCounts", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setElpAmtOfClass",
     data: BytesLike
@@ -345,6 +376,7 @@ export interface ELPTokenInterface extends utils.Interface {
     functionFragment: "setFeeCollector",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setLimits", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setSellFee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
@@ -372,7 +404,7 @@ export interface ELPTokenInterface extends utils.Interface {
     "ChainlinkRequested(bytes32)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "TokenAction(address,uint256,uint256,uint256,uint256,bool,uint256)": EventFragment;
+    "TokenAction(address,uint256,uint256,uint256,uint256,bool,uint256,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
@@ -457,10 +489,20 @@ export interface TokenActionEventObject {
   fee: BigNumber;
   nftId: BigNumber;
   isBuy: boolean;
+  classId: BigNumber;
   timestamp: BigNumber;
 }
 export type TokenActionEvent = TypedEvent<
-  [string, BigNumber, BigNumber, BigNumber, BigNumber, boolean, BigNumber],
+  [
+    string,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    boolean,
+    BigNumber,
+    BigNumber
+  ],
   TokenActionEventObject
 >;
 
@@ -529,6 +571,8 @@ export interface ELPToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    capacity(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     checkUpkeep(
       arg0: BytesLike,
       overrides?: CallOverrides
@@ -542,6 +586,8 @@ export interface ELPToken extends BaseContract {
     ): Promise<[BigNumber]>;
 
     counter(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    counts(arg0: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     currentNav(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -587,6 +633,8 @@ export interface ELPToken extends BaseContract {
 
     lastTimeStamp(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    limits(arg0: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+
     maxSellAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     maxSellAmountPerAddress(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -620,6 +668,11 @@ export interface ELPToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setCounts(
+      _counts: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setElpAmtOfClass(
       _elpAmtOfClass: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -632,6 +685,11 @@ export interface ELPToken extends BaseContract {
 
     setFeeCollector(
       _feeCollector: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setLimits(
+      _limits: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -693,6 +751,8 @@ export interface ELPToken extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  capacity(overrides?: CallOverrides): Promise<BigNumber>;
+
   checkUpkeep(
     arg0: BytesLike,
     overrides?: CallOverrides
@@ -703,6 +763,8 @@ export interface ELPToken extends BaseContract {
   classes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   counter(overrides?: CallOverrides): Promise<BigNumber>;
+
+  counts(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   currentNav(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -748,6 +810,8 @@ export interface ELPToken extends BaseContract {
 
   lastTimeStamp(overrides?: CallOverrides): Promise<BigNumber>;
 
+  limits(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
   maxSellAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
   maxSellAmountPerAddress(overrides?: CallOverrides): Promise<BigNumber>;
@@ -781,6 +845,11 @@ export interface ELPToken extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setCounts(
+    _counts: BigNumberish[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setElpAmtOfClass(
     _elpAmtOfClass: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -793,6 +862,11 @@ export interface ELPToken extends BaseContract {
 
   setFeeCollector(
     _feeCollector: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setLimits(
+    _limits: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -848,6 +922,8 @@ export interface ELPToken extends BaseContract {
 
     buyToken(_elpAmt: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
+    capacity(overrides?: CallOverrides): Promise<BigNumber>;
+
     checkUpkeep(
       arg0: BytesLike,
       overrides?: CallOverrides
@@ -858,6 +934,8 @@ export interface ELPToken extends BaseContract {
     classes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     counter(overrides?: CallOverrides): Promise<BigNumber>;
+
+    counts(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     currentNav(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -903,6 +981,8 @@ export interface ELPToken extends BaseContract {
 
     lastTimeStamp(overrides?: CallOverrides): Promise<BigNumber>;
 
+    limits(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
     maxSellAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
     maxSellAmountPerAddress(overrides?: CallOverrides): Promise<BigNumber>;
@@ -925,6 +1005,11 @@ export interface ELPToken extends BaseContract {
 
     sellToken(_elpAmt: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
+    setCounts(
+      _counts: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setElpAmtOfClass(
       _elpAmtOfClass: BigNumberish[],
       overrides?: CallOverrides
@@ -937,6 +1022,11 @@ export interface ELPToken extends BaseContract {
 
     setFeeCollector(
       _feeCollector: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setLimits(
+      _limits: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1013,13 +1103,14 @@ export interface ELPToken extends BaseContract {
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
 
-    "TokenAction(address,uint256,uint256,uint256,uint256,bool,uint256)"(
+    "TokenAction(address,uint256,uint256,uint256,uint256,bool,uint256,uint256)"(
       user?: null,
       nav?: null,
       amount?: null,
       fee?: null,
       nftId?: null,
       isBuy?: null,
+      classId?: null,
       timestamp?: null
     ): TokenActionEventFilter;
     TokenAction(
@@ -1029,6 +1120,7 @@ export interface ELPToken extends BaseContract {
       fee?: null,
       nftId?: null,
       isBuy?: null,
+      classId?: null,
       timestamp?: null
     ): TokenActionEventFilter;
 
@@ -1069,11 +1161,15 @@ export interface ELPToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    capacity(overrides?: CallOverrides): Promise<BigNumber>;
+
     checkUpkeep(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     classes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     counter(overrides?: CallOverrides): Promise<BigNumber>;
+
+    counts(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     currentNav(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1119,6 +1215,8 @@ export interface ELPToken extends BaseContract {
 
     lastTimeStamp(overrides?: CallOverrides): Promise<BigNumber>;
 
+    limits(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
     maxSellAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
     maxSellAmountPerAddress(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1152,6 +1250,11 @@ export interface ELPToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setCounts(
+      _counts: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setElpAmtOfClass(
       _elpAmtOfClass: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1164,6 +1267,11 @@ export interface ELPToken extends BaseContract {
 
     setFeeCollector(
       _feeCollector: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setLimits(
+      _limits: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1229,6 +1337,8 @@ export interface ELPToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    capacity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     checkUpkeep(
       arg0: BytesLike,
       overrides?: CallOverrides
@@ -1240,6 +1350,11 @@ export interface ELPToken extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     counter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    counts(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     currentNav(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1285,6 +1400,11 @@ export interface ELPToken extends BaseContract {
 
     lastTimeStamp(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    limits(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     maxSellAmount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     maxSellAmountPerAddress(
@@ -1320,6 +1440,11 @@ export interface ELPToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setCounts(
+      _counts: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setElpAmtOfClass(
       _elpAmtOfClass: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1332,6 +1457,11 @@ export interface ELPToken extends BaseContract {
 
     setFeeCollector(
       _feeCollector: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setLimits(
+      _limits: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

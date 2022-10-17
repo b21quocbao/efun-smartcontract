@@ -1,7 +1,8 @@
 import { task } from "hardhat/config";
 import web3 from "web3";
 
-import { ELPToken__factory, ERC20Token__factory, GroupPredict__factory } from "../../src/types";
+import { ERC20Token__factory, ERC721Token__factory, GroupPredict__factory } from "../../src/types";
+import { ELPToken__factory } from "../../src/types/factories/contracts/ELPToken__factory";
 import { Event__factory } from "../../src/types/factories/contracts/Event__factory";
 import { Prediction__factory } from "../../src/types/factories/contracts/Prediction__factory";
 
@@ -171,7 +172,7 @@ task("approve:token").setAction(async function (_taskArgs, hre) {
 
   console.log(
     await contract.approve(
-      "0xF810eed87C658830d7f47cB4264ca47FD9F6Be34",
+      "0xCdD7A96Ef0A5F5b66C2501e01bee742915AD27A3",
       "100000000000000000000000000000000000000000000000000",
     ),
     "potential 1",
@@ -182,8 +183,40 @@ task("buy:elp").setAction(async function (_taskArgs, hre) {
   const { ethers } = hre;
   const [deployer] = await ethers.getSigners();
 
-  const contract = ELPToken__factory.connect("0xF810eed87C658830d7f47cB4264ca47FD9F6Be34", deployer);
+  const contract = ELPToken__factory.connect("0xCdD7A96Ef0A5F5b66C2501e01bee742915AD27A3", deployer);
 
   console.log(await contract.buyToken(toWei("1000")), "potential 1");
   console.log(await contract.currentNav(), "potential 1");
 });
+
+task("buy:nft").setAction(async function (_taskArgs, hre) {
+  const { ethers } = hre;
+  const [deployer] = await ethers.getSigners();
+
+  const contract = ELPToken__factory.connect("0xCdD7A96Ef0A5F5b66C2501e01bee742915AD27A3", deployer);
+
+  console.log(await contract.buyNFT(0), "potential 1");
+  console.log(await contract.currentNav(), "potential 1");
+});
+
+task("transfer:nft").setAction(async function (_taskArgs, hre) {
+  const { ethers } = hre;
+  const [deployer, deployer2] = await ethers.getSigners();
+
+  const contract = ERC721Token__factory.connect("0x1C566aa7Aa21395975e990E119c4a0cD9819DaCA", deployer2);
+
+  console.log(await contract.transferFrom(deployer2.address, deployer2.address, 2), "potential 1");
+  // console.log(await contract.currentNav(), "potential 1");
+});
+
+task("set:classId")
+  .addParam("address", "address")
+  .setAction(async function (_taskArgs, hre) {
+    const { ethers } = hre;
+    const [deployer] = await ethers.getSigners();
+
+    const contract = ELPToken__factory.connect(_taskArgs.address, deployer);
+
+    console.log(await contract.setCounts([0, 0, 0, 0, 0]), "count 1");
+    console.log(await contract.setLimits([200, 30, 15, 4, 3]), "limit 1");
+  });
