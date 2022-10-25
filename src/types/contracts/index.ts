@@ -9,7 +9,6 @@ import type * as linkTokenSol from "./LinkToken.sol";
 export type { linkTokenSol };
 import type * as custom from "./custom";
 export type { custom };
-export type { APIConsumer } from "./APIConsumer";
 export type { ChainlinkClientUpgradable } from "./ChainlinkClientUpgradable";
 export type { ComPool } from "./ComPool";
 export type { ELPToken } from "./ELPToken";

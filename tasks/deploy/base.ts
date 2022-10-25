@@ -119,6 +119,30 @@ task("deploy:ERC20")
     console.log("ERC20 deployed to: ", erc20.address);
   });
 
+task("deploy:ERC721")
+  .addParam("elpAddress", "ELP Address")
+  .setAction(async function (taskArguments: TaskArguments, { ethers }) {
+    const [deployer] = await ethers.getSigners();
+
+    // Deploy ERC721
+    const erc721Factory: ERC721Token__factory = <ERC721Token__factory>await ethers.getContractFactory("ERC721Token");
+    const erc721Contract: ERC721Token = <ERC721Token>(
+      await erc721Factory
+        .connect(deployer)
+        .deploy(
+          "EFUN NFT",
+          "EFT",
+          "0x0000000000000000000000000000000000000000",
+          "0x0000000000000000000000000000000000000000",
+        )
+    );
+    console.log("ERC721Token deployed to: ", erc721Contract.address);
+    const elpContract = ELPToken__factory.connect(taskArguments.elpAddress, deployer);
+    await erc721Contract.setElpTokenAddress(elpContract.address);
+    await elpContract.setErc721Token(erc721Contract.address);
+    await elpContract.setCounts([0, 0, 0, 0, 0]);
+  });
+
 task("upgrade:Prediction")
   .addParam("address", "Contract address")
   .setAction(async function (taskArguments: TaskArguments, { ethers, upgrades }) {

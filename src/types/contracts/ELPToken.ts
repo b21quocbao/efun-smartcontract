@@ -31,7 +31,7 @@ export interface ELPTokenInterface extends utils.Interface {
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "buyNFT(uint256)": FunctionFragment;
+    "buyNFT(uint256,uint256)": FunctionFragment;
     "buyToken(uint256)": FunctionFragment;
     "capacity()": FunctionFragment;
     "checkUpkeep(bytes)": FunctionFragment;
@@ -59,7 +59,7 @@ export interface ELPTokenInterface extends utils.Interface {
     "poolAddress()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "sellFee()": FunctionFragment;
-    "sellNft(uint256)": FunctionFragment;
+    "sellNft(uint256[])": FunctionFragment;
     "sellToken(uint256)": FunctionFragment;
     "setCounts(uint256[])": FunctionFragment;
     "setElpAmtOfClass(uint256[])": FunctionFragment;
@@ -135,7 +135,7 @@ export interface ELPTokenInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
     functionFragment: "buyNFT",
-    values: [BigNumberish]
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "buyToken",
@@ -236,7 +236,7 @@ export interface ELPTokenInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "sellFee", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "sellNft",
-    values: [BigNumberish]
+    values: [BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "sellToken",
@@ -404,7 +404,7 @@ export interface ELPTokenInterface extends utils.Interface {
     "ChainlinkRequested(bytes32)": EventFragment;
     "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "TokenAction(address,uint256,uint256,uint256,uint256,bool,uint256,uint256)": EventFragment;
+    "TokenAction(address,uint256,uint256,uint256,uint256[],bool,uint256,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
@@ -487,7 +487,7 @@ export interface TokenActionEventObject {
   nav: BigNumber;
   amount: BigNumber;
   fee: BigNumber;
-  nftId: BigNumber;
+  nftIds: BigNumber[];
   isBuy: boolean;
   classId: BigNumber;
   timestamp: BigNumber;
@@ -498,7 +498,7 @@ export type TokenActionEvent = TypedEvent<
     BigNumber,
     BigNumber,
     BigNumber,
-    BigNumber,
+    BigNumber[],
     boolean,
     BigNumber,
     BigNumber
@@ -563,6 +563,7 @@ export interface ELPToken extends BaseContract {
 
     buyNFT(
       _class: BigNumberish,
+      _quantity: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -659,7 +660,7 @@ export interface ELPToken extends BaseContract {
     sellFee(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     sellNft(
-      _tokenId: BigNumberish,
+      _tokenIds: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -743,6 +744,7 @@ export interface ELPToken extends BaseContract {
 
   buyNFT(
     _class: BigNumberish,
+    _quantity: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -836,7 +838,7 @@ export interface ELPToken extends BaseContract {
   sellFee(overrides?: CallOverrides): Promise<BigNumber>;
 
   sellNft(
-    _tokenId: BigNumberish,
+    _tokenIds: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -918,7 +920,11 @@ export interface ELPToken extends BaseContract {
 
     balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    buyNFT(_class: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    buyNFT(
+      _class: BigNumberish,
+      _quantity: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber[]>;
 
     buyToken(_elpAmt: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -1001,7 +1007,10 @@ export interface ELPToken extends BaseContract {
 
     sellFee(overrides?: CallOverrides): Promise<BigNumber>;
 
-    sellNft(_tokenId: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    sellNft(
+      _tokenIds: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     sellToken(_elpAmt: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -1103,12 +1112,12 @@ export interface ELPToken extends BaseContract {
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
 
-    "TokenAction(address,uint256,uint256,uint256,uint256,bool,uint256,uint256)"(
+    "TokenAction(address,uint256,uint256,uint256,uint256[],bool,uint256,uint256)"(
       user?: null,
       nav?: null,
       amount?: null,
       fee?: null,
-      nftId?: null,
+      nftIds?: null,
       isBuy?: null,
       classId?: null,
       timestamp?: null
@@ -1118,7 +1127,7 @@ export interface ELPToken extends BaseContract {
       nav?: null,
       amount?: null,
       fee?: null,
-      nftId?: null,
+      nftIds?: null,
       isBuy?: null,
       classId?: null,
       timestamp?: null
@@ -1153,6 +1162,7 @@ export interface ELPToken extends BaseContract {
 
     buyNFT(
       _class: BigNumberish,
+      _quantity: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1241,7 +1251,7 @@ export interface ELPToken extends BaseContract {
     sellFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     sellNft(
-      _tokenId: BigNumberish,
+      _tokenIds: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1329,6 +1339,7 @@ export interface ELPToken extends BaseContract {
 
     buyNFT(
       _class: BigNumberish,
+      _quantity: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1431,7 +1442,7 @@ export interface ELPToken extends BaseContract {
     sellFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     sellNft(
-      _tokenId: BigNumberish,
+      _tokenIds: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

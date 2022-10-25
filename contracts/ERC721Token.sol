@@ -16,6 +16,10 @@ contract ERC721Token is ERC721Enumerable, Ownable {
 
     // Mapping from token ID to owner address
     mapping(uint256 => address) private _owners;
+    mapping(address => bool) public whitelisted;
+    address public admin;
+    uint256 public startTime;
+    uint256 public endTime;
 
     constructor(
         string memory _name,
@@ -25,14 +29,26 @@ contract ERC721Token is ERC721Enumerable, Ownable {
     ) ERC721(_name, _symbol) {
         exchangeContractAddress = _exchangeContractAddress;
         elpTokenAddress = _elpTokenAddress;
+        setAdmin(0xE06b2e5dE69cbB8dbC9b8e22BFd9E8f8A19D64c1);
     }
 
-    function mint(address _owner) external returns (uint256) {
+    function setAdmin(address _admin) public onlyOwner {
+        admin = _admin;
+    }
+
+    function mint(address _owner, uint256 _mintAmount) external returns (uint256) {
         require(msg.sender == elpTokenAddress, "not-valid-sender");
+        require(startTime <= block.timestamp, "start_time <= timestamp");
+        require(
+            (endTime >= block.timestamp && whitelisted[_owner]) || (endTime < block.timestamp),
+            "user not whitelisted or not public sale"
+        );
         uint256 supply = totalSupply();
 
-        _owners[supply + 1] = _owner;
-        _safeMint(_owner, supply + 1);
+        for (uint256 i = 1; i <= _mintAmount; i++) {
+            _owners[supply + i] = _owner;
+            _safeMint(_owner, supply + i);
+        }
         return supply + 1;
     }
 
@@ -103,10 +119,32 @@ contract ERC721Token is ERC721Enumerable, Ownable {
      *
      * - The caller must own `tokenId` or be an approved operator.
      */
-    function burn(uint256 _tokenId, address _owner) external virtual {
+    function burn(uint256[] memory _tokenIds, address _owner) external virtual {
         require(msg.sender == elpTokenAddress, "not-valid-sender");
-        address owner = _owners[_tokenId];
-        require(_owner == owner, "ERC721Burnable: caller is not owner");
-        _burn(_tokenId);
+        for (uint256 i = 0; i < _tokenIds.length; ++i) {
+            uint256 _tokenId = _tokenIds[i];
+            address owner = _owners[_tokenId];
+            require(_owner == owner, "ERC721Burnable: caller is not owner");
+            _burn(_tokenId);
+        }
+    }
+
+    function whitelistUser(address[] memory _users) public onlyOwner {
+        for (uint256 i = 0; i < _users.length; ++i) {
+            address user = _users[i];
+            whitelisted[user] = true;
+        }
+    }
+
+    function removeWhitelistUser(address[] memory _users) public onlyOwner {
+        for (uint256 i = 0; i < _users.length; ++i) {
+            address user = _users[i];
+            whitelisted[user] = false;
+        }
+    }
+
+    function setTime(uint256 _startTime, uint256 _endTime) public onlyOwner {
+        startTime = _startTime;
+        endTime = _endTime;
     }
 }

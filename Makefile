@@ -17,7 +17,7 @@ upgrade:
 	yarn hardhat upgrade:OverUnder --network bscTestnet --address 0x0CE4809548ADc080F203da3F4AF56fBAdDE8Ae00
 	yarn hardhat upgrade:ComPool --network bscTestnet --address 0x59f06e624473284fA92F631aA3c097eE5025f8A8
 	yarn hardhat upgrade:ELPToken --network bscTestnet --address 0xCdD7A96Ef0A5F5b66C2501e01bee742915AD27A3
-	yarn hardhat upgrade:ERC721Token --network bscTestnet --address 0x1C566aa7Aa21395975e990E119c4a0cD9819DaCA
+	yarn hardhat deploy:ERC721 --network bscTestnet --elp-address 0xCdD7A96Ef0A5F5b66C2501e01bee742915AD27A3
 verify:
 	yarn hardhat verify:address --network bscTestnet
 upgrade-mainnet:
@@ -30,5 +30,5 @@ upgrade-mainnet:
 	yarn hardhat upgrade:OverUnder --network bsc --address 0xCEB7c00383B39135D61cF240f0cc6093290F21ED
 	yarn hardhat upgrade:ComPool --network bsc --address 0x0286A2bf971c9B200dFf86fEEe911f60F3fB2dA1
 	yarn hardhat upgrade:ELPToken --network bsc --address 0x9D6CBBBD7eAd35eeA912332402E1bbbC99aED135
-	yarn hardhat upgrade:ERC721Token --network bsc --address 0x349851fF5dfca5e3A4c98F5573716923283D3362
+	yarn hardhat deploy:ERC721 --network bsc --elp-address 0x9D6CBBBD7eAd35eeA912332402E1bbbC99aED135
 

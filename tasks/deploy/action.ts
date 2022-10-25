@@ -1,7 +1,7 @@
 import { task } from "hardhat/config";
 import web3 from "web3";
 
-import { ERC20Token__factory, ERC721Token__factory, GroupPredict__factory } from "../../src/types";
+import { ComPool__factory, ERC20Token__factory, ERC721Token__factory, GroupPredict__factory } from "../../src/types";
 import { ELPToken__factory } from "../../src/types/factories/contracts/ELPToken__factory";
 import { Event__factory } from "../../src/types/factories/contracts/Event__factory";
 import { Prediction__factory } from "../../src/types/factories/contracts/Prediction__factory";
@@ -195,7 +195,7 @@ task("buy:nft").setAction(async function (_taskArgs, hre) {
 
   const contract = ELPToken__factory.connect("0xCdD7A96Ef0A5F5b66C2501e01bee742915AD27A3", deployer);
 
-  console.log(await contract.buyNFT(0), "potential 1");
+  console.log(await contract.buyNFT(0, 3), "potential 1");
   console.log(await contract.currentNav(), "potential 1");
 });
 
@@ -219,4 +219,37 @@ task("set:classId")
 
     console.log(await contract.setCounts([0, 0, 0, 0, 0]), "count 1");
     console.log(await contract.setLimits([200, 30, 15, 4, 3]), "limit 1");
+  });
+
+task("get:amount")
+  .addParam("address", "address")
+  .setAction(async function (_taskArgs, hre) {
+    const { ethers } = hre;
+    const [deployer] = await ethers.getSigners();
+
+    const contract = ComPool__factory.connect(_taskArgs.address, deployer);
+
+    console.log(await contract.capacity(), "count 1");
+  });
+
+task("mint:erc20")
+  .addParam("address", "address")
+  .setAction(async function (_taskArgs, hre) {
+    const { ethers } = hre;
+    const [deployer] = await ethers.getSigners();
+
+    const contract = ERC20Token__factory.connect("0x8E2A402b5debc184EB4C3f659CCc29A3b5d8f24d", deployer);
+
+    console.log(await contract.mint(_taskArgs.address, toWei("100000000000")), "count 1");
+  });
+
+task("check:allowance")
+  .addParam("owner", "owner")
+  .setAction(async function (_taskArgs, hre) {
+    const { ethers } = hre;
+    const [deployer] = await ethers.getSigners();
+
+    const contract = ERC20Token__factory.connect("0x8E2A402b5debc184EB4C3f659CCc29A3b5d8f24d", deployer);
+
+    console.log(await contract.allowance(_taskArgs.owner, "0xCdD7A96Ef0A5F5b66C2501e01bee742915AD27A3"), "count 1");
   });

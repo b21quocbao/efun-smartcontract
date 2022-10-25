@@ -201,10 +201,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
-      name: "APIConsumer",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.APIConsumer__factory>;
-    getContractFactory(
       name: "ChainlinkClientUpgradable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ChainlinkClientUpgradable__factory>;
@@ -536,11 +532,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165>;
-    getContractAt(
-      name: "APIConsumer",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.APIConsumer>;
     getContractAt(
       name: "ChainlinkClientUpgradable",
       address: string,

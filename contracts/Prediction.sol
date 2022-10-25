@@ -297,7 +297,6 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
             uint256 _platformAmount = (_amount * _helper.platFormfeeBefore()) / oneHundredPrecent;
             if (_event.affiliate) {
                 _liquidityPool = ComPool(liquidityPoolAddress[_token]).getAllocation(allocations[eventId]);
-                _platformAmount = 0;
             }
             _amount -= _platformAmount;
             uint256 _index = _optionIndexs[i];
@@ -331,6 +330,9 @@ contract Prediction is OwnableUpgradeable, ReentrancyGuardUpgradeable {
                         address(liquidityPoolAddress[_token]),
                         _amount
                     );
+                    if (_platformAmount > 0) {
+                        IERC20Upgradeable(_token).safeTransfer(_event.creator, _platformAmount);
+                    }
                 } else {
                     IERC20Upgradeable(_token).safeTransferFrom(msg.sender, address(this), _amount);
                     if (_platformAmount > 0) {

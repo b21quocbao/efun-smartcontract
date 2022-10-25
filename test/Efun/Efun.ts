@@ -212,6 +212,9 @@ describe("Unit tests", function () {
       await this.prediction
         .connect(this.signers.admin)
         .setLiquidityPoolAddress(this.erc20Token.address, this.comPool.address);
+      await this.erc721Token.connect(this.signers.admin).setAdmin(this.signers.admin.address);
+      await this.erc721Token.connect(this.signers.admin).whitelistUser([this.signers.user1.address]);
+      await this.erc721Token.connect(this.signers.admin).setTime(timestamp, timestamp + 2 * 3600);
     });
 
     shouldBehaveLikeEvent();

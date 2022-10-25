@@ -88,8 +88,6 @@ export type { ERC165 } from "./@openzeppelin/contracts/utils/introspection/ERC16
 export { ERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/ERC165__factory";
 export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC165";
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
-export type { APIConsumer } from "./contracts/APIConsumer";
-export { APIConsumer__factory } from "./factories/contracts/APIConsumer__factory";
 export type { ChainlinkClientUpgradable } from "./contracts/ChainlinkClientUpgradable";
 export { ChainlinkClientUpgradable__factory } from "./factories/contracts/ChainlinkClientUpgradable__factory";
 export type { ComPool } from "./contracts/ComPool";

@@ -28,23 +28,29 @@ import type {
 
 export interface ERC721TokenInterface extends utils.Interface {
   functions: {
+    "admin()": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "burn(uint256,address)": FunctionFragment;
+    "burn(uint256[],address)": FunctionFragment;
     "elpTokenAddress()": FunctionFragment;
+    "endTime()": FunctionFragment;
     "exchangeContractAddress()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mint(address)": FunctionFragment;
+    "mint(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
+    "removeWhitelistUser(address[])": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
+    "setAdmin(address)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "setElpTokenAddress(address)": FunctionFragment;
     "setExchangeContractAddress(address)": FunctionFragment;
+    "setTime(uint256,uint256)": FunctionFragment;
+    "startTime()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
@@ -54,14 +60,18 @@ export interface ERC721TokenInterface extends utils.Interface {
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "walletOfOwner(address)": FunctionFragment;
+    "whitelistUser(address[])": FunctionFragment;
+    "whitelisted(address)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "admin"
       | "approve"
       | "balanceOf"
       | "burn"
       | "elpTokenAddress"
+      | "endTime"
       | "exchangeContractAddress"
       | "getApproved"
       | "isApprovedForAll"
@@ -69,12 +79,16 @@ export interface ERC721TokenInterface extends utils.Interface {
       | "name"
       | "owner"
       | "ownerOf"
+      | "removeWhitelistUser"
       | "renounceOwnership"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
+      | "setAdmin"
       | "setApprovalForAll"
       | "setElpTokenAddress"
       | "setExchangeContractAddress"
+      | "setTime"
+      | "startTime"
       | "supportsInterface"
       | "symbol"
       | "tokenByIndex"
@@ -84,8 +98,11 @@ export interface ERC721TokenInterface extends utils.Interface {
       | "transferFrom"
       | "transferOwnership"
       | "walletOfOwner"
+      | "whitelistUser"
+      | "whitelisted"
   ): FunctionFragment;
 
+  encodeFunctionData(functionFragment: "admin", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
@@ -93,12 +110,13 @@ export interface ERC721TokenInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
     functionFragment: "burn",
-    values: [BigNumberish, string]
+    values: [BigNumberish[], string]
   ): string;
   encodeFunctionData(
     functionFragment: "elpTokenAddress",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "endTime", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "exchangeContractAddress",
     values?: undefined
@@ -111,12 +129,19 @@ export interface ERC721TokenInterface extends utils.Interface {
     functionFragment: "isApprovedForAll",
     values: [string, string]
   ): string;
-  encodeFunctionData(functionFragment: "mint", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "mint",
+    values: [string, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "removeWhitelistUser",
+    values: [string[]]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -130,6 +155,7 @@ export interface ERC721TokenInterface extends utils.Interface {
     functionFragment: "safeTransferFrom(address,address,uint256,bytes)",
     values: [string, string, BigNumberish, BytesLike]
   ): string;
+  encodeFunctionData(functionFragment: "setAdmin", values: [string]): string;
   encodeFunctionData(
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
@@ -142,6 +168,11 @@ export interface ERC721TokenInterface extends utils.Interface {
     functionFragment: "setExchangeContractAddress",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setTime",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "startTime", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
@@ -175,7 +206,13 @@ export interface ERC721TokenInterface extends utils.Interface {
     functionFragment: "walletOfOwner",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "whitelistUser",
+    values: [string[]]
+  ): string;
+  encodeFunctionData(functionFragment: "whitelisted", values: [string]): string;
 
+  decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
@@ -183,6 +220,7 @@ export interface ERC721TokenInterface extends utils.Interface {
     functionFragment: "elpTokenAddress",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "endTime", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "exchangeContractAddress",
     data: BytesLike
@@ -200,6 +238,10 @@ export interface ERC721TokenInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "removeWhitelistUser",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
@@ -211,6 +253,7 @@ export interface ERC721TokenInterface extends utils.Interface {
     functionFragment: "safeTransferFrom(address,address,uint256,bytes)",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setAdmin", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
     data: BytesLike
@@ -223,6 +266,8 @@ export interface ERC721TokenInterface extends utils.Interface {
     functionFragment: "setExchangeContractAddress",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setTime", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "startTime", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
@@ -251,6 +296,14 @@ export interface ERC721TokenInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "walletOfOwner",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "whitelistUser",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "whitelisted",
     data: BytesLike
   ): Result;
 
@@ -342,6 +395,8 @@ export interface ERC721Token extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    admin(overrides?: CallOverrides): Promise<[string]>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -351,12 +406,14 @@ export interface ERC721Token extends BaseContract {
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     burn(
-      _tokenId: BigNumberish,
+      _tokenIds: BigNumberish[],
       _owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     elpTokenAddress(overrides?: CallOverrides): Promise<[string]>;
+
+    endTime(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     exchangeContractAddress(overrides?: CallOverrides): Promise<[string]>;
 
@@ -373,6 +430,7 @@ export interface ERC721Token extends BaseContract {
 
     mint(
       _owner: string,
+      _mintAmount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -384,6 +442,11 @@ export interface ERC721Token extends BaseContract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    removeWhitelistUser(
+      _users: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -404,6 +467,11 @@ export interface ERC721Token extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setAdmin(
+      _admin: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setApprovalForAll(
       operator: string,
       approved: boolean,
@@ -419,6 +487,14 @@ export interface ERC721Token extends BaseContract {
       _exchangeContractAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    setTime(
+      _startTime: BigNumberish,
+      _endTime: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    startTime(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     supportsInterface(
       interfaceId: BytesLike,
@@ -461,7 +537,16 @@ export interface ERC721Token extends BaseContract {
       _owner: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber[]]>;
+
+    whitelistUser(
+      _users: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    whitelisted(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
   };
+
+  admin(overrides?: CallOverrides): Promise<string>;
 
   approve(
     to: string,
@@ -472,12 +557,14 @@ export interface ERC721Token extends BaseContract {
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   burn(
-    _tokenId: BigNumberish,
+    _tokenIds: BigNumberish[],
     _owner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   elpTokenAddress(overrides?: CallOverrides): Promise<string>;
+
+  endTime(overrides?: CallOverrides): Promise<BigNumber>;
 
   exchangeContractAddress(overrides?: CallOverrides): Promise<string>;
 
@@ -494,6 +581,7 @@ export interface ERC721Token extends BaseContract {
 
   mint(
     _owner: string,
+    _mintAmount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -502,6 +590,11 @@ export interface ERC721Token extends BaseContract {
   owner(overrides?: CallOverrides): Promise<string>;
 
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  removeWhitelistUser(
+    _users: string[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -522,6 +615,11 @@ export interface ERC721Token extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setAdmin(
+    _admin: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setApprovalForAll(
     operator: string,
     approved: boolean,
@@ -537,6 +635,14 @@ export interface ERC721Token extends BaseContract {
     _exchangeContractAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  setTime(
+    _startTime: BigNumberish,
+    _endTime: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  startTime(overrides?: CallOverrides): Promise<BigNumber>;
 
   supportsInterface(
     interfaceId: BytesLike,
@@ -577,7 +683,16 @@ export interface ERC721Token extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber[]>;
 
+  whitelistUser(
+    _users: string[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  whitelisted(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+
   callStatic: {
+    admin(overrides?: CallOverrides): Promise<string>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -587,12 +702,14 @@ export interface ERC721Token extends BaseContract {
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     burn(
-      _tokenId: BigNumberish,
+      _tokenIds: BigNumberish[],
       _owner: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     elpTokenAddress(overrides?: CallOverrides): Promise<string>;
+
+    endTime(overrides?: CallOverrides): Promise<BigNumber>;
 
     exchangeContractAddress(overrides?: CallOverrides): Promise<string>;
 
@@ -607,13 +724,22 @@ export interface ERC721Token extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    mint(_owner: string, overrides?: CallOverrides): Promise<BigNumber>;
+    mint(
+      _owner: string,
+      _mintAmount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    removeWhitelistUser(
+      _users: string[],
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -632,6 +758,8 @@ export interface ERC721Token extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setAdmin(_admin: string, overrides?: CallOverrides): Promise<void>;
+
     setApprovalForAll(
       operator: string,
       approved: boolean,
@@ -647,6 +775,14 @@ export interface ERC721Token extends BaseContract {
       _exchangeContractAddress: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setTime(
+      _startTime: BigNumberish,
+      _endTime: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    startTime(overrides?: CallOverrides): Promise<BigNumber>;
 
     supportsInterface(
       interfaceId: BytesLike,
@@ -686,6 +822,10 @@ export interface ERC721Token extends BaseContract {
       _owner: string,
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
+
+    whitelistUser(_users: string[], overrides?: CallOverrides): Promise<void>;
+
+    whitelisted(arg0: string, overrides?: CallOverrides): Promise<boolean>;
   };
 
   filters: {
@@ -733,6 +873,8 @@ export interface ERC721Token extends BaseContract {
   };
 
   estimateGas: {
+    admin(overrides?: CallOverrides): Promise<BigNumber>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -742,12 +884,14 @@ export interface ERC721Token extends BaseContract {
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     burn(
-      _tokenId: BigNumberish,
+      _tokenIds: BigNumberish[],
       _owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     elpTokenAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
+    endTime(overrides?: CallOverrides): Promise<BigNumber>;
 
     exchangeContractAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -764,6 +908,7 @@ export interface ERC721Token extends BaseContract {
 
     mint(
       _owner: string,
+      _mintAmount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -774,6 +919,11 @@ export interface ERC721Token extends BaseContract {
     ownerOf(
       tokenId: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    removeWhitelistUser(
+      _users: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     renounceOwnership(
@@ -795,6 +945,11 @@ export interface ERC721Token extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setAdmin(
+      _admin: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setApprovalForAll(
       operator: string,
       approved: boolean,
@@ -810,6 +965,14 @@ export interface ERC721Token extends BaseContract {
       _exchangeContractAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    setTime(
+      _startTime: BigNumberish,
+      _endTime: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    startTime(overrides?: CallOverrides): Promise<BigNumber>;
 
     supportsInterface(
       interfaceId: BytesLike,
@@ -852,9 +1015,18 @@ export interface ERC721Token extends BaseContract {
       _owner: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    whitelistUser(
+      _users: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    whitelisted(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    admin(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -867,12 +1039,14 @@ export interface ERC721Token extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     burn(
-      _tokenId: BigNumberish,
+      _tokenIds: BigNumberish[],
       _owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     elpTokenAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    endTime(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     exchangeContractAddress(
       overrides?: CallOverrides
@@ -891,6 +1065,7 @@ export interface ERC721Token extends BaseContract {
 
     mint(
       _owner: string,
+      _mintAmount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -901,6 +1076,11 @@ export interface ERC721Token extends BaseContract {
     ownerOf(
       tokenId: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    removeWhitelistUser(
+      _users: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
@@ -922,6 +1102,11 @@ export interface ERC721Token extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setAdmin(
+      _admin: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setApprovalForAll(
       operator: string,
       approved: boolean,
@@ -937,6 +1122,14 @@ export interface ERC721Token extends BaseContract {
       _exchangeContractAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    setTime(
+      _startTime: BigNumberish,
+      _endTime: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    startTime(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     supportsInterface(
       interfaceId: BytesLike,
@@ -977,6 +1170,16 @@ export interface ERC721Token extends BaseContract {
 
     walletOfOwner(
       _owner: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    whitelistUser(
+      _users: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    whitelisted(
+      arg0: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

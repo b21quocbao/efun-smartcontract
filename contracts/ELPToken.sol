@@ -91,45 +91,54 @@ contract ELPToken is ERC20Upgradeable, OwnableUpgradeable, KeeperCompatibleInter
     }
 
     function buyToken(uint256 _elpAmt) public {
-        _buyToken(_elpAmt, 0, 0);
+        uint256[] memory x;
+        _buyToken(_elpAmt, x, 0);
     }
 
     function sellToken(uint256 _elpAmt) public {
-        _sellToken(_elpAmt, 0);
+        uint256[] memory x;
+        _sellToken(_elpAmt, x);
     }
 
-    function buyNFT(uint256 _class) public returns (uint256) {
+    function buyNFT(uint256 _class, uint256 _quantity) public returns (uint256[] memory) {
+        require(counts[_class] + _quantity <= limits[_class], "exceed-limits");
         uint256 elpAmt = elpAmtOfClass[_class];
-        uint256 tokenId = ERC721Token(erc721Token).mint(msg.sender);
-        classes[tokenId] = _class;
-        require(counts[_class] < limits[_class], "exceed-limits");
-        ++counts[_class];
-        _buyToken(elpAmt, tokenId, counts[_class]);
-        return tokenId;
+        uint256 tokenId = ERC721Token(erc721Token).mint(msg.sender, _quantity);
+        uint256[] memory tokenIds = new uint256[](_quantity);
+        for (uint256 i = 0; i < _quantity; ++i) {
+            tokenIds[i] = tokenId + i;
+            classes[tokenId + i] = _class;
+            ++counts[_class];
+        }
+        _buyToken(elpAmt * _quantity, tokenIds, counts[_class]);
+        return tokenIds;
     }
 
-    function sellNft(uint256 _tokenId) public {
-        uint256 _elpAmt = elpAmtOfClass[classes[_tokenId]];
-        ERC721Token(erc721Token).burn(_tokenId, msg.sender);
-        _sellToken(_elpAmt, _tokenId);
+    function sellNft(uint256[] memory _tokenIds) public {
+        ERC721Token(erc721Token).burn(_tokenIds, msg.sender);
+        uint256 _elpAmt = 0;
+        for (uint256 i = 0; i < _tokenIds.length; ++i) {
+            _elpAmt += elpAmtOfClass[classes[_tokenIds[i]]];
+        }
+        _sellToken(_elpAmt, _tokenIds);
     }
 
     function _buyToken(
         uint256 _elpAmt,
-        uint256 _nft,
+        uint256[] memory _nfts,
         uint256 _classId
     ) private {
         uint256 _currentNav = currentNav();
         uint256 _efunAmt = _currentNav * _elpAmt;
         IERC20Upgradeable(efunToken).safeTransferFrom(msg.sender, address(poolAddress), _efunAmt);
-        emit TokenAction(msg.sender, _currentNav, _elpAmt, 0, _nft, true, _classId, block.timestamp);
+        emit TokenAction(msg.sender, _currentNav, _elpAmt, 0, _nfts, true, _classId, block.timestamp);
         capacity += _elpAmt;
-        if (_nft == 0) {
+        if (_nfts.length == 0) {
             _mint(msg.sender, _elpAmt);
         }
     }
 
-    function _sellToken(uint256 _elpAmt, uint256 _nft) private {
+    function _sellToken(uint256 _elpAmt, uint256[] memory _nfts) private {
         require(_elpAmt <= maxSellAmount, "exceed-total-sell-amount");
         require(totalSellAmount[counter][msg.sender] + _elpAmt <= maxSellAmountPerAddress, "exceed-amount-per-user");
         maxSellAmount -= _elpAmt;
@@ -146,9 +155,9 @@ contract ELPToken is ERC20Upgradeable, OwnableUpgradeable, KeeperCompatibleInter
             feeCollector,
             (_efunAmt * sellFee) / oneHundredPrecent
         );
-        emit TokenAction(msg.sender, _currentNav, _elpAmt, sellFee, _nft, false, 0, block.timestamp);
+        emit TokenAction(msg.sender, _currentNav, _elpAmt, sellFee, _nfts, false, 0, block.timestamp);
         capacity -= _elpAmt;
-        if (_nft == 0) {
+        if (_nfts.length == 0) {
             _burn(msg.sender, _elpAmt);
         }
     }
@@ -177,7 +186,7 @@ contract ELPToken is ERC20Upgradeable, OwnableUpgradeable, KeeperCompatibleInter
         uint256 nav,
         uint256 amount,
         uint256 fee,
-        uint256 nftId,
+        uint256[] nftIds,
         bool isBuy,
         uint256 classId,
         uint256 timestamp
