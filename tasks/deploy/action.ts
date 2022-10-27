@@ -3,7 +3,7 @@ import web3 from "web3";
 
 import { ComPool__factory, ERC20Token__factory, ERC721Token__factory, GroupPredict__factory } from "../../src/types";
 import { ELPToken__factory } from "../../src/types/factories/contracts/ELPToken__factory";
-import { Event__factory } from "../../src/types/factories/contracts/Event__factory";
+import { Event__factory } from "../../src/types/factories/contracts/Event.sol/Event__factory";
 import { Prediction__factory } from "../../src/types/factories/contracts/Prediction__factory";
 
 const { toWei } = web3.utils;
@@ -195,7 +195,11 @@ task("buy:nft").setAction(async function (_taskArgs, hre) {
 
   const contract = ELPToken__factory.connect("0xCdD7A96Ef0A5F5b66C2501e01bee742915AD27A3", deployer);
 
-  console.log(await contract.buyNFT(0, 3), "potential 1");
+  console.log(await contract.buyNFT(0, 1), "potential 1");
+  console.log(await contract.buyNFT(1, 1), "potential 1");
+  console.log(await contract.buyNFT(2, 1), "potential 1");
+  console.log(await contract.buyNFT(3, 1), "potential 1");
+  console.log(await contract.buyNFT(4, 1), "potential 1");
   console.log(await contract.currentNav(), "potential 1");
 });
 

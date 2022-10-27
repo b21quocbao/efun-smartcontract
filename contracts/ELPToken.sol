@@ -103,7 +103,7 @@ contract ELPToken is ERC20Upgradeable, OwnableUpgradeable, KeeperCompatibleInter
     function buyNFT(uint256 _class, uint256 _quantity) public returns (uint256[] memory) {
         require(counts[_class] + _quantity <= limits[_class], "exceed-limits");
         uint256 elpAmt = elpAmtOfClass[_class];
-        uint256 tokenId = ERC721Token(erc721Token).mint(msg.sender, _quantity);
+        uint256 tokenId = ERC721Token(erc721Token).mint(msg.sender, _quantity, _class);
         uint256[] memory tokenIds = new uint256[](_quantity);
         for (uint256 i = 0; i < _quantity; ++i) {
             tokenIds[i] = tokenId + i;

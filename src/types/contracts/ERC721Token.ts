@@ -32,12 +32,13 @@ export interface ERC721TokenInterface extends utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burn(uint256[],address)": FunctionFragment;
+    "classes(uint256)": FunctionFragment;
     "elpTokenAddress()": FunctionFragment;
     "endTime()": FunctionFragment;
     "exchangeContractAddress()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mint(address,uint256)": FunctionFragment;
+    "mint(address,uint256,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -70,6 +71,7 @@ export interface ERC721TokenInterface extends utils.Interface {
       | "approve"
       | "balanceOf"
       | "burn"
+      | "classes"
       | "elpTokenAddress"
       | "endTime"
       | "exchangeContractAddress"
@@ -113,6 +115,10 @@ export interface ERC721TokenInterface extends utils.Interface {
     values: [BigNumberish[], string]
   ): string;
   encodeFunctionData(
+    functionFragment: "classes",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "elpTokenAddress",
     values?: undefined
   ): string;
@@ -131,7 +137,7 @@ export interface ERC721TokenInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "mint",
-    values: [string, BigNumberish]
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -216,6 +222,7 @@ export interface ERC721TokenInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "classes", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "elpTokenAddress",
     data: BytesLike
@@ -411,6 +418,11 @@ export interface ERC721Token extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    classes(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     elpTokenAddress(overrides?: CallOverrides): Promise<[string]>;
 
     endTime(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -431,6 +443,7 @@ export interface ERC721Token extends BaseContract {
     mint(
       _owner: string,
       _mintAmount: BigNumberish,
+      _classId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -562,6 +575,8 @@ export interface ERC721Token extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  classes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
   elpTokenAddress(overrides?: CallOverrides): Promise<string>;
 
   endTime(overrides?: CallOverrides): Promise<BigNumber>;
@@ -582,6 +597,7 @@ export interface ERC721Token extends BaseContract {
   mint(
     _owner: string,
     _mintAmount: BigNumberish,
+    _classId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -707,6 +723,8 @@ export interface ERC721Token extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    classes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
     elpTokenAddress(overrides?: CallOverrides): Promise<string>;
 
     endTime(overrides?: CallOverrides): Promise<BigNumber>;
@@ -727,6 +745,7 @@ export interface ERC721Token extends BaseContract {
     mint(
       _owner: string,
       _mintAmount: BigNumberish,
+      _classId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -889,6 +908,8 @@ export interface ERC721Token extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    classes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
     elpTokenAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     endTime(overrides?: CallOverrides): Promise<BigNumber>;
@@ -909,6 +930,7 @@ export interface ERC721Token extends BaseContract {
     mint(
       _owner: string,
       _mintAmount: BigNumberish,
+      _classId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1044,6 +1066,11 @@ export interface ERC721Token extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    classes(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     elpTokenAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     endTime(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1066,6 +1093,7 @@ export interface ERC721Token extends BaseContract {
     mint(
       _owner: string,
       _mintAmount: BigNumberish,
+      _classId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

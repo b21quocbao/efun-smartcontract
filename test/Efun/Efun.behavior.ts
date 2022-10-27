@@ -681,7 +681,7 @@ export function shouldBehaveLikeEvent(): void {
     await this.erc20Token.connect(this.signers.user1).approve(this.elpToken.address, toWei("100000000"));
     await this.erc20Token.connect(this.signers.admin).approve(this.elpToken.address, toWei("9000000000"));
     await this.elpToken.connect(this.signers.admin).buyToken(toWei("90000"));
-    const tokenId = await this.elpToken.connect(this.signers.user1).buyNFT(0, 1);
+    const tokenId = await this.elpToken.connect(this.signers.user1).buyNFT(0, 3);
     console.log("----------------------------------------------------------------------------------");
 
     console.log((await this.elpToken.balanceOf(this.signers.user1.address)).toString(), "Elp Balance user1");

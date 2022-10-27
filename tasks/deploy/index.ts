@@ -1,5 +1,4 @@
 import "./action";
-import "./api-consumer";
 import "./base";
 import "./group-predict";
 import "./handicap";

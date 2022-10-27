@@ -8,5 +8,4 @@ export type { KeeperCompatibleInterface } from "./KeeperCompatibleInterface";
 export type { LinkTokenInterface } from "./LinkTokenInterface";
 export type { OperatorInterface } from "./OperatorInterface";
 export type { OracleInterface } from "./OracleInterface";
-export type { OwnableInterface } from "./OwnableInterface";
 export type { PointerInterface } from "./PointerInterface";

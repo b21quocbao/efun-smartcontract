@@ -20,6 +20,7 @@ contract ERC721Token is ERC721Enumerable, Ownable {
     address public admin;
     uint256 public startTime;
     uint256 public endTime;
+    mapping(uint256 => uint256) public classes;
 
     constructor(
         string memory _name,
@@ -36,7 +37,11 @@ contract ERC721Token is ERC721Enumerable, Ownable {
         admin = _admin;
     }
 
-    function mint(address _owner, uint256 _mintAmount) external returns (uint256) {
+    function mint(
+        address _owner,
+        uint256 _mintAmount,
+        uint256 _classId
+    ) external returns (uint256) {
         require(msg.sender == elpTokenAddress, "not-valid-sender");
         require(startTime <= block.timestamp, "start_time <= timestamp");
         require(
@@ -47,6 +52,7 @@ contract ERC721Token is ERC721Enumerable, Ownable {
 
         for (uint256 i = 1; i <= _mintAmount; i++) {
             _owners[supply + i] = _owner;
+            classes[supply + i] = _classId;
             _safeMint(_owner, supply + i);
         }
         return supply + 1;
@@ -146,5 +152,16 @@ contract ERC721Token is ERC721Enumerable, Ownable {
     function setTime(uint256 _startTime, uint256 _endTime) public onlyOwner {
         startTime = _startTime;
         endTime = _endTime;
+    }
+
+    function _baseURI() internal view virtual override returns (string memory) {
+        return "https://efun-public.s3.ap-southeast-1.amazonaws.com/nft-info/";
+    }
+
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+        require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+
+        string memory baseURI = _baseURI();
+        return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, classes[tokenId].toString())) : "";
     }
 }

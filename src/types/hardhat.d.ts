@@ -61,18 +61,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Operator__factory>;
     getContractFactory(
-      name: "ChainlinkClient",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ChainlinkClient__factory>;
-    getContractFactory(
-      name: "ConfirmedOwner",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ConfirmedOwner__factory>;
-    getContractFactory(
-      name: "ConfirmedOwnerWithProposal",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ConfirmedOwnerWithProposal__factory>;
-    getContractFactory(
       name: "AggregatorV3Interface",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AggregatorV3Interface__factory>;
@@ -100,10 +88,6 @@ declare module "hardhat/types/runtime" {
       name: "OracleInterface",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OracleInterface__factory>;
-    getContractFactory(
-      name: "OwnableInterface",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.OwnableInterface__factory>;
     getContractFactory(
       name: "PointerInterface",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -358,21 +342,6 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Operator>;
     getContractAt(
-      name: "ChainlinkClient",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ChainlinkClient>;
-    getContractAt(
-      name: "ConfirmedOwner",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ConfirmedOwner>;
-    getContractAt(
-      name: "ConfirmedOwnerWithProposal",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ConfirmedOwnerWithProposal>;
-    getContractAt(
       name: "AggregatorV3Interface",
       address: string,
       signer?: ethers.Signer
@@ -407,11 +376,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.OracleInterface>;
-    getContractAt(
-      name: "OwnableInterface",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.OwnableInterface>;
     getContractAt(
       name: "PointerInterface",
       address: string,
